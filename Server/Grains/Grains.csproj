@@ -63,7 +63,6 @@
     <Compile Include="Objects\Unit.cs" />
     <Compile Include="Objects\Player.cs" />
     <Compile Include="Objects\Object.cs" />
-    <Compile Include="orleans.codegen.cs" />
     <Compile Include="Realms\RealmManager.cs" />
     <Compile Include="Session\Handlers\CharacterHandlers.cs" />
     <Compile Include="Session\Handlers\AccountDataHandlers.cs" />
