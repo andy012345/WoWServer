@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DBC\DBCLoaderAttribute.cs" />
     <Compile Include="DBC\DBCStructs\CharStartOutfit.cs" />
     <Compile Include="DBC\DBCStructs\Spell.cs" />
     <Compile Include="DBC\DBCStructs\Map.cs" />

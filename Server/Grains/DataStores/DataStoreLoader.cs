@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Server
 {
@@ -51,6 +52,17 @@ namespace Server
             await _ChrClassesStore.Load("ChrClasses.dbc");
             await _ChrRacesStore.Load("ChrRaces.dbc");
             await _MapStore.Load("Map.dbc");
+
+            var methods = GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var m in methods)
+            {
+                if (m.GetCustomAttribute<DBCLoadAttribute>() == null)
+                    continue;
+
+                //this is a dbc loader, so lets load it
+                m.Invoke(this, new object[] { });
+            }
         }
     }
 }

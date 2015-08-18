@@ -45,26 +45,26 @@ namespace Server
 
                 Console.WriteLine("Test");
 
-                IPlayer test1 = factory.GetGrain<IPlayer>(0);
-                IUnit test2 = factory.GetGrain<IUnit>(0);
-                IObject test3 = factory.GetGrain<IObject>(0);
+//                 IPlayer test1 = factory.GetGrain<IPlayer>(0);
+//                 IUnit test2 = factory.GetGrain<IUnit>(0);
+//                 IObject test3 = factory.GetGrain<IObject>(0);
+// 
+//                 test1.GetPrimaryKeyLong();
+// 
+//                 List<string> testres = new List<string>();
+// 
+//                 testres.Add(test1.VirtualCall().Result);
+//                 testres.Add(test2.VirtualCall().Result);
+//                 testres.Add(test3.VirtualCall().Result);
+//                 testres.Add(test1.PlayerCall().Result);
+//                 testres.Add(test1.UnitCall().Result);
+//                 testres.Add(test1.ObjectCall().Result);
+//                 testres.Add(test2.UnitCall().Result);
+//                 testres.Add(test2.ObjectCall().Result);
+//                 testres.Add(test3.ObjectCall().Result);
 
-                test1.GetPrimaryKeyLong();
-
-                List<string> testres = new List<string>();
-
-                testres.Add(test1.VirtualCall().Result);
-                testres.Add(test2.VirtualCall().Result);
-                testres.Add(test3.VirtualCall().Result);
-                testres.Add(test1.PlayerCall().Result);
-                testres.Add(test1.UnitCall().Result);
-                testres.Add(test1.ObjectCall().Result);
-                testres.Add(test2.UnitCall().Result);
-                testres.Add(test2.ObjectCall().Result);
-                testres.Add(test3.ObjectCall().Result);
-
-                foreach (var line in testres)
-                    Console.WriteLine("{0}", line);
+//                 foreach (var line in testres)
+//                     Console.WriteLine("{0}", line);
 
                 var manager = factory.GetGrain<IDataStoreManager>(0);
                 manager.GetPlayerCreateInfo(0, 0);
