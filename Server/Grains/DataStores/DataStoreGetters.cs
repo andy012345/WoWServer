@@ -9,12 +9,6 @@ namespace Server
 {
     public partial class DataStoreManager
     {
-        public Task<MapEntry> GetMapEntry(UInt32 MapID)
-        {
-            var entry = _MapStore.Get(MapID);
-            return Task.FromResult(entry);
-        }
-
         public Task<PlayerCreateInfo> GetPlayerCreateInfo(UInt32 Class, UInt32 Race)
         {
             var entry = _PlayerCreateInfo.Get(Class, Race);
@@ -50,14 +44,6 @@ namespace Server
             return Task.FromResult(results.ToArray());
         }
 
-        public Task<ChrClasses> GetChrClasses(UInt32 Class)
-        {
-            return Task.FromResult(_ChrClassesStore.Get(Class));
-        }
 
-        public Task<ChrRaces> GetChrRaces(UInt32 Race)
-        {
-            return Task.FromResult(_ChrRacesStore.Get(Race));
-        }
     }
 }

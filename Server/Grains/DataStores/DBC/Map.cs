@@ -8,14 +8,20 @@ namespace Server
 {
     public partial class DataStoreManager
     {
-        GTCombatRatingsEntry _GTCombatRatingsEntry = new GTCombatRatingsEntry();
+        MapStore _MapStore = new MapStore();
 
         [DBCLoad]
-        public List<Task> LoadGTableDBCs()
+        public List<Task> LoadMapDBCs()
         {
             List<Task> ret = new List<Task>();
-            ret.Add(_GTCombatRatingsEntry.Load("gtCombatRatings.dbc"));
+            ret.Add(_MapStore.Load("Map.dbc"));
             return ret;
+        }
+
+        public Task<MapEntry> GetMapEntry(UInt32 MapID)
+        {
+            var entry = _MapStore.Get(MapID);
+            return Task.FromResult(entry);
         }
     }
 }

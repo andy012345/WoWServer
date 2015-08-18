@@ -20,10 +20,12 @@ namespace Server
         byte[] StringData = null;
 
         public Dictionary<int, T> RecordDataIndexed = null;
-        
+
         public async Task Load(string path)
         {
             await Task.Factory.StartNew(() => { LoadImpl(path); });
+
+            await Task.Factory.StartNew(() => { Console.WriteLine("Loaded {0} entries from {1}", NumRecords, path); });
         }
 
         void LoadImpl(string path)

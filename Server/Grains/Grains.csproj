@@ -58,6 +58,8 @@
     <Compile Include="DataStores\DataStoreGetters.cs" />
     <Compile Include="DataStores\DataStoreManager.cs" />
     <Compile Include="DataStores\DataStoreLoader.cs" />
+    <Compile Include="DataStores\DBC\Map.cs" />
+    <Compile Include="DataStores\DBC\Character.cs" />
     <Compile Include="DataStores\DBC\GTable.cs" />
     <Compile Include="Maps\Map.cs" />
     <Compile Include="Objects\Creator.cs" />
