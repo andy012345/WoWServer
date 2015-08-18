@@ -25,6 +25,21 @@ namespace Server
     [StorageProvider(ProviderName = "Default")]
     class ObjectCreator : Grain<ObjectCreatorState>, ICreator
     {
+        IDisposable SaveTask = null;
+        public double SavePeriodSeconds = 30;
+
+        public override Task OnActivateAsync()
+        {
+            SaveTask = RegisterTimer(SaveState, null, TimeSpan.FromSeconds(SavePeriodSeconds), TimeSpan.FromSeconds(SavePeriodSeconds));
+            return base.OnActivateAsync();
+        }
+
+        public async Task SaveState(object state)
+        {
+            await WriteStateAsync();
+        }
+
+
         public async Task<ObjectGUID> GenerateGUID(ObjectType objectType)
         {
             switch (objectType)

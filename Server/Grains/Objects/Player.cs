@@ -9,7 +9,6 @@ using Shared;
 
 namespace Server
 {
-
     public enum ObjectUpdateType
     {
         UPDATETYPE_VALUES = 0,

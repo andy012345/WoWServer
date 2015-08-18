@@ -20,7 +20,6 @@ namespace Server
         byte[] StringData = null;
 
         public Dictionary<int, T> RecordDataIndexed = null;
-        public List<T> RecordData = null;
         
         public async Task Load(string path)
         {
