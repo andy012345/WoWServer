@@ -157,6 +157,12 @@ namespace Server
 
                 return base.InvokeMethodAsync<Server.MapEntry>(571002267, new object[] {@MapID} );
             }
+            
+            System.Threading.Tasks.Task<Shared.CreatureEntry[]> Server.IDataStoreManager.GetCreatureEntriesByMap(uint @MapID)
+            {
+
+                return base.InvokeMethodAsync<Shared.CreatureEntry[]>(-1190088203, new object[] {@MapID} );
+            }
         }
     }
     
@@ -194,6 +200,8 @@ namespace Server
                                 return ((IDataStoreManager)grain).GetChrRaces((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 571002267: 
                                 return ((IDataStoreManager)grain).GetMapEntry((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1190088203: 
+                                return ((IDataStoreManager)grain).GetCreatureEntriesByMap((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }
@@ -228,6 +236,8 @@ namespace Server
                             return "GetChrRaces";
                     case 571002267:
                             return "GetMapEntry";
+                    case -1190088203:
+                            return "GetCreatureEntriesByMap";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -5428,6 +5438,111 @@ namespace InterfacesSerializers
         public static void Register()
         {
             global::Orleans.Serialization.SerializationManager.Register(typeof(Shared.PlayerCreateInfo), DeepCopier, Serializer, Deserializer);
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    [global::Orleans.CodeGeneration.RegisterSerializerAttribute()]
+    internal class Shared_CreatureEntrySerialization
+    {
+        
+        static Shared_CreatureEntrySerialization()
+        {
+            Register();
+        }
+        
+        public static object DeepCopier(object original)
+        {
+            Shared.CreatureEntry input = ((Shared.CreatureEntry)(original));
+            Shared.CreatureEntry result = new Shared.CreatureEntry();
+            Orleans.Serialization.SerializationContext.Current.RecordObject(original, result);
+            result.MovementType = input.MovementType;
+            result.VerifiedBuild = input.VerifiedBuild;
+            result.areaId = input.areaId;
+            result.curhealth = input.curhealth;
+            result.curmana = input.curmana;
+            result.currentwaypoint = input.currentwaypoint;
+            result.dynamicflags = input.dynamicflags;
+            result.equipment_id = input.equipment_id;
+            result.guid = input.guid;
+            result.id = input.id;
+            result.map = input.map;
+            result.modelid = input.modelid;
+            result.npcflag = input.npcflag;
+            result.orientation = input.orientation;
+            result.phaseMask = input.phaseMask;
+            result.position_x = input.position_x;
+            result.position_y = input.position_y;
+            result.position_z = input.position_z;
+            result.spawnMask = input.spawnMask;
+            result.spawndist = input.spawndist;
+            result.spawntimesecs = input.spawntimesecs;
+            result.unit_flags = input.unit_flags;
+            result.zoneId = input.zoneId;
+            return result;
+        }
+        
+        public static void Serializer(object untypedInput, Orleans.Serialization.BinaryTokenStreamWriter stream, System.Type expected)
+        {
+            Shared.CreatureEntry input = ((Shared.CreatureEntry)(untypedInput));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.MovementType, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.VerifiedBuild, stream, typeof(int));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.areaId, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.curhealth, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.curmana, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.currentwaypoint, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.dynamicflags, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.equipment_id, stream, typeof(int));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.guid, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.id, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.map, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.modelid, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.npcflag, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.orientation, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.phaseMask, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.position_x, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.position_y, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.position_z, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.spawnMask, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.spawndist, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.spawntimesecs, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.unit_flags, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.zoneId, stream, typeof(uint));
+        }
+        
+        public static object Deserializer(System.Type expected, global::Orleans.Serialization.BinaryTokenStreamReader stream)
+        {
+            Shared.CreatureEntry result = new Shared.CreatureEntry();
+            result.MovementType = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.VerifiedBuild = ((int)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(int), stream)));
+            result.areaId = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.curhealth = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.curmana = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.currentwaypoint = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.dynamicflags = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.equipment_id = ((int)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(int), stream)));
+            result.guid = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.id = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.map = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.modelid = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.npcflag = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.orientation = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.phaseMask = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.position_x = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.position_y = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.position_z = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.spawnMask = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.spawndist = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.spawntimesecs = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.unit_flags = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.zoneId = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            return result;
+        }
+        
+        public static void Register()
+        {
+            global::Orleans.Serialization.SerializationManager.Register(typeof(Shared.CreatureEntry), DeepCopier, Serializer, Deserializer);
         }
     }
     

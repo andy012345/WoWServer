@@ -15,5 +15,9 @@ namespace Server
         Task<ChrClasses> GetChrClasses(UInt32 Class);
         Task<ChrRaces> GetChrRaces(UInt32 Race);
         Task<MapEntry> GetMapEntry(UInt32 MapID);
+
+        //Creatures
+        Task<CreatureEntry[]> GetCreatureEntriesByMap(UInt32 MapID);
+
     }
 }

@@ -75,6 +75,16 @@ namespace Server
             await base.OnActivateAsync();
         }
 
+        public virtual Task OnConstruct()
+        {
+            if (_IsValid())
+            {
+                _SetFloat((int)EObjectFields.OBJECT_FIELD_SCALE_X, 1.0f); //default scale
+            }
+
+            return TaskDone.Done;
+        }
+
         public Task<bool> IsValid() { return Task.FromResult(State.Exists); }
         public bool _IsValid() { return State.Exists; }
 

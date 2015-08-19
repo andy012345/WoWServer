@@ -46,8 +46,8 @@ namespace Shared
 
     public class PlayerCreateInfoSpellCustom
     {
-        public UInt32 raceMask = 0;
-        public UInt32 classMask = 0;
+        public UInt32 racemask = 0;
+        public UInt32 classmask = 0;
         public UInt32 Spell = 0;
         public string Note = "";
 
@@ -63,7 +63,7 @@ namespace Shared
 
     public class PlayerXPForLevel
     {
-        public UInt32 Levle = 0;
+        public UInt32 Level = 0;
         public UInt32 Experience = 0;
     }
 

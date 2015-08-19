@@ -91,8 +91,9 @@ public interface PlayerData : UnitData, IGrainState
             await base.OnActivateAsync();
         }
 
-        public Task OnConstruct()
+        public async override Task OnConstruct()
         {
+            await base.OnConstruct();
             if (_IsValid())
             {
                 State.MyType = TypeID.TYPEID_PLAYER;
@@ -100,7 +101,6 @@ public interface PlayerData : UnitData, IGrainState
             }
             if (State.Account != null)
                 _Account = GrainFactory.GetGrain<IAccount>(State.Account);
-            return TaskDone.Done;
         }
 
         public override IObjectImpl ToRef() { return this.AsReference<IPlayer>(); }

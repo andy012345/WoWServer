@@ -10,7 +10,7 @@ namespace Server
     {
         MapStore _MapStore = new MapStore();
 
-        [DBCLoad]
+        [DataStoreLoader]
         public List<Task> LoadMapDBCs()
         {
             List<Task> ret = new List<Task>();

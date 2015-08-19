@@ -10,11 +10,12 @@ namespace Shared
 {
     public static class ServerLog
     {
-        public static async void Debug(string format, params object[] arg)
+        public static void Debug(string format, params object[] arg)
         {
             DateTime now = DateTime.Now;
             string formatted = string.Format("[{0}:{1}:{2}] DEBUG: ", now.Hour, now.Minute, now.Second) + string.Format(format, arg);
-            await Task.Factory.StartNew(() => { Console.WriteLine(formatted); });
+            Console.WriteLine(formatted);
+           // await Task.Factory.StartNew(() => { Console.WriteLine(formatted); });
         }
     }
 

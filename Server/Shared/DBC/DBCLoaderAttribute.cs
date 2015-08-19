@@ -12,7 +12,7 @@ using Shared;
 namespace Server
 {
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
-    public class DBCLoadAttribute : Attribute
+    public class DataStoreLoaderAttribute : Attribute
     {
 
     }

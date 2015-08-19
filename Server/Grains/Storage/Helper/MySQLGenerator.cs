@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using MySql.Data.MySqlClient;
+using Shared;
 
 namespace Server
 {
@@ -69,11 +70,27 @@ namespace Server
 
             foreach (var tmp in dict)
             {
-                var propinfo = type.GetField(tmp.Key, BindingFlags.Instance | BindingFlags.Public);
+                if (tmp.Value is DBNull)
+                    continue; //nothing to see here
 
-                if (propinfo != null)
-                    propinfo.SetValue(obj, tmp.Value);
+                var objField = type.GetField(tmp.Key, BindingFlags.Instance | BindingFlags.Public);
 
+                if (objField != null)
+                {
+                    var objFieldType = objField.FieldType;
+                    try
+                    {
+	                    objField.SetValue(obj, Convert.ChangeType(tmp.Value, objFieldType));
+                    }
+                    catch (Exception e)
+                    {
+                        ServerLog.Debug("Exception setting {0} to {1} in {2}, details:\n{3}", tmp.Key, tmp.Value, type.ToString(), e.ToString());
+                    }
+                }
+                else
+                {
+                    ServerLog.Debug("Cannot set {0} to {1} in type {2} as field does not exist", tmp.Key, tmp.Value, type.ToString());
+                }
             }
 
             return (T)obj;

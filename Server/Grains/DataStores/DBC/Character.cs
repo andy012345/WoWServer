@@ -12,7 +12,7 @@ namespace Server
         ChrClassesStore _ChrClassesStore = new ChrClassesStore();
         ChrRacesStore _ChrRacesStore = new ChrRacesStore();
 
-        [DBCLoad]
+        [DataStoreLoader]
         public List<Task> LoadCharacterDBCs()
         {
             List<Task> ret = new List<Task>();

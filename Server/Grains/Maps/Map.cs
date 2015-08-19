@@ -19,12 +19,69 @@ namespace Server
         public bool Exists { get; set; }
     }
 
+
+
+    public class MapCellHandler
+    {
+        public const float TileSize = 533.33333f;
+        public const UInt32 TileCount = 64;
+
+        public const float MinX = -TileCount * TileSize / 2;
+        public const float MinY = -TileCount * TileSize / 2;
+        public const float MaxX = TileCount * TileSize / 2;
+        public const float MaxY = TileCount * TileSize / 2;
+
+        public const UInt32 CellsPerTile = 8;
+        public const float CellSize = TileSize * CellsPerTile;
+        public const UInt32 CellSizeX = TileCount * CellsPerTile;
+        public const UInt32 CellSizeY = TileCount * CellsPerTile;
+
+        MapCell[,] _cells = new MapCell[CellSizeX, CellSizeY];
+
+        public UInt32 GetCellX(float x)
+        {
+            if (x < MinX || x > MaxX)
+                throw new ArgumentException("Position out of range");
+            var tile = (MaxX - x) / CellSize;
+            return (UInt32)tile;
+        }
+
+        public UInt32 GetCellY(float y)
+        {
+            if (y < MinY || y > MaxY)
+                throw new ArgumentException("Position out of range");
+            var tile = (MaxY - y) / CellSize;
+            return (UInt32)tile;
+        }
+
+        public MapCell GetCell(float x, float y)
+        {
+            var cellx = GetCellX(x);
+            var celly = GetCellY(y);
+
+            return _cells[cellx, celly];
+        }
+    }
+
+    public class MapCell
+    {
+
+    }
+
     [Reentrant]
     [StorageProvider(ProviderName = "Default")]
     public class Map : Grain<MapState>, IMap
     {
         Dictionary<ObjectGUID, IObjectImpl> objectMap = new Dictionary<ObjectGUID, IObjectImpl>();
         List<IObjectImpl> activeObjects = new List<IObjectImpl>();
+        MapCellHandler _mapCellHandler = new MapCellHandler(); //to look at adding to serialisation
+
+        public override async Task OnActivateAsync()
+        {
+            if (_IsValid())
+                await OnConstruct();
+            await base.OnActivateAsync();
+        }
 
         public async Task Create(UInt32 MapID, UInt32 InstanceID, UInt32 RealmID)
         {
@@ -36,7 +93,22 @@ namespace Server
             State.RealmID = RealmID;
 
             State.Exists = true;
+            await OnConstruct();
             await Save();
+        }
+
+        public async Task OnConstruct()
+        {
+            IDataStoreManager datastore = GrainFactory.GetGrain<IDataStoreManager>(0);
+
+            //get all creatures for my map!
+            var creatures = await datastore.GetCreatureEntriesByMap(State.MapID);
+
+            //add them to their cells
+            foreach (var cre in creatures)
+            {
+                var cell = _mapCellHandler.GetCell(cre.position_x, cre.position_y);
+            }
         }
 
         public bool _IsValid() { return State.Exists; }

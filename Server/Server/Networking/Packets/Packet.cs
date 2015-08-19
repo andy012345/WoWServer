@@ -19,18 +19,9 @@ namespace Server.Networking
     public class PacketProcessor
     {
         public PacketIn currentPacket;
-        public int _dataNeeded = 0;
         public ServerSocket sock = null;
 
-        public int dataNeeded
-        {
-            get { return _dataNeeded; }
-            set
-            {
-                Console.WriteLine("DataNeeded: {0}", value);
-                _dataNeeded = value;
-            }
-        }
+        public int dataNeeded = 0;
 
         public PacketProcessor() { Reset(); }
 

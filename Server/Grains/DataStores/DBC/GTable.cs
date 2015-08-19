@@ -10,7 +10,7 @@ namespace Server
     {
         GTCombatRatingsEntry _GTCombatRatingsEntry = new GTCombatRatingsEntry();
 
-        [DBCLoad]
+        [DataStoreLoader]
         public List<Task> LoadGTableDBCs()
         {
             List<Task> ret = new List<Task>();

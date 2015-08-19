@@ -61,6 +61,8 @@
     <Compile Include="DataStores\DBC\Map.cs" />
     <Compile Include="DataStores\DBC\Character.cs" />
     <Compile Include="DataStores\DBC\GTable.cs" />
+    <Compile Include="DataStores\SQL\Creature.cs" />
+    <Compile Include="DataStores\SQL\Player.cs" />
     <Compile Include="Maps\Map.cs" />
     <Compile Include="Objects\Creator.cs" />
     <Compile Include="Objects\Unit.cs" />

@@ -76,7 +76,8 @@
     <Compile Include="Crypto\SHA.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Structs\AuthResponse.cs" />
-    <Compile Include="Structs\DataStore\PlayerDataStore.cs" />
+    <Compile Include="Structs\DataStore\Creature.cs" />
+    <Compile Include="Structs\DataStore\Player.cs" />
     <Compile Include="Structs\PlayerCreateInfo.cs" />
     <Compile Include="Structs\RealmManager.cs" />
     <Compile Include="Structs\AuthServerStructs.cs" />

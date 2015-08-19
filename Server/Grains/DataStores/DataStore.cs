@@ -18,6 +18,8 @@ namespace Server
 {
     public class DataStore<DataType>
     {
+        UInt32 NumRecords = 0;
+
         string TableName = null;
         List<string> TableIndexes = new List<string>();
         List<DataType> TableDataIndex0 = null; //used if 0 index
@@ -31,6 +33,7 @@ namespace Server
         public async Task Load(string constring)
         {
             await LoadImpl(await CreateConnection(constring));
+            ServerLog.Debug("Loaded {0} entries from {1}", NumRecords, TableName);
         }
 
         async Task LoadImpl(MySqlConnection connection)
@@ -64,6 +67,7 @@ namespace Server
                         throw new Exception("Table has incorrect index");
                     Add(Convert.ToUInt32(dict[TableIndexes[0]]), Convert.ToUInt32(dict[TableIndexes[1]]), data);
                 }
+                ++NumRecords;
             }
 
             reader.Dispose();
@@ -84,7 +88,7 @@ namespace Server
 
         void Add(DataType data)
         {
-            Add(0, data);
+            TableDataIndex0.Add(data);
         }
 
         void Add(UInt32 index, DataType data)
