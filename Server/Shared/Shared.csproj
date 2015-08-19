@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DBC\DBCLoaderAttribute.cs" />
     <Compile Include="DBC\DBCStructs\CharStartOutfit.cs" />
     <Compile Include="DBC\DBCStructs\Spell.cs" />
     <Compile Include="DBC\DBCStructs\Map.cs" />
@@ -85,6 +86,7 @@
     <Compile Include="Structs\SessionStream.cs" />
     <Compile Include="Structs\UpdateFieldVisibilityFlags.cs" />
     <Compile Include="Structs\UpdateField.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Crypto\ZLib.cs" />
     <Compile Include="UpdateMask.cs" />

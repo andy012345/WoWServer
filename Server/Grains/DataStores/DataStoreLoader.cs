@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Reflection;
 
 namespace Server
 {
@@ -26,7 +27,7 @@ namespace Server
 
             List<Task> loaders = new List<Task>();
 
-            loaders.Add(LoadDBC());
+            loaders.Add(LoadDBCs());
             loaders.Add(_PlayerCreateInfo.Load(ConnectionString));
             loaders.Add(_PlayerCreateInfoAction.Load(ConnectionString));
             loaders.Add(_PlayerCreateInfoItem.Load(ConnectionString));
@@ -39,18 +40,26 @@ namespace Server
             await Task.WhenAll(loaders);
         }
 
-
-        CharStartOutfitStore _CharacterOutfitStore = new CharStartOutfitStore();
-        ChrClassesStore _ChrClassesStore = new ChrClassesStore();
-        ChrRacesStore _ChrRacesStore = new ChrRacesStore();
-        MapStore _MapStore = new MapStore();
-
-        public async Task LoadDBC()
+        public async Task LoadDBCs()
         {
-            await _CharacterOutfitStore.Load("CharStartOutfit.dbc");
-            await _ChrClassesStore.Load("ChrClasses.dbc");
-            await _ChrRacesStore.Load("ChrRaces.dbc");
-            await _MapStore.Load("Map.dbc");
+
+            List<Task> awaitingLoaders = new List<Task>();
+
+            var methods = GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance);
+
+            foreach (var m in methods)
+            {
+                if (m.GetCustomAttribute<DBCLoadAttribute>() == null)
+                    continue;
+
+                var ret = m.Invoke(this, new object[] { });
+                var retlist = ret as List<Task>;
+                if (retlist == null)
+                    throw new Exception("DBC loader returned unexpected type (should be List<Task>)");
+                awaitingLoaders.AddRange(retlist);
+            }
+
+            await Task.WhenAll(awaitingLoaders);
         }
     }
 }
