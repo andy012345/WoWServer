@@ -25,7 +25,7 @@ namespace Server
         {
             await Task.Factory.StartNew(() => { LoadImpl(path); });
 
-            await Task.Factory.StartNew(() => { Console.WriteLine("Loaded {0} entries from {1}", NumRecords, path); });
+            ServerLog.Debug("Loaded {0} entries from {1}", NumRecords, path);
         }
 
         void LoadImpl(string path)

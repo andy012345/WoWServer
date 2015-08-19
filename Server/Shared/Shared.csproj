@@ -86,6 +86,7 @@
     <Compile Include="Structs\SessionStream.cs" />
     <Compile Include="Structs\UpdateFieldVisibilityFlags.cs" />
     <Compile Include="Structs\UpdateField.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Time.cs" />
     <Compile Include="Crypto\ZLib.cs" />
     <Compile Include="UpdateMask.cs" />
