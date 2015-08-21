@@ -20,6 +20,23 @@ namespace Server
         Task<ObjectGUID> GetGUID();
         Task<PackedGUID> GetPackedGUID();
 
+        Task<float> GetPositionX();
+        Task<float> GetPositionY();
+        Task<float> GetPositionZ();
+        Task<float> GetOrientation();
+
+        Task UpdateInRangeSet();
+        Task UpdateInRangeSet_Add();
+        Task UpdateInRangeSet_Remove();
+        Task RemoveInRangeObject(ObjectGUID guid, IObjectImpl obj, bool remove_other = true);
+        Task AddInRangeObject(ObjectGUID guid, IObjectImpl obj, bool add_other = true);
+        Task<bool> CanSee(IObjectImpl other);
+
+        Task<PacketOut> BuildCreateUpdateFor(IPlayer plr);
+        Task<PacketOut> BuildValuesUpdateFor(IPlayer plr);
+
+        Task Update();
+
 
         //Update FIelds
         Task<byte> GetByte(int field, int index);
@@ -33,8 +50,18 @@ namespace Server
         Task SetGUID(int field, ObjectGUID val);
 
         //Maps
+        Task<IMap> GetMap();
         Task SetMap(IMap map);
+        Task ClearMap();
         Task<bool> IsCellActivator();
+
+        Task<bool> IsPlayer();
+        Task<bool> IsUnit();
+        Task<bool> IsCreature();
+        Task<bool> IsPet();
+        Task<bool> IsVehicle();
+        Task<bool> IsTransport();
+        Task<bool> IsGameObject();
     }
 
     public interface IBaseObjectImpl : IGrainWithIntegerKey

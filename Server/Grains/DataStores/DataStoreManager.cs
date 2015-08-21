@@ -17,7 +17,6 @@ using MySql.Data.MySqlClient;
 namespace Server
 {
     [Reentrant]
-    [StatelessWorker]
     public partial class DataStoreManager : Grain, IDataStoreManager
     {
         bool Loaded = false;

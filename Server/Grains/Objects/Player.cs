@@ -35,21 +35,23 @@ namespace Server
         UPDATEFLAG_ROTATION = 0x0200
     }
 
-public interface PlayerData : UnitData, IGrainState
+    public class PlayerData : UnitData
     {
-        string Name { get; set; }
-        string Account { get; set; }
-        int Race { get; set; }
-        int Class { get; set; }
-        int Gender { get; set; }
-        UInt32 RealmID { get; set; }
+        public string Name { get; set; }
+        public string Account { get; set; }
+        public int Race { get; set; }
+        public int Class { get; set; }
+        public int Gender { get; set; }
+        public UInt32 RealmID { get; set; }
 
         //Binds!
-        float BindX { get; set; }
-        float BindY { get; set; }
-        float BindZ { get; set; }
-        UInt32 BindMap { get; set; }
-        UInt32 BindArea { get; set; }
+        public float BindX { get; set; }
+        public float BindY { get; set; }
+        public float BindZ { get; set; }
+        public UInt32 BindMap { get; set; }
+        public UInt32 BindArea { get; set; }
+
+        public List<PacketOut> PendingUpdateData { get; set; }
     }
 
     public class PlayerByNameIndexState : GrainState
@@ -98,6 +100,9 @@ public interface PlayerData : UnitData, IGrainState
             {
                 State.MyType = TypeID.TYPEID_PLAYER;
                 Type = (UInt32)(TypeMask.TYPEMASK_PLAYER | TypeMask.TYPEMASK_UNIT | TypeMask.TYPEMASK_OBJECT);
+
+                if (State.PendingUpdateData == null)
+                    State.PendingUpdateData = new List<PacketOut>();
             }
             if (State.Account != null)
                 _Account = GrainFactory.GetGrain<IAccount>(State.Account);
@@ -194,13 +199,13 @@ public interface PlayerData : UnitData, IGrainState
             State.BindArea = 0;
 
             State.Exists = true; //WE EXIST, YAY
-            
-            _SetUInt32((int)EUnitFields.UNIT_FIELD_FLAGS_2, 2048); //regen power
-            _SetUInt32((int)EUnitFields.PLAYER_FIELD_WATCHED_FACTION_INDEX, 0xFFFFFFFF);
-            _SetUInt32((int)EUnitFields.UNIT_FIELD_LEVEL, 1);
-            _SetUInt32((int)EUnitFields.PLAYER_FIELD_COINAGE, 1);
-            _SetUInt32((int)EUnitFields.UNIT_FIELD_HEALTH, 100);
-            _SetUInt32((int)EUnitFields.UNIT_FIELD_MAXHEALTH, 100);
+
+            await SetUInt32((int)EUnitFields.UNIT_FIELD_FLAGS_2, 2048); //regen power
+            await SetUInt32((int)EUnitFields.PLAYER_FIELD_WATCHED_FACTION_INDEX, 0xFFFFFFFF);
+            await SetUInt32((int)EUnitFields.UNIT_FIELD_LEVEL, 1);
+            await SetUInt32((int)EUnitFields.PLAYER_FIELD_COINAGE, 1);
+            await SetUInt32((int)EUnitFields.UNIT_FIELD_HEALTH, 100);
+            await SetUInt32((int)EUnitFields.UNIT_FIELD_MAXHEALTH, 100);
 
             await OnConstruct();
             await Save();
@@ -288,54 +293,29 @@ public interface PlayerData : UnitData, IGrainState
         public byte Skin
         {
             get { return _GetByte((int)EUnitFields.PLAYER_BYTES, 0); }
-            set { _SetByte((int)EUnitFields.PLAYER_BYTES, 0, value); }
+            set { SetByte((int)EUnitFields.PLAYER_BYTES, 0, value); }
         }
         public byte Face
         {
             get { return _GetByte((int)EUnitFields.PLAYER_BYTES, 1); }
-            set { _SetByte((int)EUnitFields.PLAYER_BYTES, 1, value); }
+            set { SetByte((int)EUnitFields.PLAYER_BYTES, 1, value); }
         }
         public byte HairStyle
         {
             get { return _GetByte((int)EUnitFields.PLAYER_BYTES, 2); }
-            set { _SetByte((int)EUnitFields.PLAYER_BYTES, 2, value); }
+            set { SetByte((int)EUnitFields.PLAYER_BYTES, 2, value); }
         }
         public byte HairColor
         {
             get { return _GetByte((int)EUnitFields.PLAYER_BYTES, 3); }
-            set { _SetByte((int)EUnitFields.PLAYER_BYTES, 3, value); }
+            set { SetByte((int)EUnitFields.PLAYER_BYTES, 3, value); }
         }
         public byte FacialHair
         {
             get { return _GetByte((int)EUnitFields.PLAYER_BYTES_2, 0); }
-            set { _SetByte((int)EUnitFields.PLAYER_BYTES_2, 0, value); }
+            set { SetByte((int)EUnitFields.PLAYER_BYTES_2, 0, value); }
         }
-        public byte Gender
-        {
-            get { return _GetByte((int)EUnitFields.UNIT_FIELD_BYTES_0, 2); }
-            set { _SetByte((int)EUnitFields.UNIT_FIELD_BYTES_0, 2, value); }
-        }
-        public byte Race
-        {
-            get { return _GetByte((int)EUnitFields.UNIT_FIELD_BYTES_0, 0); }
-            set { _SetByte((int)EUnitFields.UNIT_FIELD_BYTES_0, 0, value); }
-        }
-        public byte Class
-        {
-            get { return _GetByte((int)EUnitFields.UNIT_FIELD_BYTES_0, 1); }
-            set { _SetByte((int)EUnitFields.UNIT_FIELD_BYTES_0, 1, value); }
-        }
-        public byte PowerType
-        {
-            get { return _GetByte((int)EUnitFields.UNIT_FIELD_BYTES_0, 3); }
-            set { _SetByte((int)EUnitFields.UNIT_FIELD_BYTES_0, 3, value); }
-        }
-
-        public UInt32 BaseHealth
-        {
-            get { return _GetUInt32((int)EUnitFields.UNIT_FIELD_BASE_HEALTH); }
-            set { _SetUInt32((int)EUnitFields.UNIT_FIELD_BASE_HEALTH, value); }
-        }
+ 
 
         #endregion
 
@@ -508,6 +488,11 @@ public interface PlayerData : UnitData, IGrainState
         public void CalulateMaxHealth()
         {
             //
+        }
+
+        public override async Task OnAddInRangeObject(ObjectGUID guid, IObjectImpl obj)
+        {
+            State.PendingUpdateData.Add(await obj.BuildCreateUpdateFor(ToRef() as IPlayer));
         }
     }
 }

@@ -15,10 +15,10 @@ using System.Collections;
 
 namespace Server
 {
-    public interface SessionData : IGrainState
+    public class SessionData : GrainState
     {
-        byte[] SessionKey { get; set; }
-        IAccount Account { get; set; } //can we reference interfaces to actors? the codegen seems fine, to test
+        public byte[] SessionKey { get; set; }
+        public IAccount Account { get; set; } //can we reference interfaces to actors? the codegen seems fine, to test
     }
 
     [Reentrant]
@@ -31,7 +31,7 @@ namespace Server
         Shared.BigInteger v;
         Shared.BigInteger b;
         Shared.BigInteger B;
-        Shared.BigInteger rs;
+       // Shared.BigInteger rs;
 
         Shared.BigInteger SessionKey;
         bool Authed = false;

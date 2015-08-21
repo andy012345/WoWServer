@@ -37,35 +37,39 @@ namespace Server
         TYPEMASK_SEER = TYPEMASK_PLAYER | TYPEMASK_UNIT | TYPEMASK_DYNAMICOBJECT
     }
 
-    public interface ObjectData : IGrainState
+    public class ObjectData : GrainState
     {
-        bool Exists { get; set; }
+        public bool Exists { get; set; }
 
-        float PositionX { get; set; }
-        float PositionY { get; set; }
-        float PositionZ { get; set; }
-        float Orientation { get; set; }
+        public float PositionX { get; set; }
+        public float PositionY { get; set; }
+        public float PositionZ { get; set; }
+        public float Orientation { get; set; }
 
-        UInt32 MapID { get; set; }
-        UInt32 InstanceID { get; set; }
+        public UInt32 MapID { get; set; }
+        public UInt32 InstanceID { get; set; }
 
-        TypeID MyType { get; set; }
+        public TypeID MyType { get; set; }
 
-        ObjectType ObjType { get; set; }
-        UpdateField[] UpdateFields { get; set; }
+        public ObjectType ObjType { get; set; }
+        public UpdateField[] UpdateFields { get; set; }
 
-        ObjectUpdateFlags UpdateFlags { get; set; }
+        public UpdateMask UpdateFieldsMask { get; set; }
+
+        public ObjectUpdateFlags UpdateFlags { get; set; }
     }
 
     public class ObjectImpl : Object<ObjectData>, IObject
     {
     }
-   
+
     public class Object<T> : BaseObject<T>, IObjectImpl
-        where T : class, ObjectData
+        where T : ObjectData
     {
         protected ObjectGUID oGUID = null;
         protected PackedGUID pGUID = null;
+
+        Dictionary<ObjectGUID, IObjectImpl> _inrangeObjects = new Dictionary<ObjectGUID, IObjectImpl>();
 
         public async override Task OnActivateAsync()
         {
@@ -75,14 +79,15 @@ namespace Server
             await base.OnActivateAsync();
         }
 
-        public virtual Task OnConstruct()
+        public async virtual Task OnConstruct()
         {
             if (_IsValid())
             {
-                _SetFloat((int)EObjectFields.OBJECT_FIELD_SCALE_X, 1.0f); //default scale
-            }
+                await SetFloat((int)EObjectFields.OBJECT_FIELD_SCALE_X, 1.0f); //default scale
 
-            return TaskDone.Done;
+                if (State.UpdateFieldsMask == null)
+                    State.UpdateFieldsMask = new UpdateMask(State.UpdateFields.Length);
+            }
         }
 
         public Task<bool> IsValid() { return Task.FromResult(State.Exists); }
@@ -121,7 +126,12 @@ namespace Server
                         Type = (UInt32)(TypeMask.TYPEMASK_PLAYER | TypeMask.TYPEMASK_UNIT | TypeMask.TYPEMASK_OBJECT);
                     }
                     break;
-                case ObjectType.Creature: CreateUpdateFields((int)EUnitFields.UNIT_END); break;
+                case ObjectType.Creature:
+                    {
+                        CreateUpdateFields((int)EUnitFields.UNIT_END);
+                        Type = (UInt32)(TypeMask.TYPEMASK_UNIT | TypeMask.TYPEMASK_OBJECT);
+                    }
+                    break;
 
                 default: throw new Exception("Cannot to create Update Fields by unknown object type");
             }
@@ -144,30 +154,25 @@ namespace Server
             return ret;
         }
         public float _GetFloat(UInt32 field) { return State.UpdateFields[field].GetFloat(); }
-        public void _SetByte(int field, int index, byte val) { State.UpdateFields[field].Set(index, val); }
-        public void _SetUInt32(int field, UInt32 val) { State.UpdateFields[field].Set(val); }
-        public void _SetInt32(int field, int val) { State.UpdateFields[field].Set(val); }
-        public void _SetFloat(int field, float val) { State.UpdateFields[field].Set(val); }
+        public async Task SetByte(int field, int index, byte val) { State.UpdateFields[field].Set(index, val); await OnFieldChange(field); }
+        public async Task SetUInt32(int field, UInt32 val) { State.UpdateFields[field].Set(val); await OnFieldChange(field); }
+        public async Task SetInt32(int field, int val) { State.UpdateFields[field].Set(val); await OnFieldChange(field); }
+        public async Task SetFloat(int field, float val) { State.UpdateFields[field].Set(val); await OnFieldChange(field); }
 
-        public void _SetGUID(int field, ObjectGUID val) { SetUInt64(field, val.ToUInt64()); }
-        public void _SetUInt64(int field, UInt64 val)
+        public async Task SetGUID(int field, ObjectGUID val) { await SetUInt64(field, val.ToUInt64()); await OnFieldChange(field); }
+        public async Task SetUInt64(int field, UInt64 val)
         {
             UInt32 high = (UInt32)(val >> 32);
             UInt32 low = (UInt32)val;
-            SetUInt32(field, low);
-            SetUInt32(field + 1, high);
+            await SetUInt32(field, low);
+            await SetUInt32(field + 1, high);
+            await OnFieldChange(field);
         }
 
         //Tasks for external people
         public Task<byte> GetByte(int field, int index) { return Task.FromResult(_GetByte(field, index)); }
         public Task<UInt32> GetUInt32(int field) { return Task.FromResult(_GetUInt32(field)); }
         public Task<float> GetFloat(UInt32 field) { return Task.FromResult(_GetFloat(field)); }
-        public Task SetByte(int field, int index, byte val) { _SetByte(field, index, val); return TaskDone.Done; }
-        public Task SetUInt32(int field, UInt32 val) { _SetUInt32(field, val); return TaskDone.Done; }
-        public Task SetInt32(int field, int val) { _SetInt32(field, val); return TaskDone.Done; }
-        public Task SetFloat(int field, float val) { _SetFloat(field, val); return TaskDone.Done; }
-        public Task SetUInt64(int field, UInt64 val) { SetUInt64(field, val); return TaskDone.Done; }
-        public Task SetGUID(int field, ObjectGUID val) { _SetGUID(field, val); return TaskDone.Done; }
 
         #endregion
 
@@ -176,16 +181,16 @@ namespace Server
         public UInt32 Type
         {
             get { return _GetUInt32((int)EObjectFields.OBJECT_FIELD_TYPE); }
-            set { _SetUInt32((int)EObjectFields.OBJECT_FIELD_TYPE, value); }
+            set { SetUInt32((int)EObjectFields.OBJECT_FIELD_TYPE, value); }
         }
 
         public UInt64 GUID
         {
             get { return _GetUInt64((int)EObjectFields.OBJECT_FIELD_GUID); }
-            set { _SetUInt64((int)EObjectFields.OBJECT_FIELD_GUID, value); oGUID = new ObjectGUID(value); pGUID = new PackedGUID(value); }
+            set { SetUInt64((int)EObjectFields.OBJECT_FIELD_GUID, value); oGUID = new ObjectGUID(value); pGUID = new PackedGUID(value); }
         }
 
-       #endregion
+        #endregion
 
         public async Task SetMap(IMap map)
         {
@@ -200,7 +205,108 @@ namespace Server
             }
         }
 
+        public Task<IMap> GetMap()
+        {
+            return Task.FromResult(GrainFactory.GetGrain<IMap>(State.InstanceID));
+        }
+
+        protected IMap _GetMap()
+        {
+            if (State.InstanceID == 0)
+                return null; //not in a map
+            var map = GrainFactory.GetGrain<IMap>(State.InstanceID);
+            return map;
+        }
+
+        public Task ClearMap()
+        {
+            State.MapID = 0xFFFFFFFF;
+            State.InstanceID = 0;
+            return TaskDone.Done;
+        }
+
         public virtual Task<bool> IsCellActivator() { return Task.FromResult(false); }
+
+        public async Task UpdateInRangeSet()
+        {
+            await UpdateInRangeSet_Remove();
+            await UpdateInRangeSet_Add();
+        }
+
+        public async Task UpdateInRangeSet_Add()
+        {
+            var map = _GetMap();
+
+            if (map == null)
+                return;
+
+            await map.UpdateInRangeObject(ToRef());
+        }
+
+        public async Task UpdateInRangeSet_Remove()
+        {
+            //Remove old
+            foreach (var obj in _inrangeObjects)
+            {
+                var cansee = await CanSee(obj.Value);
+
+                if (!cansee)
+                    await RemoveInRangeObject(obj.Key, obj.Value);
+            }
+        }
+
+        public async Task AddInRangeObject(ObjectGUID guid, IObjectImpl obj, bool add_other = true)
+        {
+            if (_inrangeObjects.ContainsKey(guid))
+                return; //already in
+
+            _inrangeObjects.Add(guid, obj);
+
+            await OnAddInRangeObject(guid, obj);
+
+            if (add_other)
+                await obj.AddInRangeObject(oGUID, ToRef(), false);
+        }
+
+        public virtual Task OnAddInRangeObject(ObjectGUID guid, IObjectImpl obj) { return TaskDone.Done; }
+
+        public async Task RemoveInRangeObject(ObjectGUID guid, IObjectImpl obj, bool remove_other = true)
+        {
+            _inrangeObjects.Remove(guid);
+            if (remove_other)
+                await obj.RemoveInRangeObject(oGUID, ToRef(), false);
+        }
+
+        public Task<IObjectImpl> GetInRangeObject(ObjectGUID guid)
+        {
+            IObjectImpl ret = null;
+            _inrangeObjects.TryGetValue(guid, out ret);
+            return Task.FromResult(ret);
+        }
+
+        public virtual async Task<bool> CanSee(IObjectImpl other)
+        {
+            var otherposx = await other.GetPositionX();
+            var otherposy = await other.GetPositionY();
+
+            float dist = _GetDistance2DSq(otherposx, otherposy);
+
+            if (dist > (100 * 100)) //todo: implement, 100 yds for now
+                return false;
+
+            return true;
+        }
+
+        float _GetDistance2DSq(float x, float y)
+        {
+            float myx = State.PositionX;
+            float myy = State.PositionY;
+
+            float deltax = myx - x;
+            float deltay = myy - y;
+
+            return (deltax * deltax) + (deltay * deltay);
+        }
 
         public Task<PacketOut> BuildCreateUpdateFor(IPlayer plr)
         {
@@ -218,12 +324,40 @@ namespace Server
             }
 
             PacketOut p = new PacketOut();
+
             p.Write((byte)updateType);
             p.Write(pGUID);
             p.Write((byte)State.MyType);
             _BuildMovementUpdate(updateType, updateFlags, ref p);
             _BuildValuesUpdate(updateType, updateFlags, ref p, plr);
             return Task.FromResult(p);
+        }
+
+        public Task<PacketOut> BuildValuesUpdateFor(IPlayer plr)
+        {
+            ObjectUpdateType updateType = ObjectUpdateType.UPDATETYPE_CREATE_OBJECT;
+
+            ObjectUpdateFlags updateFlags = State.UpdateFlags;
+
+            if (plr.GetPrimaryKeyLong() == this.GetPrimaryKeyLong())
+                updateFlags |= ObjectUpdateFlags.UPDATEFLAG_SELF;
+
+            PacketOut p = new PacketOut();
+            
+            p.Write((byte)updateType);
+            p.Write(pGUID);
+            p.Write((byte)State.MyType);
+            _BuildMovementUpdate(updateType, updateFlags, ref p);
+            _BuildValuesUpdate(updateType, updateFlags, ref p, plr);
+            return Task.FromResult(p);
+        }
+
+        public async Task OnFieldChange(int field)
+        {
+            var map = await GetMap();
+
+            if (map != null)
+                await map.OnObjectUpdated(ToRef());
         }
 
         void _BuildMovementUpdate(ObjectUpdateType type, ObjectUpdateFlags flags, ref PacketOut pkt)
@@ -383,21 +517,36 @@ namespace Server
             }
         }
 
+        public Task<float> GetPositionX() { return Task.FromResult(State.PositionX); }
+        public Task<float> GetPositionY() { return Task.FromResult(State.PositionY); }
+        public Task<float> GetPositionZ() { return Task.FromResult(State.PositionZ); }
+        public Task<float> GetOrientation() { return Task.FromResult(State.Orientation); }
+
         #region Type virtuals
         public virtual bool _IsPlayer() { return false; }
         public virtual bool _IsUnit() { return false; }
         public virtual bool _IsCreature() { return false; }
+        public virtual bool _IsPet() { return false; }
+        public virtual bool _IsVehicle() { return false; }
+        public virtual bool _IsTransport() { return false; }
+        public virtual bool _IsGameObject() { return false; }
 
 
-        public virtual Task<bool> IsPlayer() { return Task.FromResult(_IsPlayer()); }
-        public virtual Task<bool> IsUnit() { return Task.FromResult(_IsUnit()); }
-        public virtual Task<bool> IsCreature() { return Task.FromResult(_IsCreature()); }
+        public Task<bool> IsPlayer() { return Task.FromResult(_IsPlayer()); }
+        public Task<bool> IsUnit() { return Task.FromResult(_IsUnit()); }
+        public Task<bool> IsCreature() { return Task.FromResult(_IsCreature()); }
+        public Task<bool> IsPet() { return Task.FromResult(_IsPet()); }
+        public Task<bool> IsVehicle() { return Task.FromResult(_IsVehicle()); }
+        public Task<bool> IsTransport() { return Task.FromResult(_IsTransport()); }
+        public Task<bool> IsGameObject() { return Task.FromResult(_IsGameObject()); }
         #endregion
+
+        public virtual Task Update() { return TaskDone.Done; }
     }
 
     [Reentrant]
-[StorageProvider(ProviderName = "Default")]
-public class BaseObject<T> : Grain<T>, IBaseObjectImpl
+    [StorageProvider(ProviderName = "Default")]
+    public class BaseObject<T> : Grain<T>, IBaseObjectImpl
     where T : class, IGrainState
     {
 

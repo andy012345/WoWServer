@@ -17,6 +17,8 @@ namespace Orleans.Storage.MySQLDB
     using MySql.Data.MySqlClient;
     using Newtonsoft.Json.Converters;
     using Newtonsoft.Json;
+    using System.Diagnostics;
+    using System.Collections.Concurrent;
 
     /// <summary>
     /// A MySQLDB storage provider.
@@ -30,10 +32,11 @@ namespace Orleans.Storage.MySQLDB
     /// </remarks>
     public class MySQLJSONDBStorageProvider : IStorageProvider
     {
-        MySqlConnection DatabaseConnection;
+        ConcurrentQueue<MySqlConnection> freeConnectionPool = new ConcurrentQueue<MySqlConnection>();
         string ConnectString;
         string Table = "OrleansGrainStorage";
         bool CustomTable = false;
+        bool Closed = false;
 
         public Task Init(string name, IProviderRuntime providerRuntime, IProviderConfiguration config)
         {
@@ -47,8 +50,6 @@ namespace Orleans.Storage.MySQLDB
                 CustomTable = true;
             }
 
-            CheckDatabaseConnection().Wait();
-
             return TaskDone.Done;
         }
 
@@ -59,31 +60,55 @@ namespace Orleans.Storage.MySQLDB
         /// </summary>
         public string Name { get; protected set; }
 
-        public Task Close()
+        public async Task Close()
         {
-            DatabaseConnection.Dispose();
+            Closed = true;
 
+            MySqlConnection con = await GetFreeConnection();
+
+            while (con != null)
+            {
+                con.Dispose();
+                con = await GetFreeConnection();
+            }
+        }
+
+        public async Task<MySqlConnection> GetFreeConnection()
+        {
+            MySqlConnection con;
+            if (freeConnectionPool.TryDequeue(out con))
+                return con;
+            return await CreateConnection();
+        }
+
+        public Task AddFreeConnection(MySqlConnection con)
+        {
+            if (Closed)
+            {
+                con.Dispose();
+                return TaskDone.Done;
+            }
+
+            freeConnectionPool.Enqueue(con);
             return TaskDone.Done;
         }
 
-        public async Task CheckDatabaseConnection()
+        public async Task<MySqlConnection> CreateConnection()
         {
-            if (DatabaseConnection != null && DatabaseConnection.State == System.Data.ConnectionState.Open)
-                return;
+            if (Closed)
+                return null;
 
-            //if we're not open, dispose of old connection and make a new one
-            if (DatabaseConnection != null)
-                DatabaseConnection.Dispose();
-            DatabaseConnection = new MySqlConnection(ConnectString);
-            await DatabaseConnection.OpenAsync();
+            var con = new MySqlConnection(ConnectString);
+            await con.OpenAsync();
 
-            if (DatabaseConnection != null && DatabaseConnection.State != System.Data.ConnectionState.Open)
+            if (con != null && con.State != System.Data.ConnectionState.Open)
                 throw new Exception("MySQLStorage could not open a connection to the database");
+            return con;
         }
 
         public async Task ReadStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
         {
-            await CheckDatabaseConnection();
+            var con = await GetFreeConnection();
 
             var table = GetTableName(grainState);
             string keyAsString = GetKey(grainReference);
@@ -95,7 +120,7 @@ namespace Orleans.Storage.MySQLDB
             else
                 query = string.Format("select * from `{0}` where `guid` = \"{1}\" AND `type` = \"{2}\";", table, MySqlHelper.EscapeString(keyAsString), MySqlHelper.EscapeString(grainType));
 
-            using (var cmd = new MySqlCommand(query, DatabaseConnection))
+            using (var cmd = new MySqlCommand(query, con))
             {
                 using (var reader = await cmd.ExecuteReaderAsync())
                 {
@@ -120,6 +145,8 @@ namespace Orleans.Storage.MySQLDB
                     }
                 }
             }
+
+            await AddFreeConnection(con);
         }
 
         private string GetTableName(IGrainState grainState)
@@ -129,6 +156,8 @@ namespace Orleans.Storage.MySQLDB
             return grainState.GetType().Name; //use grain name generator if no table provided
         }
 
+        //Ignore exceptions here as we have to use try blocks on orleans code
+        [DebuggerStepThrough]
         private static string GetKey(GrainReference grainReference)
         {
             string keyAsString = null;
@@ -155,8 +184,7 @@ namespace Orleans.Storage.MySQLDB
 
         public async Task WriteStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
         {
-            await CheckDatabaseConnection();
-
+            var con = await GetFreeConnection();
             var table = GetTableName(grainState);
             var key = GetKey(grainReference);
 
@@ -175,16 +203,18 @@ namespace Orleans.Storage.MySQLDB
 
             foreach (var q in queries)
             {
-                MySqlCommand com = new MySqlCommand(q, DatabaseConnection);
+                MySqlCommand com = new MySqlCommand(q, con);
                 Log.Verbose(q);
                 await com.ExecuteNonQueryAsync();
                 com.Dispose();
             }
+
+            await AddFreeConnection(con);
         }
 
         public async Task ClearStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
         {
-            await CheckDatabaseConnection();
+            var con = await GetFreeConnection();
             var table = GetTableName(grainState);
             var key = GetKey(grainReference);
 
@@ -195,9 +225,11 @@ namespace Orleans.Storage.MySQLDB
             else
                 query = string.Format("delete from `{0}` where `guid` = \"{1}\" AND `type` = \"{2}\";", table, MySqlHelper.EscapeString(key), MySqlHelper.EscapeString(grainType));
 
-            MySqlCommand com = new MySqlCommand(query);
+            MySqlCommand com = new MySqlCommand(query, con);
             Log.Verbose(query);
             await com.ExecuteNonQueryAsync();
+            com.Dispose();
+            await AddFreeConnection(con);
         }
 
     }

@@ -11,6 +11,7 @@ namespace Server
     {
         Task<UInt32> GenerateInstanceID();
         Task<ObjectGUID> GenerateGUID(ObjectType objectType);
+        Task<ObjectGUID> GenerateCreatureGUID(UInt32 Entry);
 
         Task<Tuple<LoginErrorCode, IPlayer>> CreatePlayer(PlayerCreateData info);
     }

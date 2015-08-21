@@ -3,6 +3,7 @@ using Orleans.Concurrency;
 using System.Threading.Tasks;
 using System;
 using Server;
+using Shared;
 
 namespace Server
 {
@@ -14,5 +15,10 @@ namespace Server
         Task Create(UInt32 MapID, UInt32 InstanceID, UInt32 RealmID);
 
         Task<bool> AddObject(IObjectImpl obj);
+        Task UpdateInRangeObject(IObjectImpl obj);
+
+        Task OnObjectUpdated(IObjectImpl obj);
+
+        Task SpawnCreatures(CreatureEntry[] creatures);
     }
 }

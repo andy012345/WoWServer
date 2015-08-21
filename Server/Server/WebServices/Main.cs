@@ -22,6 +22,7 @@ namespace Server
 
         public static void Run()
         {
+            return;
             //if (System.IO.File.Exists("Config-Web.xml"))
             {
                 if (!System.IO.File.Exists("Config-Client.xml"))

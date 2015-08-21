@@ -21,60 +21,15 @@ namespace Server
 
 
 
-    public class MapCellHandler
-    {
-        public const float TileSize = 533.33333f;
-        public const UInt32 TileCount = 64;
-
-        public const float MinX = -TileCount * TileSize / 2;
-        public const float MinY = -TileCount * TileSize / 2;
-        public const float MaxX = TileCount * TileSize / 2;
-        public const float MaxY = TileCount * TileSize / 2;
-
-        public const UInt32 CellsPerTile = 8;
-        public const float CellSize = TileSize * CellsPerTile;
-        public const UInt32 CellSizeX = TileCount * CellsPerTile;
-        public const UInt32 CellSizeY = TileCount * CellsPerTile;
-
-        MapCell[,] _cells = new MapCell[CellSizeX, CellSizeY];
-
-        public UInt32 GetCellX(float x)
-        {
-            if (x < MinX || x > MaxX)
-                throw new ArgumentException("Position out of range");
-            var tile = (MaxX - x) / CellSize;
-            return (UInt32)tile;
-        }
-
-        public UInt32 GetCellY(float y)
-        {
-            if (y < MinY || y > MaxY)
-                throw new ArgumentException("Position out of range");
-            var tile = (MaxY - y) / CellSize;
-            return (UInt32)tile;
-        }
-
-        public MapCell GetCell(float x, float y)
-        {
-            var cellx = GetCellX(x);
-            var celly = GetCellY(y);
-
-            return _cells[cellx, celly];
-        }
-    }
-
-    public class MapCell
-    {
-
-    }
-
     [Reentrant]
     [StorageProvider(ProviderName = "Default")]
-    public class Map : Grain<MapState>, IMap
+    public partial class Map : Grain<MapState>, IMap
     {
         Dictionary<ObjectGUID, IObjectImpl> objectMap = new Dictionary<ObjectGUID, IObjectImpl>();
         List<IObjectImpl> activeObjects = new List<IObjectImpl>();
-        MapCellHandler _mapCellHandler = new MapCellHandler(); //to look at adding to serialisation
+        IDisposable UpdateTask = null;
+        List<IObjectImpl> updateObjects = new List<IObjectImpl>();
+        Dictionary<UInt64, List<CreatureEntry>> CreatureEntryByCellKey = new Dictionary<ulong, List<CreatureEntry>>();
 
         public override async Task OnActivateAsync()
         {
@@ -99,6 +54,10 @@ namespace Server
 
         public async Task OnConstruct()
         {
+            await InitMapCells();
+
+            List<Task> tasks = new List<Task>();
+
             IDataStoreManager datastore = GrainFactory.GetGrain<IDataStoreManager>(0);
 
             //get all creatures for my map!
@@ -107,8 +66,21 @@ namespace Server
             //add them to their cells
             foreach (var cre in creatures)
             {
-                var cell = _mapCellHandler.GetCell(cre.position_x, cre.position_y);
+                var cellkey = GetCellKey(cre.position_x, cre.position_y);
+
+                if (CreatureEntryByCellKey.ContainsKey(cellkey))
+                    CreatureEntryByCellKey[cellkey].Add(cre);
+                else
+                {
+                    List<CreatureEntry> l = new List<CreatureEntry>();
+                    l.Add(cre);
+                    CreatureEntryByCellKey.Add(cellkey, l);
+                }
             }
+
+            UpdateTask = RegisterTimer(Update, null, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
+
+            await Task.WhenAll(tasks);
         }
 
         public bool _IsValid() { return State.Exists; }
@@ -133,21 +105,198 @@ namespace Server
         public async Task<bool> AddObject(IObjectImpl obj)
         {
             var guid = await obj.GetGUID();
-            objectMap.Add(guid, obj);
-            await obj.SetMap(this);
 
             var isactivator = await obj.IsCellActivator();
 
+            var posx = await obj.GetPositionX();
+            var posy = await obj.GetPositionY();
+            var cell = await GetCell(posx, posy);
+
+            ServerLog.Debug("Adding {0} to map {1} instance {2} at {3}, {4}", guid.ToUInt64(), State.MapID, State.InstanceID, posx, posy);
+
+
+            if (cell == null)
+                return false;
+
+            objectMap.Add(guid, obj);
+            await obj.SetMap(this);
+            //await obj.SetCell(cell);
+
+            cell.AddObject(guid, obj);
+
             if (isactivator)
             {
-                //well he gets updates, duh
                 activeObjects.Add(obj);
-
-                //todo: add ref to 3x3 cell around him
+                await AddRefCells(posx, posy);
             }
+
+            await obj.UpdateInRangeSet();
 
             return true;
         }
 
+        //Returns a key of the cell ((x << 32) | y) and updates cell references
+        public async Task<UInt64> OnActivatorMove(IObjectImpl obj, float oldx, float oldy, float newx, float newy)
+        {
+            var old_cell = GetCell(oldx, oldy);
+            var new_cell = GetCell(newx, newy);
+
+            if (old_cell != new_cell)
+            {
+                await AddRefCells(newx, newy);
+                await DecRefCells(oldx, oldy);
+            }
+
+            if (new_cell != null)
+                return GetCellKey(newx, newy);
+
+            return 0;
+        }
+
+        public async Task OnObjectMove(IObjectImpl obj, float oldx, float oldy, float newx, float newy)
+        {
+            //this activates and deactivates cells
+            var is_activator = await obj.IsCellActivator();
+            
+            if (is_activator)
+                await OnActivatorMove(obj, oldx, oldy, newx, newy);
+        }
+
+        private async Task AddRefCells(float posx, float posy)
+        {
+            List<Task> tasks = new List<Task>();
+
+            var cellx = GetCellX(posx);
+            var celly = GetCellY(posy);
+
+
+            for (var x = cellx - 1; x < cellx + 1; ++x)
+            {
+                for (var y = celly - 1; x < celly + 1; ++y)
+                {
+                    var cell = await GetCellDirect(x, y);
+
+                    if (cell != null)
+                        tasks.Add(cell.AddRef());
+                }
+            }
+
+            await Task.WhenAll(tasks);
+        }
+
+        private async Task DecRefCells(float posx, float posy)
+        {
+            List<Task> tasks = new List<Task>();
+            var cellx = GetCellX(posx);
+            var celly = GetCellY(posy);
+
+            for (var x = cellx - 1; x < cellx + 1; ++x)
+            {
+                for (var y = celly - 1; x < celly + 1; ++y)
+                {
+                    var cell = await GetCellDirect(x, y);
+
+                    if (cell != null)
+                        tasks.Add(cell.DecRef());
+                }
+            }
+
+            await Task.WhenAll(tasks);
+        }
+
+        public async Task RemoveObject(IObjectImpl obj)
+        {
+            activeObjects.Remove(obj);
+
+            var isactivator = await obj.IsCellActivator();
+            var posx = await obj.GetPositionX();
+            var posy = await obj.GetPositionY();
+
+            if (isactivator)
+            {
+                activeObjects.Remove(obj);
+                await DecRefCells(posx, posy);
+            }
+            var cell = await GetCell(posx, posy);
+
+            if (cell != null)
+            {
+                cell.RemoveObject(await obj.GetGUID());
+            }
+        }
+
+        public async Task SpawnCreatures(CreatureEntry[] cres)
+        {
+            List<ICreature> creaturespawns = new List<ICreature>();
+            List<Task> tasks = new List<Task>();
+
+            var creator = GrainFactory.GetGrain<ICreator>(0);
+            foreach (var cre in cres)
+            {
+                var guid = await creator.GenerateCreatureGUID(cre.id);
+
+                ServerLog.Debug("Spawning creature {0} due to cell activation", cre.guid);
+
+                var creature = GrainFactory.GetGrain<ICreature>(guid.ToInt64());
+                creaturespawns.Add(creature);
+                tasks.Add(creature.Create(cre));
+            }
+
+            await Task.WhenAll(tasks);
+
+            foreach (var c in creaturespawns)
+                tasks.Add(AddObject(c));
+
+            await Task.WhenAll(tasks);
+        }
+
+        public async Task UpdateInRangeObject(IObjectImpl obj)
+        {
+            var posx = await obj.GetPositionX();
+            var posy = await obj.GetPositionY();
+            var cellx = GetCellX(posx);
+            var celly = GetCellY(posy);
+
+            var player = await obj.IsPlayer();
+
+            if (player)
+                ServerLog.Debug("Updating inrange for player");
+
+             for (var x = cellx - 1; x < cellx + 1; ++x)
+             {
+                 for (var y = celly - 1; y < celly + 1; ++y)
+                 {
+                    var cell = await GetCellDirect(x, y);
+
+                    if (cell != null)
+                    {
+                        foreach (var o in (await cell.GetObjectMap()))
+                        {
+                            var cansee = await obj.CanSee(o.Value);
+
+                            if (cansee)
+                                await obj.AddInRangeObject(o.Key, o.Value);
+                        }
+                    }
+                }
+            }
+        }
+
+        public Task OnObjectUpdated(IObjectImpl obj)
+        {
+            updateObjects.Add(obj);
+            return TaskDone.Done;
+        }
+
+        public async Task Update(object state)
+        {
+            List<Task> UpdateTasks = new List<Task>();
+            foreach (var obj in activeObjects)
+            {
+                UpdateTasks.Add(obj.Update());
+            }
+
+            await Task.WhenAll(UpdateTasks);
+        }
     }
 }

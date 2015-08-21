@@ -163,6 +163,18 @@ namespace Server
 
                 return base.InvokeMethodAsync<Shared.CreatureEntry[]>(-1190088203, new object[] {@MapID} );
             }
+            
+            System.Threading.Tasks.Task<Shared.CreatureEntry> Server.IDataStoreManager.GetCreatureEntry(uint @guid)
+            {
+
+                return base.InvokeMethodAsync<Shared.CreatureEntry>(-2102013331, new object[] {@guid} );
+            }
+            
+            System.Threading.Tasks.Task<Shared.CreatureTemplate> Server.IDataStoreManager.GetCreatureTemplate(uint @Entry)
+            {
+
+                return base.InvokeMethodAsync<Shared.CreatureTemplate>(-1651406328, new object[] {@Entry} );
+            }
         }
     }
     
@@ -202,6 +214,10 @@ namespace Server
                                 return ((IDataStoreManager)grain).GetMapEntry((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1190088203: 
                                 return ((IDataStoreManager)grain).GetCreatureEntriesByMap((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -2102013331: 
+                                return ((IDataStoreManager)grain).GetCreatureEntry((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1651406328: 
+                                return ((IDataStoreManager)grain).GetCreatureTemplate((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }
@@ -238,6 +254,265 @@ namespace Server
                             return "GetMapEntry";
                     case -1190088203:
                             return "GetCreatureEntriesByMap";
+                    case -2102013331:
+                            return "GetCreatureEntry";
+                    case -1651406328:
+                            return "GetCreatureTemplate";
+                    
+                        default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                    }
+
+                default:
+                    throw new System.InvalidCastException("interfaceId="+interfaceId);
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    public class MapCellFactory
+    {
+        
+
+                        [System.Obsolete("This method has been deprecated. Please use GrainFactory.GetGrain<IMapCell> instead.")]
+                        public static IMapCell GetGrain(long primaryKey)
+                        {
+                            return Cast(global::Orleans.CodeGeneration.GrainFactoryBase.MakeGrainReferenceInternal(typeof(IMapCell), primaryKey));
+                        }
+
+                        [System.Obsolete("This method has been deprecated. Please use GrainFactory.GetGrain<IMapCell> instead.")]
+                        public static IMapCell GetGrain(long primaryKey, string grainClassNamePrefix)
+                        {
+                            return Cast(global::Orleans.CodeGeneration.GrainFactoryBase.MakeGrainReferenceInternal(typeof(IMapCell), primaryKey, grainClassNamePrefix));
+                        }
+
+            public static IMapCell Cast(global::Orleans.Runtime.IAddressable grainRef)
+            {
+                
+                return MapCellReference.Cast(grainRef);
+            }
+        
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+        [System.SerializableAttribute()]
+        [global::Orleans.CodeGeneration.GrainReferenceAttribute("Server.IMapCell")]
+        internal class MapCellReference : global::Orleans.Runtime.GrainReference, global::Orleans.Runtime.IAddressable, Server.IMapCell
+        {
+            
+
+            public static IMapCell Cast(global::Orleans.Runtime.IAddressable grainRef)
+            {
+                
+                return (IMapCell) global::Orleans.Runtime.GrainReference.CastInternal(typeof(IMapCell), (global::Orleans.Runtime.GrainReference gr) => { return new MapCellReference(gr);}, grainRef, 622146605);
+            }
+            
+            protected internal MapCellReference(global::Orleans.Runtime.GrainReference reference) : 
+                    base(reference)
+            {
+            }
+            
+            protected internal MapCellReference(SerializationInfo info, StreamingContext context) : 
+                    base(info, context)
+            {
+            }
+            
+            protected override int InterfaceId
+            {
+                get
+                {
+                    return 622146605;
+                }
+            }
+            
+            public override string InterfaceName
+            {
+                get
+                {
+                    return "Server.IMapCell";
+                }
+            }
+            
+            [global::Orleans.CodeGeneration.CopierMethodAttribute()]
+            public static object _Copier(object original)
+            {
+                MapCellReference input = ((MapCellReference)(original));
+                return ((MapCellReference)(global::Orleans.Runtime.GrainReference.CopyGrainReference(input)));
+            }
+            
+            [global::Orleans.CodeGeneration.SerializerMethodAttribute()]
+            public static void _Serializer(object original, global::Orleans.Serialization.BinaryTokenStreamWriter stream, System.Type expected)
+            {
+                MapCellReference input = ((MapCellReference)(original));
+                global::Orleans.Runtime.GrainReference.SerializeGrainReference(input, stream, expected);
+            }
+            
+            [global::Orleans.CodeGeneration.DeserializerMethodAttribute()]
+            public static object _Deserializer(System.Type expected, global::Orleans.Serialization.BinaryTokenStreamReader stream)
+            {
+                return MapCellReference.Cast(((global::Orleans.Runtime.GrainReference)(global::Orleans.Runtime.GrainReference.DeserializeGrainReference(expected, stream))));
+            }
+            
+            public override bool IsCompatible(int interfaceId)
+            {
+                return (interfaceId == this.InterfaceId);
+            }
+            
+            protected override string GetMethodName(int interfaceId, int methodId)
+            {
+                return MapCellMethodInvoker.GetMethodName(interfaceId, methodId);
+            }
+            
+            System.Threading.Tasks.Task Server.IMapCell.Init(uint @cellx, uint @celly, Server.IMap @parent)
+            {
+
+                return base.InvokeMethodAsync<object>(-155693576, new object[] {@cellx, @celly, @parent is global::Orleans.Grain ? @parent.AsReference<Server.IMap>() : @parent} );
+            }
+            
+            System.Threading.Tasks.Task Server.IMapCell.AddObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj)
+            {
+
+                return base.InvokeMethodAsync<object>(1709859866, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj} );
+            }
+            
+            System.Threading.Tasks.Task Server.IMapCell.RemoveObject(Shared.ObjectGUID @guid)
+            {
+
+                return base.InvokeMethodAsync<object>(1718968129, new object[] {@guid} );
+            }
+            
+            System.Threading.Tasks.Task Server.IMapCell.AddRef()
+            {
+
+                return base.InvokeMethodAsync<object>(-121618869, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IMapCell.DecRef()
+            {
+
+                return base.InvokeMethodAsync<object>(1433401269, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IMapCell.AddCreature(Shared.CreatureEntry @creature)
+            {
+
+                return base.InvokeMethodAsync<object>(112603947, new object[] {@creature} );
+            }
+            
+            System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<Shared.ObjectGUID, Server.IObjectImpl>> Server.IMapCell.GetObjectMap()
+            {
+
+                return base.InvokeMethodAsync<System.Collections.Generic.Dictionary<Shared.ObjectGUID,Server.IObjectImpl>>(-790080664, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IMapCell.Update()
+            {
+
+                return base.InvokeMethodAsync<object>(-1356403447, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IMapCell.Create(uint @InstanceID)
+            {
+
+                return base.InvokeMethodAsync<object>(227697294, new object[] {@InstanceID} );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IMapCell.IsValid()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-663875885, null );
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    [global::Orleans.CodeGeneration.MethodInvokerAttribute("Server.IMapCell", 622146605)]
+    internal class MapCellMethodInvoker : global::Orleans.CodeGeneration.IGrainMethodInvoker
+    {
+        
+        int global::Orleans.CodeGeneration.IGrainMethodInvoker.InterfaceId
+        {
+            get
+            {
+                return 622146605;
+            }
+        }
+        
+        global::System.Threading.Tasks.Task<object> global::Orleans.CodeGeneration.IGrainMethodInvoker.Invoke(global::Orleans.Runtime.IAddressable grain, int interfaceId, int methodId, object[] arguments)
+        {
+
+            try
+            {                    if (grain == null) throw new System.ArgumentNullException("grain");
+                switch (interfaceId)
+                {
+                    case 622146605:  // IMapCell
+                        switch (methodId)
+                        {
+                            case -155693576: 
+                                return ((IMapCell)grain).Init((UInt32)arguments[0], (UInt32)arguments[1], (IMap)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1709859866: 
+                                return ((IMapCell)grain).AddObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1718968129: 
+                                return ((IMapCell)grain).RemoveObject((ObjectGUID)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -121618869: 
+                                return ((IMapCell)grain).AddRef().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1433401269: 
+                                return ((IMapCell)grain).DecRef().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 112603947: 
+                                return ((IMapCell)grain).AddCreature((CreatureEntry)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -790080664: 
+                                return ((IMapCell)grain).GetObjectMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IMapCell)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 227697294: 
+                                return ((IMapCell)grain).Create((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -663875885: 
+                                return ((IMapCell)grain).IsValid().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                        }
+                    default:
+                        throw new System.InvalidCastException("interfaceId="+interfaceId);
+                }
+            }
+            catch(Exception ex)
+            {
+                var t = new System.Threading.Tasks.TaskCompletionSource<object>();
+                t.SetException(ex);
+                return t.Task;
+            }
+        }
+        
+        public static string GetMethodName(int interfaceId, int methodId)
+        {
+
+            switch (interfaceId)
+            {
+                
+                case 622146605:  // IMapCell
+                    switch (methodId)
+                    {
+                        case -155693576:
+                            return "Init";
+                    case 1709859866:
+                            return "AddObject";
+                    case 1718968129:
+                            return "RemoveObject";
+                    case -121618869:
+                            return "AddRef";
+                    case 1433401269:
+                            return "DecRef";
+                    case 112603947:
+                            return "AddCreature";
+                    case -790080664:
+                            return "GetObjectMap";
+                    case -1356403447:
+                            return "Update";
+                    case 227697294:
+                            return "Create";
+                    case -663875885:
+                            return "IsValid";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -372,6 +647,24 @@ namespace Server
 
                 return base.InvokeMethodAsync<System.Boolean>(482762363, new object[] {@obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj} );
             }
+            
+            System.Threading.Tasks.Task Server.IMap.UpdateInRangeObject(Server.IObjectImpl @obj)
+            {
+
+                return base.InvokeMethodAsync<object>(1256474764, new object[] {@obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj} );
+            }
+            
+            System.Threading.Tasks.Task Server.IMap.OnObjectUpdated(Server.IObjectImpl @obj)
+            {
+
+                return base.InvokeMethodAsync<object>(-1231155966, new object[] {@obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj} );
+            }
+            
+            System.Threading.Tasks.Task Server.IMap.SpawnCreatures(Shared.CreatureEntry[] @creatures)
+            {
+
+                return base.InvokeMethodAsync<object>(-1562962289, new object[] {@creatures} );
+            }
         }
     }
     
@@ -409,6 +702,12 @@ namespace Server
                                 return ((IMap)grain).Create((UInt32)arguments[0], (UInt32)arguments[1], (UInt32)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 482762363: 
                                 return ((IMap)grain).AddObject((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1256474764: 
+                                return ((IMap)grain).UpdateInRangeObject((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1231155966: 
+                                return ((IMap)grain).OnObjectUpdated((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1562962289: 
+                                return ((IMap)grain).SpawnCreatures((CreatureEntry[])arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }
@@ -443,6 +742,12 @@ namespace Server
                             return "Create";
                     case 482762363:
                             return "AddObject";
+                    case 1256474764:
+                            return "UpdateInRangeObject";
+                    case -1231155966:
+                            return "OnObjectUpdated";
+                    case -1562962289:
+                            return "SpawnCreatures";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -948,6 +1253,84 @@ namespace Server
                 return base.InvokeMethodAsync<Shared.PackedGUID>(1822423030, null );
             }
             
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionX()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(166514075, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionY()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(437724131, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionZ()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(1183954579, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetOrientation()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(1856558624, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet()
+            {
+
+                return base.InvokeMethodAsync<object>(48269821, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet_Add()
+            {
+
+                return base.InvokeMethodAsync<object>(668678885, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet_Remove()
+            {
+
+                return base.InvokeMethodAsync<object>(1748861840, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.RemoveInRangeObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj, bool @remove_other)
+            {
+
+                return base.InvokeMethodAsync<object>(1415061848, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj, @remove_other} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.AddInRangeObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj, bool @add_other)
+            {
+
+                return base.InvokeMethodAsync<object>(-1175709360, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj, @add_other} );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.CanSee(Server.IObjectImpl @other)
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-314520557, new object[] {@other is global::Orleans.Grain ? @other.AsReference<Server.IObjectImpl>() : @other} );
+            }
+            
+            System.Threading.Tasks.Task<Shared.PacketOut> Server.IObjectImpl.BuildCreateUpdateFor(Server.IPlayer @plr)
+            {
+
+                return base.InvokeMethodAsync<Shared.PacketOut>(-596183580, new object[] {@plr is global::Orleans.Grain ? @plr.AsReference<Server.IPlayer>() : @plr} );
+            }
+            
+            System.Threading.Tasks.Task<Shared.PacketOut> Server.IObjectImpl.BuildValuesUpdateFor(Server.IPlayer @plr)
+            {
+
+                return base.InvokeMethodAsync<Shared.PacketOut>(-684828005, new object[] {@plr is global::Orleans.Grain ? @plr.AsReference<Server.IPlayer>() : @plr} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.Update()
+            {
+
+                return base.InvokeMethodAsync<object>(-1356403447, null );
+            }
+            
             System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(int @field, int @index)
             {
 
@@ -1002,16 +1385,70 @@ namespace Server
                 return base.InvokeMethodAsync<object>(-140687627, new object[] {@field, @val} );
             }
             
+            System.Threading.Tasks.Task<Server.IMap> Server.IObjectImpl.GetMap()
+            {
+
+                return base.InvokeMethodAsync<Server.IMap>(-2063265882, null );
+            }
+            
             System.Threading.Tasks.Task Server.IObjectImpl.SetMap(Server.IMap @map)
             {
 
                 return base.InvokeMethodAsync<object>(2124193760, new object[] {@map is global::Orleans.Grain ? @map.AsReference<Server.IMap>() : @map} );
             }
             
+            System.Threading.Tasks.Task Server.IObjectImpl.ClearMap()
+            {
+
+                return base.InvokeMethodAsync<object>(939583700, null );
+            }
+            
             System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsCellActivator()
             {
 
                 return base.InvokeMethodAsync<System.Boolean>(-1893562941, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsPlayer()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-1523856837, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsUnit()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1951711301, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsCreature()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-927314476, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsPet()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1612767703, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsVehicle()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-313953098, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsTransport()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1810721655, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsGameObject()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-235749357, null );
             }
         }
     }
@@ -1052,6 +1489,32 @@ namespace Server
                                 return ((IObjectImpl)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1822423030: 
                                 return ((IObjectImpl)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IObjectImpl)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IObjectImpl)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IObjectImpl)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IObjectImpl)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IObjectImpl)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IObjectImpl)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IObjectImpl)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IObjectImpl)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IObjectImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IObjectImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 194300607: 
                                 return ((IObjectImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1305326038: 
@@ -1070,10 +1533,28 @@ namespace Server
                                 return ((IObjectImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -140687627: 
                                 return ((IObjectImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IObjectImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
                                 return ((IObjectImpl)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IObjectImpl)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IObjectImpl)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IObjectImpl)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IObjectImpl)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IObjectImpl)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IObjectImpl)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IObjectImpl)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }case 436426678:  // IBaseObjectImpl
@@ -1115,6 +1596,32 @@ namespace Server
                             return "GetGUID";
                     case 1822423030:
                             return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
                     case 194300607:
                             return "GetByte";
                     case -1305326038:
@@ -1133,10 +1640,28 @@ namespace Server
                             return "SetUInt64";
                     case -140687627:
                             return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
                     case -1893562941:
                             return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -1305,6 +1830,84 @@ namespace Server
                 return base.InvokeMethodAsync<Shared.PackedGUID>(1822423030, null );
             }
             
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionX()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(166514075, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionY()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(437724131, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionZ()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(1183954579, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetOrientation()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(1856558624, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet()
+            {
+
+                return base.InvokeMethodAsync<object>(48269821, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet_Add()
+            {
+
+                return base.InvokeMethodAsync<object>(668678885, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet_Remove()
+            {
+
+                return base.InvokeMethodAsync<object>(1748861840, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.RemoveInRangeObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj, bool @remove_other)
+            {
+
+                return base.InvokeMethodAsync<object>(1415061848, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj, @remove_other} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.AddInRangeObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj, bool @add_other)
+            {
+
+                return base.InvokeMethodAsync<object>(-1175709360, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj, @add_other} );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.CanSee(Server.IObjectImpl @other)
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-314520557, new object[] {@other is global::Orleans.Grain ? @other.AsReference<Server.IObjectImpl>() : @other} );
+            }
+            
+            System.Threading.Tasks.Task<Shared.PacketOut> Server.IObjectImpl.BuildCreateUpdateFor(Server.IPlayer @plr)
+            {
+
+                return base.InvokeMethodAsync<Shared.PacketOut>(-596183580, new object[] {@plr is global::Orleans.Grain ? @plr.AsReference<Server.IPlayer>() : @plr} );
+            }
+            
+            System.Threading.Tasks.Task<Shared.PacketOut> Server.IObjectImpl.BuildValuesUpdateFor(Server.IPlayer @plr)
+            {
+
+                return base.InvokeMethodAsync<Shared.PacketOut>(-684828005, new object[] {@plr is global::Orleans.Grain ? @plr.AsReference<Server.IPlayer>() : @plr} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.Update()
+            {
+
+                return base.InvokeMethodAsync<object>(-1356403447, null );
+            }
+            
             System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(int @field, int @index)
             {
 
@@ -1359,16 +1962,70 @@ namespace Server
                 return base.InvokeMethodAsync<object>(-140687627, new object[] {@field, @val} );
             }
             
+            System.Threading.Tasks.Task<Server.IMap> Server.IObjectImpl.GetMap()
+            {
+
+                return base.InvokeMethodAsync<Server.IMap>(-2063265882, null );
+            }
+            
             System.Threading.Tasks.Task Server.IObjectImpl.SetMap(Server.IMap @map)
             {
 
                 return base.InvokeMethodAsync<object>(2124193760, new object[] {@map is global::Orleans.Grain ? @map.AsReference<Server.IMap>() : @map} );
             }
             
+            System.Threading.Tasks.Task Server.IObjectImpl.ClearMap()
+            {
+
+                return base.InvokeMethodAsync<object>(939583700, null );
+            }
+            
             System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsCellActivator()
             {
 
                 return base.InvokeMethodAsync<System.Boolean>(-1893562941, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsPlayer()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-1523856837, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsUnit()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1951711301, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsCreature()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-927314476, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsPet()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1612767703, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsVehicle()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-313953098, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsTransport()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1810721655, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsGameObject()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-235749357, null );
             }
         }
     }
@@ -1415,6 +2072,32 @@ namespace Server
                                 return ((IUnitImpl)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1822423030: 
                                 return ((IUnitImpl)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IUnitImpl)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IUnitImpl)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IUnitImpl)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IUnitImpl)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IUnitImpl)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IUnitImpl)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IUnitImpl)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IUnitImpl)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IUnitImpl)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IUnitImpl)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IUnitImpl)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IUnitImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IUnitImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 194300607: 
                                 return ((IUnitImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1305326038: 
@@ -1433,10 +2116,28 @@ namespace Server
                                 return ((IUnitImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -140687627: 
                                 return ((IUnitImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IUnitImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnitImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IUnitImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
                                 return ((IUnitImpl)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IUnitImpl)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IUnitImpl)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IUnitImpl)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IUnitImpl)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IUnitImpl)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IUnitImpl)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IUnitImpl)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }case 1962518542:  // IObjectImpl
@@ -1454,6 +2155,32 @@ namespace Server
                                 return ((IObjectImpl)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1822423030: 
                                 return ((IObjectImpl)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IObjectImpl)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IObjectImpl)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IObjectImpl)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IObjectImpl)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IObjectImpl)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IObjectImpl)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IObjectImpl)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IObjectImpl)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IObjectImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IObjectImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 194300607: 
                                 return ((IObjectImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1305326038: 
@@ -1472,10 +2199,28 @@ namespace Server
                                 return ((IObjectImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -140687627: 
                                 return ((IObjectImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IObjectImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
                                 return ((IObjectImpl)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IObjectImpl)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IObjectImpl)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IObjectImpl)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IObjectImpl)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IObjectImpl)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IObjectImpl)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IObjectImpl)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }case 436426678:  // IBaseObjectImpl
@@ -1523,6 +2268,32 @@ namespace Server
                             return "GetGUID";
                     case 1822423030:
                             return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
                     case 194300607:
                             return "GetByte";
                     case -1305326038:
@@ -1541,10 +2312,28 @@ namespace Server
                             return "SetUInt64";
                     case -140687627:
                             return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
                     case -1893562941:
                             return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -1564,6 +2353,32 @@ namespace Server
                             return "GetGUID";
                     case 1822423030:
                             return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
                     case 194300607:
                             return "GetByte";
                     case -1305326038:
@@ -1582,10 +2397,28 @@ namespace Server
                             return "SetUInt64";
                     case -140687627:
                             return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
                     case -1893562941:
                             return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -1809,6 +2642,84 @@ namespace Server
                 return base.InvokeMethodAsync<Shared.PackedGUID>(1822423030, null );
             }
             
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionX()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(166514075, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionY()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(437724131, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionZ()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(1183954579, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetOrientation()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(1856558624, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet()
+            {
+
+                return base.InvokeMethodAsync<object>(48269821, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet_Add()
+            {
+
+                return base.InvokeMethodAsync<object>(668678885, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet_Remove()
+            {
+
+                return base.InvokeMethodAsync<object>(1748861840, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.RemoveInRangeObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj, bool @remove_other)
+            {
+
+                return base.InvokeMethodAsync<object>(1415061848, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj, @remove_other} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.AddInRangeObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj, bool @add_other)
+            {
+
+                return base.InvokeMethodAsync<object>(-1175709360, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj, @add_other} );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.CanSee(Server.IObjectImpl @other)
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-314520557, new object[] {@other is global::Orleans.Grain ? @other.AsReference<Server.IObjectImpl>() : @other} );
+            }
+            
+            System.Threading.Tasks.Task<Shared.PacketOut> Server.IObjectImpl.BuildCreateUpdateFor(Server.IPlayer @plr)
+            {
+
+                return base.InvokeMethodAsync<Shared.PacketOut>(-596183580, new object[] {@plr is global::Orleans.Grain ? @plr.AsReference<Server.IPlayer>() : @plr} );
+            }
+            
+            System.Threading.Tasks.Task<Shared.PacketOut> Server.IObjectImpl.BuildValuesUpdateFor(Server.IPlayer @plr)
+            {
+
+                return base.InvokeMethodAsync<Shared.PacketOut>(-684828005, new object[] {@plr is global::Orleans.Grain ? @plr.AsReference<Server.IPlayer>() : @plr} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.Update()
+            {
+
+                return base.InvokeMethodAsync<object>(-1356403447, null );
+            }
+            
             System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(int @field, int @index)
             {
 
@@ -1863,16 +2774,70 @@ namespace Server
                 return base.InvokeMethodAsync<object>(-140687627, new object[] {@field, @val} );
             }
             
+            System.Threading.Tasks.Task<Server.IMap> Server.IObjectImpl.GetMap()
+            {
+
+                return base.InvokeMethodAsync<Server.IMap>(-2063265882, null );
+            }
+            
             System.Threading.Tasks.Task Server.IObjectImpl.SetMap(Server.IMap @map)
             {
 
                 return base.InvokeMethodAsync<object>(2124193760, new object[] {@map is global::Orleans.Grain ? @map.AsReference<Server.IMap>() : @map} );
             }
             
+            System.Threading.Tasks.Task Server.IObjectImpl.ClearMap()
+            {
+
+                return base.InvokeMethodAsync<object>(939583700, null );
+            }
+            
             System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsCellActivator()
             {
 
                 return base.InvokeMethodAsync<System.Boolean>(-1893562941, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsPlayer()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-1523856837, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsUnit()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1951711301, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsCreature()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-927314476, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsPet()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1612767703, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsVehicle()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-313953098, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsTransport()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1810721655, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsGameObject()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-235749357, null );
             }
         }
     }
@@ -1937,6 +2902,32 @@ namespace Server
                                 return ((IPlayerImpl)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1822423030: 
                                 return ((IPlayerImpl)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IPlayerImpl)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IPlayerImpl)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IPlayerImpl)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IPlayerImpl)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IPlayerImpl)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IPlayerImpl)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IPlayerImpl)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IPlayerImpl)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IPlayerImpl)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IPlayerImpl)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IPlayerImpl)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IPlayerImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IPlayerImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 194300607: 
                                 return ((IPlayerImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1305326038: 
@@ -1955,10 +2946,28 @@ namespace Server
                                 return ((IPlayerImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -140687627: 
                                 return ((IPlayerImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IPlayerImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IPlayerImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IPlayerImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
                                 return ((IPlayerImpl)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IPlayerImpl)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IPlayerImpl)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IPlayerImpl)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IPlayerImpl)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IPlayerImpl)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IPlayerImpl)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IPlayerImpl)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }case -459325194:  // IUnitImpl
@@ -1982,6 +2991,32 @@ namespace Server
                                 return ((IUnitImpl)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1822423030: 
                                 return ((IUnitImpl)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IUnitImpl)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IUnitImpl)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IUnitImpl)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IUnitImpl)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IUnitImpl)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IUnitImpl)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IUnitImpl)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IUnitImpl)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IUnitImpl)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IUnitImpl)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IUnitImpl)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IUnitImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IUnitImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 194300607: 
                                 return ((IUnitImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1305326038: 
@@ -2000,10 +3035,28 @@ namespace Server
                                 return ((IUnitImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -140687627: 
                                 return ((IUnitImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IUnitImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnitImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IUnitImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
                                 return ((IUnitImpl)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IUnitImpl)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IUnitImpl)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IUnitImpl)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IUnitImpl)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IUnitImpl)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IUnitImpl)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IUnitImpl)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }case 1962518542:  // IObjectImpl
@@ -2021,6 +3074,32 @@ namespace Server
                                 return ((IObjectImpl)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1822423030: 
                                 return ((IObjectImpl)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IObjectImpl)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IObjectImpl)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IObjectImpl)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IObjectImpl)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IObjectImpl)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IObjectImpl)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IObjectImpl)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IObjectImpl)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IObjectImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IObjectImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 194300607: 
                                 return ((IObjectImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1305326038: 
@@ -2039,10 +3118,28 @@ namespace Server
                                 return ((IObjectImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -140687627: 
                                 return ((IObjectImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IObjectImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
                                 return ((IObjectImpl)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IObjectImpl)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IObjectImpl)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IObjectImpl)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IObjectImpl)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IObjectImpl)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IObjectImpl)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IObjectImpl)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }case 436426678:  // IBaseObjectImpl
@@ -2108,6 +3205,32 @@ namespace Server
                             return "GetGUID";
                     case 1822423030:
                             return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
                     case 194300607:
                             return "GetByte";
                     case -1305326038:
@@ -2126,10 +3249,28 @@ namespace Server
                             return "SetUInt64";
                     case -140687627:
                             return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
                     case -1893562941:
                             return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -2155,6 +3296,32 @@ namespace Server
                             return "GetGUID";
                     case 1822423030:
                             return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
                     case 194300607:
                             return "GetByte";
                     case -1305326038:
@@ -2173,10 +3340,28 @@ namespace Server
                             return "SetUInt64";
                     case -140687627:
                             return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
                     case -1893562941:
                             return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -2196,6 +3381,32 @@ namespace Server
                             return "GetGUID";
                     case 1822423030:
                             return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
                     case 194300607:
                             return "GetByte";
                     case -1305326038:
@@ -2214,10 +3425,28 @@ namespace Server
                             return "SetUInt64";
                     case -140687627:
                             return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
                     case -1893562941:
                             return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -2442,6 +3671,84 @@ namespace Server
                 return base.InvokeMethodAsync<Shared.PackedGUID>(1822423030, null );
             }
             
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionX()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(166514075, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionY()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(437724131, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionZ()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(1183954579, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetOrientation()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(1856558624, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet()
+            {
+
+                return base.InvokeMethodAsync<object>(48269821, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet_Add()
+            {
+
+                return base.InvokeMethodAsync<object>(668678885, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet_Remove()
+            {
+
+                return base.InvokeMethodAsync<object>(1748861840, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.RemoveInRangeObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj, bool @remove_other)
+            {
+
+                return base.InvokeMethodAsync<object>(1415061848, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj, @remove_other} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.AddInRangeObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj, bool @add_other)
+            {
+
+                return base.InvokeMethodAsync<object>(-1175709360, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj, @add_other} );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.CanSee(Server.IObjectImpl @other)
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-314520557, new object[] {@other is global::Orleans.Grain ? @other.AsReference<Server.IObjectImpl>() : @other} );
+            }
+            
+            System.Threading.Tasks.Task<Shared.PacketOut> Server.IObjectImpl.BuildCreateUpdateFor(Server.IPlayer @plr)
+            {
+
+                return base.InvokeMethodAsync<Shared.PacketOut>(-596183580, new object[] {@plr is global::Orleans.Grain ? @plr.AsReference<Server.IPlayer>() : @plr} );
+            }
+            
+            System.Threading.Tasks.Task<Shared.PacketOut> Server.IObjectImpl.BuildValuesUpdateFor(Server.IPlayer @plr)
+            {
+
+                return base.InvokeMethodAsync<Shared.PacketOut>(-684828005, new object[] {@plr is global::Orleans.Grain ? @plr.AsReference<Server.IPlayer>() : @plr} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.Update()
+            {
+
+                return base.InvokeMethodAsync<object>(-1356403447, null );
+            }
+            
             System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(int @field, int @index)
             {
 
@@ -2496,16 +3803,70 @@ namespace Server
                 return base.InvokeMethodAsync<object>(-140687627, new object[] {@field, @val} );
             }
             
+            System.Threading.Tasks.Task<Server.IMap> Server.IObjectImpl.GetMap()
+            {
+
+                return base.InvokeMethodAsync<Server.IMap>(-2063265882, null );
+            }
+            
             System.Threading.Tasks.Task Server.IObjectImpl.SetMap(Server.IMap @map)
             {
 
                 return base.InvokeMethodAsync<object>(2124193760, new object[] {@map is global::Orleans.Grain ? @map.AsReference<Server.IMap>() : @map} );
             }
             
+            System.Threading.Tasks.Task Server.IObjectImpl.ClearMap()
+            {
+
+                return base.InvokeMethodAsync<object>(939583700, null );
+            }
+            
             System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsCellActivator()
             {
 
                 return base.InvokeMethodAsync<System.Boolean>(-1893562941, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsPlayer()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-1523856837, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsUnit()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1951711301, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsCreature()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-927314476, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsPet()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1612767703, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsVehicle()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-313953098, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsTransport()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1810721655, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsGameObject()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-235749357, null );
             }
         }
     }
@@ -2570,6 +3931,32 @@ namespace Server
                                 return ((IPlayer)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1822423030: 
                                 return ((IPlayer)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IPlayer)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IPlayer)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IPlayer)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IPlayer)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IPlayer)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IPlayer)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IPlayer)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IPlayer)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IPlayer)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IPlayer)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IPlayer)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IPlayer)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IPlayer)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 194300607: 
                                 return ((IPlayer)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1305326038: 
@@ -2588,10 +3975,28 @@ namespace Server
                                 return ((IPlayer)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -140687627: 
                                 return ((IPlayer)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IPlayer)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IPlayer)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IPlayer)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
                                 return ((IPlayer)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IPlayer)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IPlayer)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IPlayer)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IPlayer)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IPlayer)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IPlayer)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IPlayer)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }case 1374563470:  // IPlayerImpl
@@ -2633,6 +4038,32 @@ namespace Server
                                 return ((IPlayerImpl)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1822423030: 
                                 return ((IPlayerImpl)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IPlayerImpl)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IPlayerImpl)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IPlayerImpl)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IPlayerImpl)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IPlayerImpl)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IPlayerImpl)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IPlayerImpl)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IPlayerImpl)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IPlayerImpl)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IPlayerImpl)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IPlayerImpl)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IPlayerImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IPlayerImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 194300607: 
                                 return ((IPlayerImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1305326038: 
@@ -2651,10 +4082,28 @@ namespace Server
                                 return ((IPlayerImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -140687627: 
                                 return ((IPlayerImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IPlayerImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IPlayerImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IPlayerImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
                                 return ((IPlayerImpl)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IPlayerImpl)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IPlayerImpl)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IPlayerImpl)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IPlayerImpl)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IPlayerImpl)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IPlayerImpl)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IPlayerImpl)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }case -459325194:  // IUnitImpl
@@ -2678,6 +4127,32 @@ namespace Server
                                 return ((IUnitImpl)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1822423030: 
                                 return ((IUnitImpl)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IUnitImpl)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IUnitImpl)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IUnitImpl)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IUnitImpl)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IUnitImpl)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IUnitImpl)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IUnitImpl)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IUnitImpl)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IUnitImpl)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IUnitImpl)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IUnitImpl)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IUnitImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IUnitImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 194300607: 
                                 return ((IUnitImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1305326038: 
@@ -2696,10 +4171,28 @@ namespace Server
                                 return ((IUnitImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -140687627: 
                                 return ((IUnitImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IUnitImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnitImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IUnitImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
                                 return ((IUnitImpl)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IUnitImpl)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IUnitImpl)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IUnitImpl)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IUnitImpl)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IUnitImpl)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IUnitImpl)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IUnitImpl)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }case 1962518542:  // IObjectImpl
@@ -2717,6 +4210,32 @@ namespace Server
                                 return ((IObjectImpl)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1822423030: 
                                 return ((IObjectImpl)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IObjectImpl)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IObjectImpl)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IObjectImpl)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IObjectImpl)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IObjectImpl)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IObjectImpl)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IObjectImpl)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IObjectImpl)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IObjectImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IObjectImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 194300607: 
                                 return ((IObjectImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1305326038: 
@@ -2735,10 +4254,28 @@ namespace Server
                                 return ((IObjectImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -140687627: 
                                 return ((IObjectImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IObjectImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
                                 return ((IObjectImpl)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IObjectImpl)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IObjectImpl)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IObjectImpl)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IObjectImpl)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IObjectImpl)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IObjectImpl)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IObjectImpl)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }case 436426678:  // IBaseObjectImpl
@@ -2804,6 +4341,32 @@ namespace Server
                             return "GetGUID";
                     case 1822423030:
                             return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
                     case 194300607:
                             return "GetByte";
                     case -1305326038:
@@ -2822,10 +4385,28 @@ namespace Server
                             return "SetUInt64";
                     case -140687627:
                             return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
                     case -1893562941:
                             return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -2869,6 +4450,32 @@ namespace Server
                             return "GetGUID";
                     case 1822423030:
                             return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
                     case 194300607:
                             return "GetByte";
                     case -1305326038:
@@ -2887,10 +4494,28 @@ namespace Server
                             return "SetUInt64";
                     case -140687627:
                             return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
                     case -1893562941:
                             return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -2916,6 +4541,32 @@ namespace Server
                             return "GetGUID";
                     case 1822423030:
                             return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
                     case 194300607:
                             return "GetByte";
                     case -1305326038:
@@ -2934,10 +4585,28 @@ namespace Server
                             return "SetUInt64";
                     case -140687627:
                             return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
                     case -1893562941:
                             return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -2957,6 +4626,32 @@ namespace Server
                             return "GetGUID";
                     case 1822423030:
                             return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
                     case 194300607:
                             return "GetByte";
                     case -1305326038:
@@ -2975,10 +4670,28 @@ namespace Server
                             return "SetUInt64";
                     case -140687627:
                             return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
                     case -1893562941:
                             return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -3129,6 +4842,84 @@ namespace Server
                 return base.InvokeMethodAsync<Shared.PackedGUID>(1822423030, null );
             }
             
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionX()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(166514075, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionY()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(437724131, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionZ()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(1183954579, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetOrientation()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(1856558624, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet()
+            {
+
+                return base.InvokeMethodAsync<object>(48269821, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet_Add()
+            {
+
+                return base.InvokeMethodAsync<object>(668678885, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet_Remove()
+            {
+
+                return base.InvokeMethodAsync<object>(1748861840, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.RemoveInRangeObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj, bool @remove_other)
+            {
+
+                return base.InvokeMethodAsync<object>(1415061848, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj, @remove_other} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.AddInRangeObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj, bool @add_other)
+            {
+
+                return base.InvokeMethodAsync<object>(-1175709360, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj, @add_other} );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.CanSee(Server.IObjectImpl @other)
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-314520557, new object[] {@other is global::Orleans.Grain ? @other.AsReference<Server.IObjectImpl>() : @other} );
+            }
+            
+            System.Threading.Tasks.Task<Shared.PacketOut> Server.IObjectImpl.BuildCreateUpdateFor(Server.IPlayer @plr)
+            {
+
+                return base.InvokeMethodAsync<Shared.PacketOut>(-596183580, new object[] {@plr is global::Orleans.Grain ? @plr.AsReference<Server.IPlayer>() : @plr} );
+            }
+            
+            System.Threading.Tasks.Task<Shared.PacketOut> Server.IObjectImpl.BuildValuesUpdateFor(Server.IPlayer @plr)
+            {
+
+                return base.InvokeMethodAsync<Shared.PacketOut>(-684828005, new object[] {@plr is global::Orleans.Grain ? @plr.AsReference<Server.IPlayer>() : @plr} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.Update()
+            {
+
+                return base.InvokeMethodAsync<object>(-1356403447, null );
+            }
+            
             System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(int @field, int @index)
             {
 
@@ -3183,16 +4974,70 @@ namespace Server
                 return base.InvokeMethodAsync<object>(-140687627, new object[] {@field, @val} );
             }
             
+            System.Threading.Tasks.Task<Server.IMap> Server.IObjectImpl.GetMap()
+            {
+
+                return base.InvokeMethodAsync<Server.IMap>(-2063265882, null );
+            }
+            
             System.Threading.Tasks.Task Server.IObjectImpl.SetMap(Server.IMap @map)
             {
 
                 return base.InvokeMethodAsync<object>(2124193760, new object[] {@map is global::Orleans.Grain ? @map.AsReference<Server.IMap>() : @map} );
             }
             
+            System.Threading.Tasks.Task Server.IObjectImpl.ClearMap()
+            {
+
+                return base.InvokeMethodAsync<object>(939583700, null );
+            }
+            
             System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsCellActivator()
             {
 
                 return base.InvokeMethodAsync<System.Boolean>(-1893562941, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsPlayer()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-1523856837, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsUnit()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1951711301, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsCreature()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-927314476, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsPet()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1612767703, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsVehicle()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-313953098, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsTransport()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1810721655, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsGameObject()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-235749357, null );
             }
         }
     }
@@ -3233,6 +5078,32 @@ namespace Server
                                 return ((IObject)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1822423030: 
                                 return ((IObject)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IObject)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IObject)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IObject)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IObject)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IObject)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IObject)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IObject)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IObject)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IObject)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IObject)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IObject)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IObject)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IObject)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 194300607: 
                                 return ((IObject)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1305326038: 
@@ -3251,10 +5122,28 @@ namespace Server
                                 return ((IObject)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -140687627: 
                                 return ((IObject)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IObject)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObject)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IObject)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
                                 return ((IObject)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IObject)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IObject)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IObject)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IObject)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IObject)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IObject)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IObject)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }case 1962518542:  // IObjectImpl
@@ -3272,6 +5161,32 @@ namespace Server
                                 return ((IObjectImpl)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1822423030: 
                                 return ((IObjectImpl)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IObjectImpl)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IObjectImpl)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IObjectImpl)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IObjectImpl)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IObjectImpl)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IObjectImpl)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IObjectImpl)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IObjectImpl)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IObjectImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IObjectImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 194300607: 
                                 return ((IObjectImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1305326038: 
@@ -3290,10 +5205,28 @@ namespace Server
                                 return ((IObjectImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -140687627: 
                                 return ((IObjectImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IObjectImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
                                 return ((IObjectImpl)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IObjectImpl)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IObjectImpl)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IObjectImpl)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IObjectImpl)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IObjectImpl)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IObjectImpl)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IObjectImpl)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }case 436426678:  // IBaseObjectImpl
@@ -3335,6 +5268,32 @@ namespace Server
                             return "GetGUID";
                     case 1822423030:
                             return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
                     case 194300607:
                             return "GetByte";
                     case -1305326038:
@@ -3353,10 +5312,28 @@ namespace Server
                             return "SetUInt64";
                     case -140687627:
                             return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
                     case -1893562941:
                             return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -3376,6 +5353,32 @@ namespace Server
                             return "GetGUID";
                     case 1822423030:
                             return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
                     case 194300607:
                             return "GetByte";
                     case -1305326038:
@@ -3394,10 +5397,2109 @@ namespace Server
                             return "SetUInt64";
                     case -140687627:
                             return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
                     case -1893562941:
                             return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
+                    
+                        default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                    }
+                case 436426678:  // IBaseObjectImpl
+                    switch (methodId)
+                    {
+                        
+                        default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                    }
+
+                default:
+                    throw new System.InvalidCastException("interfaceId="+interfaceId);
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    public class CreatureImplFactory
+    {
+        
+
+                        [System.Obsolete("This method has been deprecated. Please use GrainFactory.GetGrain<ICreatureImpl> instead.")]
+                        public static ICreatureImpl GetGrain(long primaryKey)
+                        {
+                            return Cast(global::Orleans.CodeGeneration.GrainFactoryBase.MakeGrainReferenceInternal(typeof(ICreatureImpl), primaryKey));
+                        }
+
+                        [System.Obsolete("This method has been deprecated. Please use GrainFactory.GetGrain<ICreatureImpl> instead.")]
+                        public static ICreatureImpl GetGrain(long primaryKey, string grainClassNamePrefix)
+                        {
+                            return Cast(global::Orleans.CodeGeneration.GrainFactoryBase.MakeGrainReferenceInternal(typeof(ICreatureImpl), primaryKey, grainClassNamePrefix));
+                        }
+
+            public static ICreatureImpl Cast(global::Orleans.Runtime.IAddressable grainRef)
+            {
+                
+                return CreatureImplReference.Cast(grainRef);
+            }
+        
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+        [System.SerializableAttribute()]
+        [global::Orleans.CodeGeneration.GrainReferenceAttribute("Server.ICreatureImpl")]
+        internal class CreatureImplReference : global::Orleans.Runtime.GrainReference, global::Orleans.Runtime.IAddressable, Server.ICreatureImpl
+        {
+            
+
+            public static ICreatureImpl Cast(global::Orleans.Runtime.IAddressable grainRef)
+            {
+                
+                return (ICreatureImpl) global::Orleans.Runtime.GrainReference.CastInternal(typeof(ICreatureImpl), (global::Orleans.Runtime.GrainReference gr) => { return new CreatureImplReference(gr);}, grainRef, -2139656788);
+            }
+            
+            protected internal CreatureImplReference(global::Orleans.Runtime.GrainReference reference) : 
+                    base(reference)
+            {
+            }
+            
+            protected internal CreatureImplReference(SerializationInfo info, StreamingContext context) : 
+                    base(info, context)
+            {
+            }
+            
+            protected override int InterfaceId
+            {
+                get
+                {
+                    return -2139656788;
+                }
+            }
+            
+            public override string InterfaceName
+            {
+                get
+                {
+                    return "Server.ICreatureImpl";
+                }
+            }
+            
+            [global::Orleans.CodeGeneration.CopierMethodAttribute()]
+            public static object _Copier(object original)
+            {
+                CreatureImplReference input = ((CreatureImplReference)(original));
+                return ((CreatureImplReference)(global::Orleans.Runtime.GrainReference.CopyGrainReference(input)));
+            }
+            
+            [global::Orleans.CodeGeneration.SerializerMethodAttribute()]
+            public static void _Serializer(object original, global::Orleans.Serialization.BinaryTokenStreamWriter stream, System.Type expected)
+            {
+                CreatureImplReference input = ((CreatureImplReference)(original));
+                global::Orleans.Runtime.GrainReference.SerializeGrainReference(input, stream, expected);
+            }
+            
+            [global::Orleans.CodeGeneration.DeserializerMethodAttribute()]
+            public static object _Deserializer(System.Type expected, global::Orleans.Serialization.BinaryTokenStreamReader stream)
+            {
+                return CreatureImplReference.Cast(((global::Orleans.Runtime.GrainReference)(global::Orleans.Runtime.GrainReference.DeserializeGrainReference(expected, stream))));
+            }
+            
+            public override bool IsCompatible(int interfaceId)
+            {
+                return ((((interfaceId == this.InterfaceId) 
+                            || (interfaceId == -459325194)) 
+                            || (interfaceId == 1962518542)) 
+                            || (interfaceId == 436426678));
+            }
+            
+            protected override string GetMethodName(int interfaceId, int methodId)
+            {
+                return CreatureImplMethodInvoker.GetMethodName(interfaceId, methodId);
+            }
+            
+            System.Threading.Tasks.Task Server.ICreatureImpl.Create(Shared.CreatureEntry @entry)
+            {
+
+                return base.InvokeMethodAsync<object>(934435978, new object[] {@entry} );
+            }
+            
+            System.Threading.Tasks.Task<string> Server.IUnitImpl.UnitCall()
+            {
+
+                return base.InvokeMethodAsync<System.String>(1519937893, null );
+            }
+            
+            System.Threading.Tasks.Task<int> Server.IUnitImpl.GetDisplayID()
+            {
+
+                return base.InvokeMethodAsync<System.Int32>(-342467399, null );
+            }
+            
+            System.Threading.Tasks.Task<int> Server.IUnitImpl.GetNativeDisplayID()
+            {
+
+                return base.InvokeMethodAsync<System.Int32>(1421261762, null );
+            }
+            
+            System.Threading.Tasks.Task<string> Server.IObjectImpl.VirtualCall()
+            {
+
+                return base.InvokeMethodAsync<System.String>(911766124, null );
+            }
+            
+            System.Threading.Tasks.Task<string> Server.IObjectImpl.ObjectCall()
+            {
+
+                return base.InvokeMethodAsync<System.String>(-509390599, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.Save()
+            {
+
+                return base.InvokeMethodAsync<object>(-1038277770, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsValid()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-663875885, null );
+            }
+            
+            System.Threading.Tasks.Task<Shared.ObjectGUID> Server.IObjectImpl.GetGUID()
+            {
+
+                return base.InvokeMethodAsync<Shared.ObjectGUID>(-1893154936, null );
+            }
+            
+            System.Threading.Tasks.Task<Shared.PackedGUID> Server.IObjectImpl.GetPackedGUID()
+            {
+
+                return base.InvokeMethodAsync<Shared.PackedGUID>(1822423030, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionX()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(166514075, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionY()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(437724131, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionZ()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(1183954579, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetOrientation()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(1856558624, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet()
+            {
+
+                return base.InvokeMethodAsync<object>(48269821, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet_Add()
+            {
+
+                return base.InvokeMethodAsync<object>(668678885, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet_Remove()
+            {
+
+                return base.InvokeMethodAsync<object>(1748861840, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.RemoveInRangeObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj, bool @remove_other)
+            {
+
+                return base.InvokeMethodAsync<object>(1415061848, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj, @remove_other} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.AddInRangeObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj, bool @add_other)
+            {
+
+                return base.InvokeMethodAsync<object>(-1175709360, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj, @add_other} );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.CanSee(Server.IObjectImpl @other)
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-314520557, new object[] {@other is global::Orleans.Grain ? @other.AsReference<Server.IObjectImpl>() : @other} );
+            }
+            
+            System.Threading.Tasks.Task<Shared.PacketOut> Server.IObjectImpl.BuildCreateUpdateFor(Server.IPlayer @plr)
+            {
+
+                return base.InvokeMethodAsync<Shared.PacketOut>(-596183580, new object[] {@plr is global::Orleans.Grain ? @plr.AsReference<Server.IPlayer>() : @plr} );
+            }
+            
+            System.Threading.Tasks.Task<Shared.PacketOut> Server.IObjectImpl.BuildValuesUpdateFor(Server.IPlayer @plr)
+            {
+
+                return base.InvokeMethodAsync<Shared.PacketOut>(-684828005, new object[] {@plr is global::Orleans.Grain ? @plr.AsReference<Server.IPlayer>() : @plr} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.Update()
+            {
+
+                return base.InvokeMethodAsync<object>(-1356403447, null );
+            }
+            
+            System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(int @field, int @index)
+            {
+
+                return base.InvokeMethodAsync<System.Byte>(194300607, new object[] {@field, @index} );
+            }
+            
+            System.Threading.Tasks.Task<uint> Server.IObjectImpl.GetUInt32(int @field)
+            {
+
+                return base.InvokeMethodAsync<System.UInt32>(-1305326038, new object[] {@field} );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetFloat(uint @field)
+            {
+
+                return base.InvokeMethodAsync<System.Single>(-1053963025, new object[] {@field} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetByte(int @field, int @index, byte @val)
+            {
+
+                return base.InvokeMethodAsync<object>(-1778927808, new object[] {@field, @index, @val} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt32(int @field, uint @val)
+            {
+
+                return base.InvokeMethodAsync<object>(-890930237, new object[] {@field, @val} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetInt32(int @field, int @val)
+            {
+
+                return base.InvokeMethodAsync<object>(-1920519729, new object[] {@field, @val} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetFloat(int @field, float @val)
+            {
+
+                return base.InvokeMethodAsync<object>(1703182622, new object[] {@field, @val} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt64(int @field, ulong @val)
+            {
+
+                return base.InvokeMethodAsync<object>(-2061902484, new object[] {@field, @val} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetGUID(int @field, Shared.ObjectGUID @val)
+            {
+
+                return base.InvokeMethodAsync<object>(-140687627, new object[] {@field, @val} );
+            }
+            
+            System.Threading.Tasks.Task<Server.IMap> Server.IObjectImpl.GetMap()
+            {
+
+                return base.InvokeMethodAsync<Server.IMap>(-2063265882, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetMap(Server.IMap @map)
+            {
+
+                return base.InvokeMethodAsync<object>(2124193760, new object[] {@map is global::Orleans.Grain ? @map.AsReference<Server.IMap>() : @map} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.ClearMap()
+            {
+
+                return base.InvokeMethodAsync<object>(939583700, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsCellActivator()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-1893562941, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsPlayer()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-1523856837, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsUnit()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1951711301, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsCreature()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-927314476, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsPet()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1612767703, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsVehicle()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-313953098, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsTransport()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1810721655, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsGameObject()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-235749357, null );
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    [global::Orleans.CodeGeneration.MethodInvokerAttribute("Server.ICreatureImpl", -2139656788)]
+    internal class CreatureImplMethodInvoker : global::Orleans.CodeGeneration.IGrainMethodInvoker
+    {
+        
+        int global::Orleans.CodeGeneration.IGrainMethodInvoker.InterfaceId
+        {
+            get
+            {
+                return -2139656788;
+            }
+        }
+        
+        global::System.Threading.Tasks.Task<object> global::Orleans.CodeGeneration.IGrainMethodInvoker.Invoke(global::Orleans.Runtime.IAddressable grain, int interfaceId, int methodId, object[] arguments)
+        {
+
+            try
+            {                    if (grain == null) throw new System.ArgumentNullException("grain");
+                switch (interfaceId)
+                {
+                    case -2139656788:  // ICreatureImpl
+                        switch (methodId)
+                        {
+                            case 934435978: 
+                                return ((ICreatureImpl)grain).Create((CreatureEntry)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1519937893: 
+                                return ((ICreatureImpl)grain).UnitCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -342467399: 
+                                return ((ICreatureImpl)grain).GetDisplayID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1421261762: 
+                                return ((ICreatureImpl)grain).GetNativeDisplayID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 911766124: 
+                                return ((ICreatureImpl)grain).VirtualCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -509390599: 
+                                return ((ICreatureImpl)grain).ObjectCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1038277770: 
+                                return ((ICreatureImpl)grain).Save().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -663875885: 
+                                return ((ICreatureImpl)grain).IsValid().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1893154936: 
+                                return ((ICreatureImpl)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1822423030: 
+                                return ((ICreatureImpl)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((ICreatureImpl)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((ICreatureImpl)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((ICreatureImpl)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((ICreatureImpl)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((ICreatureImpl)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((ICreatureImpl)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((ICreatureImpl)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((ICreatureImpl)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((ICreatureImpl)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((ICreatureImpl)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((ICreatureImpl)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((ICreatureImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((ICreatureImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 194300607: 
+                                return ((ICreatureImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1305326038: 
+                                return ((ICreatureImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1053963025: 
+                                return ((ICreatureImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1778927808: 
+                                return ((ICreatureImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -890930237: 
+                                return ((ICreatureImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1920519729: 
+                                return ((ICreatureImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1703182622: 
+                                return ((ICreatureImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2061902484: 
+                                return ((ICreatureImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -140687627: 
+                                return ((ICreatureImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((ICreatureImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 2124193760: 
+                                return ((ICreatureImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((ICreatureImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1893562941: 
+                                return ((ICreatureImpl)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((ICreatureImpl)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((ICreatureImpl)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((ICreatureImpl)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((ICreatureImpl)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((ICreatureImpl)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((ICreatureImpl)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((ICreatureImpl)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                        }case -459325194:  // IUnitImpl
+                        switch (methodId)
+                        {
+                            case 1519937893: 
+                                return ((IUnitImpl)grain).UnitCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -342467399: 
+                                return ((IUnitImpl)grain).GetDisplayID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1421261762: 
+                                return ((IUnitImpl)grain).GetNativeDisplayID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 911766124: 
+                                return ((IUnitImpl)grain).VirtualCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -509390599: 
+                                return ((IUnitImpl)grain).ObjectCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1038277770: 
+                                return ((IUnitImpl)grain).Save().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -663875885: 
+                                return ((IUnitImpl)grain).IsValid().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1893154936: 
+                                return ((IUnitImpl)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1822423030: 
+                                return ((IUnitImpl)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IUnitImpl)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IUnitImpl)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IUnitImpl)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IUnitImpl)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IUnitImpl)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IUnitImpl)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IUnitImpl)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IUnitImpl)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IUnitImpl)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IUnitImpl)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IUnitImpl)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IUnitImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IUnitImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 194300607: 
+                                return ((IUnitImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1305326038: 
+                                return ((IUnitImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1053963025: 
+                                return ((IUnitImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1778927808: 
+                                return ((IUnitImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -890930237: 
+                                return ((IUnitImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1920519729: 
+                                return ((IUnitImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1703182622: 
+                                return ((IUnitImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2061902484: 
+                                return ((IUnitImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -140687627: 
+                                return ((IUnitImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IUnitImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 2124193760: 
+                                return ((IUnitImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IUnitImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1893562941: 
+                                return ((IUnitImpl)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IUnitImpl)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IUnitImpl)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IUnitImpl)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IUnitImpl)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IUnitImpl)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IUnitImpl)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IUnitImpl)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                        }case 1962518542:  // IObjectImpl
+                        switch (methodId)
+                        {
+                            case 911766124: 
+                                return ((IObjectImpl)grain).VirtualCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -509390599: 
+                                return ((IObjectImpl)grain).ObjectCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1038277770: 
+                                return ((IObjectImpl)grain).Save().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -663875885: 
+                                return ((IObjectImpl)grain).IsValid().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1893154936: 
+                                return ((IObjectImpl)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1822423030: 
+                                return ((IObjectImpl)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IObjectImpl)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IObjectImpl)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IObjectImpl)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IObjectImpl)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IObjectImpl)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IObjectImpl)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IObjectImpl)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IObjectImpl)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IObjectImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IObjectImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 194300607: 
+                                return ((IObjectImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1305326038: 
+                                return ((IObjectImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1053963025: 
+                                return ((IObjectImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1778927808: 
+                                return ((IObjectImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -890930237: 
+                                return ((IObjectImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1920519729: 
+                                return ((IObjectImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1703182622: 
+                                return ((IObjectImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2061902484: 
+                                return ((IObjectImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -140687627: 
+                                return ((IObjectImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 2124193760: 
+                                return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IObjectImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1893562941: 
+                                return ((IObjectImpl)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IObjectImpl)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IObjectImpl)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IObjectImpl)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IObjectImpl)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IObjectImpl)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IObjectImpl)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IObjectImpl)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                        }case 436426678:  // IBaseObjectImpl
+                        switch (methodId)
+                        {
+                            default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                        }
+                    default:
+                        throw new System.InvalidCastException("interfaceId="+interfaceId);
+                }
+            }
+            catch(Exception ex)
+            {
+                var t = new System.Threading.Tasks.TaskCompletionSource<object>();
+                t.SetException(ex);
+                return t.Task;
+            }
+        }
+        
+        public static string GetMethodName(int interfaceId, int methodId)
+        {
+
+            switch (interfaceId)
+            {
+                
+                case -2139656788:  // ICreatureImpl
+                    switch (methodId)
+                    {
+                        case 934435978:
+                            return "Create";
+                    case 1519937893:
+                            return "UnitCall";
+                    case -342467399:
+                            return "GetDisplayID";
+                    case 1421261762:
+                            return "GetNativeDisplayID";
+                    case 911766124:
+                            return "VirtualCall";
+                    case -509390599:
+                            return "ObjectCall";
+                    case -1038277770:
+                            return "Save";
+                    case -663875885:
+                            return "IsValid";
+                    case -1893154936:
+                            return "GetGUID";
+                    case 1822423030:
+                            return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
+                    case 194300607:
+                            return "GetByte";
+                    case -1305326038:
+                            return "GetUInt32";
+                    case -1053963025:
+                            return "GetFloat";
+                    case -1778927808:
+                            return "SetByte";
+                    case -890930237:
+                            return "SetUInt32";
+                    case -1920519729:
+                            return "SetInt32";
+                    case 1703182622:
+                            return "SetFloat";
+                    case -2061902484:
+                            return "SetUInt64";
+                    case -140687627:
+                            return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
+                    case 2124193760:
+                            return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
+                    case -1893562941:
+                            return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
+                    
+                        default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                    }
+                case -459325194:  // IUnitImpl
+                    switch (methodId)
+                    {
+                        case 1519937893:
+                            return "UnitCall";
+                    case -342467399:
+                            return "GetDisplayID";
+                    case 1421261762:
+                            return "GetNativeDisplayID";
+                    case 911766124:
+                            return "VirtualCall";
+                    case -509390599:
+                            return "ObjectCall";
+                    case -1038277770:
+                            return "Save";
+                    case -663875885:
+                            return "IsValid";
+                    case -1893154936:
+                            return "GetGUID";
+                    case 1822423030:
+                            return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
+                    case 194300607:
+                            return "GetByte";
+                    case -1305326038:
+                            return "GetUInt32";
+                    case -1053963025:
+                            return "GetFloat";
+                    case -1778927808:
+                            return "SetByte";
+                    case -890930237:
+                            return "SetUInt32";
+                    case -1920519729:
+                            return "SetInt32";
+                    case 1703182622:
+                            return "SetFloat";
+                    case -2061902484:
+                            return "SetUInt64";
+                    case -140687627:
+                            return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
+                    case 2124193760:
+                            return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
+                    case -1893562941:
+                            return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
+                    
+                        default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                    }
+                case 1962518542:  // IObjectImpl
+                    switch (methodId)
+                    {
+                        case 911766124:
+                            return "VirtualCall";
+                    case -509390599:
+                            return "ObjectCall";
+                    case -1038277770:
+                            return "Save";
+                    case -663875885:
+                            return "IsValid";
+                    case -1893154936:
+                            return "GetGUID";
+                    case 1822423030:
+                            return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
+                    case 194300607:
+                            return "GetByte";
+                    case -1305326038:
+                            return "GetUInt32";
+                    case -1053963025:
+                            return "GetFloat";
+                    case -1778927808:
+                            return "SetByte";
+                    case -890930237:
+                            return "SetUInt32";
+                    case -1920519729:
+                            return "SetInt32";
+                    case 1703182622:
+                            return "SetFloat";
+                    case -2061902484:
+                            return "SetUInt64";
+                    case -140687627:
+                            return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
+                    case 2124193760:
+                            return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
+                    case -1893562941:
+                            return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
+                    
+                        default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                    }
+                case 436426678:  // IBaseObjectImpl
+                    switch (methodId)
+                    {
+                        
+                        default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                    }
+
+                default:
+                    throw new System.InvalidCastException("interfaceId="+interfaceId);
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    public class CreatureFactory
+    {
+        
+
+                        [System.Obsolete("This method has been deprecated. Please use GrainFactory.GetGrain<ICreature> instead.")]
+                        public static ICreature GetGrain(long primaryKey)
+                        {
+                            return Cast(global::Orleans.CodeGeneration.GrainFactoryBase.MakeGrainReferenceInternal(typeof(ICreature), primaryKey));
+                        }
+
+                        [System.Obsolete("This method has been deprecated. Please use GrainFactory.GetGrain<ICreature> instead.")]
+                        public static ICreature GetGrain(long primaryKey, string grainClassNamePrefix)
+                        {
+                            return Cast(global::Orleans.CodeGeneration.GrainFactoryBase.MakeGrainReferenceInternal(typeof(ICreature), primaryKey, grainClassNamePrefix));
+                        }
+
+            public static ICreature Cast(global::Orleans.Runtime.IAddressable grainRef)
+            {
+                
+                return CreatureReference.Cast(grainRef);
+            }
+        
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+        [System.SerializableAttribute()]
+        [global::Orleans.CodeGeneration.GrainReferenceAttribute("Server.ICreature")]
+        internal class CreatureReference : global::Orleans.Runtime.GrainReference, global::Orleans.Runtime.IAddressable, Server.ICreature
+        {
+            
+
+            public static ICreature Cast(global::Orleans.Runtime.IAddressable grainRef)
+            {
+                
+                return (ICreature) global::Orleans.Runtime.GrainReference.CastInternal(typeof(ICreature), (global::Orleans.Runtime.GrainReference gr) => { return new CreatureReference(gr);}, grainRef, -1097649859);
+            }
+            
+            protected internal CreatureReference(global::Orleans.Runtime.GrainReference reference) : 
+                    base(reference)
+            {
+            }
+            
+            protected internal CreatureReference(SerializationInfo info, StreamingContext context) : 
+                    base(info, context)
+            {
+            }
+            
+            protected override int InterfaceId
+            {
+                get
+                {
+                    return -1097649859;
+                }
+            }
+            
+            public override string InterfaceName
+            {
+                get
+                {
+                    return "Server.ICreature";
+                }
+            }
+            
+            [global::Orleans.CodeGeneration.CopierMethodAttribute()]
+            public static object _Copier(object original)
+            {
+                CreatureReference input = ((CreatureReference)(original));
+                return ((CreatureReference)(global::Orleans.Runtime.GrainReference.CopyGrainReference(input)));
+            }
+            
+            [global::Orleans.CodeGeneration.SerializerMethodAttribute()]
+            public static void _Serializer(object original, global::Orleans.Serialization.BinaryTokenStreamWriter stream, System.Type expected)
+            {
+                CreatureReference input = ((CreatureReference)(original));
+                global::Orleans.Runtime.GrainReference.SerializeGrainReference(input, stream, expected);
+            }
+            
+            [global::Orleans.CodeGeneration.DeserializerMethodAttribute()]
+            public static object _Deserializer(System.Type expected, global::Orleans.Serialization.BinaryTokenStreamReader stream)
+            {
+                return CreatureReference.Cast(((global::Orleans.Runtime.GrainReference)(global::Orleans.Runtime.GrainReference.DeserializeGrainReference(expected, stream))));
+            }
+            
+            public override bool IsCompatible(int interfaceId)
+            {
+                return (((((interfaceId == this.InterfaceId) 
+                            || (interfaceId == -2139656788)) 
+                            || (interfaceId == -459325194)) 
+                            || (interfaceId == 1962518542)) 
+                            || (interfaceId == 436426678));
+            }
+            
+            protected override string GetMethodName(int interfaceId, int methodId)
+            {
+                return CreatureMethodInvoker.GetMethodName(interfaceId, methodId);
+            }
+            
+            System.Threading.Tasks.Task Server.ICreatureImpl.Create(Shared.CreatureEntry @entry)
+            {
+
+                return base.InvokeMethodAsync<object>(934435978, new object[] {@entry} );
+            }
+            
+            System.Threading.Tasks.Task<string> Server.IUnitImpl.UnitCall()
+            {
+
+                return base.InvokeMethodAsync<System.String>(1519937893, null );
+            }
+            
+            System.Threading.Tasks.Task<int> Server.IUnitImpl.GetDisplayID()
+            {
+
+                return base.InvokeMethodAsync<System.Int32>(-342467399, null );
+            }
+            
+            System.Threading.Tasks.Task<int> Server.IUnitImpl.GetNativeDisplayID()
+            {
+
+                return base.InvokeMethodAsync<System.Int32>(1421261762, null );
+            }
+            
+            System.Threading.Tasks.Task<string> Server.IObjectImpl.VirtualCall()
+            {
+
+                return base.InvokeMethodAsync<System.String>(911766124, null );
+            }
+            
+            System.Threading.Tasks.Task<string> Server.IObjectImpl.ObjectCall()
+            {
+
+                return base.InvokeMethodAsync<System.String>(-509390599, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.Save()
+            {
+
+                return base.InvokeMethodAsync<object>(-1038277770, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsValid()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-663875885, null );
+            }
+            
+            System.Threading.Tasks.Task<Shared.ObjectGUID> Server.IObjectImpl.GetGUID()
+            {
+
+                return base.InvokeMethodAsync<Shared.ObjectGUID>(-1893154936, null );
+            }
+            
+            System.Threading.Tasks.Task<Shared.PackedGUID> Server.IObjectImpl.GetPackedGUID()
+            {
+
+                return base.InvokeMethodAsync<Shared.PackedGUID>(1822423030, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionX()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(166514075, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionY()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(437724131, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionZ()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(1183954579, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetOrientation()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(1856558624, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet()
+            {
+
+                return base.InvokeMethodAsync<object>(48269821, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet_Add()
+            {
+
+                return base.InvokeMethodAsync<object>(668678885, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet_Remove()
+            {
+
+                return base.InvokeMethodAsync<object>(1748861840, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.RemoveInRangeObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj, bool @remove_other)
+            {
+
+                return base.InvokeMethodAsync<object>(1415061848, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj, @remove_other} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.AddInRangeObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj, bool @add_other)
+            {
+
+                return base.InvokeMethodAsync<object>(-1175709360, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj, @add_other} );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.CanSee(Server.IObjectImpl @other)
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-314520557, new object[] {@other is global::Orleans.Grain ? @other.AsReference<Server.IObjectImpl>() : @other} );
+            }
+            
+            System.Threading.Tasks.Task<Shared.PacketOut> Server.IObjectImpl.BuildCreateUpdateFor(Server.IPlayer @plr)
+            {
+
+                return base.InvokeMethodAsync<Shared.PacketOut>(-596183580, new object[] {@plr is global::Orleans.Grain ? @plr.AsReference<Server.IPlayer>() : @plr} );
+            }
+            
+            System.Threading.Tasks.Task<Shared.PacketOut> Server.IObjectImpl.BuildValuesUpdateFor(Server.IPlayer @plr)
+            {
+
+                return base.InvokeMethodAsync<Shared.PacketOut>(-684828005, new object[] {@plr is global::Orleans.Grain ? @plr.AsReference<Server.IPlayer>() : @plr} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.Update()
+            {
+
+                return base.InvokeMethodAsync<object>(-1356403447, null );
+            }
+            
+            System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(int @field, int @index)
+            {
+
+                return base.InvokeMethodAsync<System.Byte>(194300607, new object[] {@field, @index} );
+            }
+            
+            System.Threading.Tasks.Task<uint> Server.IObjectImpl.GetUInt32(int @field)
+            {
+
+                return base.InvokeMethodAsync<System.UInt32>(-1305326038, new object[] {@field} );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetFloat(uint @field)
+            {
+
+                return base.InvokeMethodAsync<System.Single>(-1053963025, new object[] {@field} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetByte(int @field, int @index, byte @val)
+            {
+
+                return base.InvokeMethodAsync<object>(-1778927808, new object[] {@field, @index, @val} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt32(int @field, uint @val)
+            {
+
+                return base.InvokeMethodAsync<object>(-890930237, new object[] {@field, @val} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetInt32(int @field, int @val)
+            {
+
+                return base.InvokeMethodAsync<object>(-1920519729, new object[] {@field, @val} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetFloat(int @field, float @val)
+            {
+
+                return base.InvokeMethodAsync<object>(1703182622, new object[] {@field, @val} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt64(int @field, ulong @val)
+            {
+
+                return base.InvokeMethodAsync<object>(-2061902484, new object[] {@field, @val} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetGUID(int @field, Shared.ObjectGUID @val)
+            {
+
+                return base.InvokeMethodAsync<object>(-140687627, new object[] {@field, @val} );
+            }
+            
+            System.Threading.Tasks.Task<Server.IMap> Server.IObjectImpl.GetMap()
+            {
+
+                return base.InvokeMethodAsync<Server.IMap>(-2063265882, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetMap(Server.IMap @map)
+            {
+
+                return base.InvokeMethodAsync<object>(2124193760, new object[] {@map is global::Orleans.Grain ? @map.AsReference<Server.IMap>() : @map} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.ClearMap()
+            {
+
+                return base.InvokeMethodAsync<object>(939583700, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsCellActivator()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-1893562941, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsPlayer()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-1523856837, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsUnit()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1951711301, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsCreature()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-927314476, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsPet()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1612767703, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsVehicle()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-313953098, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsTransport()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1810721655, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsGameObject()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-235749357, null );
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    [global::Orleans.CodeGeneration.MethodInvokerAttribute("Server.ICreature", -1097649859)]
+    internal class CreatureMethodInvoker : global::Orleans.CodeGeneration.IGrainMethodInvoker
+    {
+        
+        int global::Orleans.CodeGeneration.IGrainMethodInvoker.InterfaceId
+        {
+            get
+            {
+                return -1097649859;
+            }
+        }
+        
+        global::System.Threading.Tasks.Task<object> global::Orleans.CodeGeneration.IGrainMethodInvoker.Invoke(global::Orleans.Runtime.IAddressable grain, int interfaceId, int methodId, object[] arguments)
+        {
+
+            try
+            {                    if (grain == null) throw new System.ArgumentNullException("grain");
+                switch (interfaceId)
+                {
+                    case -1097649859:  // ICreature
+                        switch (methodId)
+                        {
+                            case 934435978: 
+                                return ((ICreature)grain).Create((CreatureEntry)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1519937893: 
+                                return ((ICreature)grain).UnitCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -342467399: 
+                                return ((ICreature)grain).GetDisplayID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1421261762: 
+                                return ((ICreature)grain).GetNativeDisplayID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 911766124: 
+                                return ((ICreature)grain).VirtualCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -509390599: 
+                                return ((ICreature)grain).ObjectCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1038277770: 
+                                return ((ICreature)grain).Save().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -663875885: 
+                                return ((ICreature)grain).IsValid().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1893154936: 
+                                return ((ICreature)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1822423030: 
+                                return ((ICreature)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((ICreature)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((ICreature)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((ICreature)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((ICreature)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((ICreature)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((ICreature)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((ICreature)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((ICreature)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((ICreature)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((ICreature)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((ICreature)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((ICreature)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((ICreature)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 194300607: 
+                                return ((ICreature)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1305326038: 
+                                return ((ICreature)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1053963025: 
+                                return ((ICreature)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1778927808: 
+                                return ((ICreature)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -890930237: 
+                                return ((ICreature)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1920519729: 
+                                return ((ICreature)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1703182622: 
+                                return ((ICreature)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2061902484: 
+                                return ((ICreature)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -140687627: 
+                                return ((ICreature)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((ICreature)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 2124193760: 
+                                return ((ICreature)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((ICreature)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1893562941: 
+                                return ((ICreature)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((ICreature)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((ICreature)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((ICreature)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((ICreature)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((ICreature)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((ICreature)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((ICreature)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                        }case -2139656788:  // ICreatureImpl
+                        switch (methodId)
+                        {
+                            case 934435978: 
+                                return ((ICreatureImpl)grain).Create((CreatureEntry)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1519937893: 
+                                return ((ICreatureImpl)grain).UnitCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -342467399: 
+                                return ((ICreatureImpl)grain).GetDisplayID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1421261762: 
+                                return ((ICreatureImpl)grain).GetNativeDisplayID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 911766124: 
+                                return ((ICreatureImpl)grain).VirtualCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -509390599: 
+                                return ((ICreatureImpl)grain).ObjectCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1038277770: 
+                                return ((ICreatureImpl)grain).Save().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -663875885: 
+                                return ((ICreatureImpl)grain).IsValid().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1893154936: 
+                                return ((ICreatureImpl)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1822423030: 
+                                return ((ICreatureImpl)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((ICreatureImpl)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((ICreatureImpl)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((ICreatureImpl)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((ICreatureImpl)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((ICreatureImpl)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((ICreatureImpl)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((ICreatureImpl)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((ICreatureImpl)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((ICreatureImpl)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((ICreatureImpl)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((ICreatureImpl)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((ICreatureImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((ICreatureImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 194300607: 
+                                return ((ICreatureImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1305326038: 
+                                return ((ICreatureImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1053963025: 
+                                return ((ICreatureImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1778927808: 
+                                return ((ICreatureImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -890930237: 
+                                return ((ICreatureImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1920519729: 
+                                return ((ICreatureImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1703182622: 
+                                return ((ICreatureImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2061902484: 
+                                return ((ICreatureImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -140687627: 
+                                return ((ICreatureImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((ICreatureImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 2124193760: 
+                                return ((ICreatureImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((ICreatureImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1893562941: 
+                                return ((ICreatureImpl)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((ICreatureImpl)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((ICreatureImpl)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((ICreatureImpl)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((ICreatureImpl)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((ICreatureImpl)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((ICreatureImpl)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((ICreatureImpl)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                        }case -459325194:  // IUnitImpl
+                        switch (methodId)
+                        {
+                            case 1519937893: 
+                                return ((IUnitImpl)grain).UnitCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -342467399: 
+                                return ((IUnitImpl)grain).GetDisplayID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1421261762: 
+                                return ((IUnitImpl)grain).GetNativeDisplayID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 911766124: 
+                                return ((IUnitImpl)grain).VirtualCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -509390599: 
+                                return ((IUnitImpl)grain).ObjectCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1038277770: 
+                                return ((IUnitImpl)grain).Save().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -663875885: 
+                                return ((IUnitImpl)grain).IsValid().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1893154936: 
+                                return ((IUnitImpl)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1822423030: 
+                                return ((IUnitImpl)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IUnitImpl)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IUnitImpl)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IUnitImpl)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IUnitImpl)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IUnitImpl)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IUnitImpl)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IUnitImpl)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IUnitImpl)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IUnitImpl)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IUnitImpl)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IUnitImpl)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IUnitImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IUnitImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 194300607: 
+                                return ((IUnitImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1305326038: 
+                                return ((IUnitImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1053963025: 
+                                return ((IUnitImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1778927808: 
+                                return ((IUnitImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -890930237: 
+                                return ((IUnitImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1920519729: 
+                                return ((IUnitImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1703182622: 
+                                return ((IUnitImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2061902484: 
+                                return ((IUnitImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -140687627: 
+                                return ((IUnitImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IUnitImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 2124193760: 
+                                return ((IUnitImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IUnitImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1893562941: 
+                                return ((IUnitImpl)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IUnitImpl)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IUnitImpl)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IUnitImpl)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IUnitImpl)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IUnitImpl)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IUnitImpl)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IUnitImpl)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                        }case 1962518542:  // IObjectImpl
+                        switch (methodId)
+                        {
+                            case 911766124: 
+                                return ((IObjectImpl)grain).VirtualCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -509390599: 
+                                return ((IObjectImpl)grain).ObjectCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1038277770: 
+                                return ((IObjectImpl)grain).Save().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -663875885: 
+                                return ((IObjectImpl)grain).IsValid().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1893154936: 
+                                return ((IObjectImpl)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1822423030: 
+                                return ((IObjectImpl)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IObjectImpl)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IObjectImpl)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IObjectImpl)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IObjectImpl)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IObjectImpl)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IObjectImpl)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IObjectImpl)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IObjectImpl)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IObjectImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IObjectImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 194300607: 
+                                return ((IObjectImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1305326038: 
+                                return ((IObjectImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1053963025: 
+                                return ((IObjectImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1778927808: 
+                                return ((IObjectImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -890930237: 
+                                return ((IObjectImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1920519729: 
+                                return ((IObjectImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1703182622: 
+                                return ((IObjectImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2061902484: 
+                                return ((IObjectImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -140687627: 
+                                return ((IObjectImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 2124193760: 
+                                return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IObjectImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1893562941: 
+                                return ((IObjectImpl)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IObjectImpl)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IObjectImpl)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IObjectImpl)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IObjectImpl)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IObjectImpl)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IObjectImpl)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IObjectImpl)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                        }case 436426678:  // IBaseObjectImpl
+                        switch (methodId)
+                        {
+                            default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                        }
+                    default:
+                        throw new System.InvalidCastException("interfaceId="+interfaceId);
+                }
+            }
+            catch(Exception ex)
+            {
+                var t = new System.Threading.Tasks.TaskCompletionSource<object>();
+                t.SetException(ex);
+                return t.Task;
+            }
+        }
+        
+        public static string GetMethodName(int interfaceId, int methodId)
+        {
+
+            switch (interfaceId)
+            {
+                
+                case -1097649859:  // ICreature
+                    switch (methodId)
+                    {
+                        case 934435978:
+                            return "Create";
+                    case 1519937893:
+                            return "UnitCall";
+                    case -342467399:
+                            return "GetDisplayID";
+                    case 1421261762:
+                            return "GetNativeDisplayID";
+                    case 911766124:
+                            return "VirtualCall";
+                    case -509390599:
+                            return "ObjectCall";
+                    case -1038277770:
+                            return "Save";
+                    case -663875885:
+                            return "IsValid";
+                    case -1893154936:
+                            return "GetGUID";
+                    case 1822423030:
+                            return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
+                    case 194300607:
+                            return "GetByte";
+                    case -1305326038:
+                            return "GetUInt32";
+                    case -1053963025:
+                            return "GetFloat";
+                    case -1778927808:
+                            return "SetByte";
+                    case -890930237:
+                            return "SetUInt32";
+                    case -1920519729:
+                            return "SetInt32";
+                    case 1703182622:
+                            return "SetFloat";
+                    case -2061902484:
+                            return "SetUInt64";
+                    case -140687627:
+                            return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
+                    case 2124193760:
+                            return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
+                    case -1893562941:
+                            return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
+                    
+                        default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                    }
+                case -2139656788:  // ICreatureImpl
+                    switch (methodId)
+                    {
+                        case 934435978:
+                            return "Create";
+                    case 1519937893:
+                            return "UnitCall";
+                    case -342467399:
+                            return "GetDisplayID";
+                    case 1421261762:
+                            return "GetNativeDisplayID";
+                    case 911766124:
+                            return "VirtualCall";
+                    case -509390599:
+                            return "ObjectCall";
+                    case -1038277770:
+                            return "Save";
+                    case -663875885:
+                            return "IsValid";
+                    case -1893154936:
+                            return "GetGUID";
+                    case 1822423030:
+                            return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
+                    case 194300607:
+                            return "GetByte";
+                    case -1305326038:
+                            return "GetUInt32";
+                    case -1053963025:
+                            return "GetFloat";
+                    case -1778927808:
+                            return "SetByte";
+                    case -890930237:
+                            return "SetUInt32";
+                    case -1920519729:
+                            return "SetInt32";
+                    case 1703182622:
+                            return "SetFloat";
+                    case -2061902484:
+                            return "SetUInt64";
+                    case -140687627:
+                            return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
+                    case 2124193760:
+                            return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
+                    case -1893562941:
+                            return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
+                    
+                        default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                    }
+                case -459325194:  // IUnitImpl
+                    switch (methodId)
+                    {
+                        case 1519937893:
+                            return "UnitCall";
+                    case -342467399:
+                            return "GetDisplayID";
+                    case 1421261762:
+                            return "GetNativeDisplayID";
+                    case 911766124:
+                            return "VirtualCall";
+                    case -509390599:
+                            return "ObjectCall";
+                    case -1038277770:
+                            return "Save";
+                    case -663875885:
+                            return "IsValid";
+                    case -1893154936:
+                            return "GetGUID";
+                    case 1822423030:
+                            return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
+                    case 194300607:
+                            return "GetByte";
+                    case -1305326038:
+                            return "GetUInt32";
+                    case -1053963025:
+                            return "GetFloat";
+                    case -1778927808:
+                            return "SetByte";
+                    case -890930237:
+                            return "SetUInt32";
+                    case -1920519729:
+                            return "SetInt32";
+                    case 1703182622:
+                            return "SetFloat";
+                    case -2061902484:
+                            return "SetUInt64";
+                    case -140687627:
+                            return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
+                    case 2124193760:
+                            return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
+                    case -1893562941:
+                            return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
+                    
+                        default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                    }
+                case 1962518542:  // IObjectImpl
+                    switch (methodId)
+                    {
+                        case 911766124:
+                            return "VirtualCall";
+                    case -509390599:
+                            return "ObjectCall";
+                    case -1038277770:
+                            return "Save";
+                    case -663875885:
+                            return "IsValid";
+                    case -1893154936:
+                            return "GetGUID";
+                    case 1822423030:
+                            return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
+                    case 194300607:
+                            return "GetByte";
+                    case -1305326038:
+                            return "GetUInt32";
+                    case -1053963025:
+                            return "GetFloat";
+                    case -1778927808:
+                            return "SetByte";
+                    case -890930237:
+                            return "SetUInt32";
+                    case -1920519729:
+                            return "SetInt32";
+                    case 1703182622:
+                            return "SetFloat";
+                    case -2061902484:
+                            return "SetUInt64";
+                    case -140687627:
+                            return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
+                    case 2124193760:
+                            return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
+                    case -1893562941:
+                            return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -3567,6 +7669,84 @@ namespace Server
                 return base.InvokeMethodAsync<Shared.PackedGUID>(1822423030, null );
             }
             
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionX()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(166514075, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionY()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(437724131, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetPositionZ()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(1183954579, null );
+            }
+            
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetOrientation()
+            {
+
+                return base.InvokeMethodAsync<System.Single>(1856558624, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet()
+            {
+
+                return base.InvokeMethodAsync<object>(48269821, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet_Add()
+            {
+
+                return base.InvokeMethodAsync<object>(668678885, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.UpdateInRangeSet_Remove()
+            {
+
+                return base.InvokeMethodAsync<object>(1748861840, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.RemoveInRangeObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj, bool @remove_other)
+            {
+
+                return base.InvokeMethodAsync<object>(1415061848, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj, @remove_other} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.AddInRangeObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj, bool @add_other)
+            {
+
+                return base.InvokeMethodAsync<object>(-1175709360, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj, @add_other} );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.CanSee(Server.IObjectImpl @other)
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-314520557, new object[] {@other is global::Orleans.Grain ? @other.AsReference<Server.IObjectImpl>() : @other} );
+            }
+            
+            System.Threading.Tasks.Task<Shared.PacketOut> Server.IObjectImpl.BuildCreateUpdateFor(Server.IPlayer @plr)
+            {
+
+                return base.InvokeMethodAsync<Shared.PacketOut>(-596183580, new object[] {@plr is global::Orleans.Grain ? @plr.AsReference<Server.IPlayer>() : @plr} );
+            }
+            
+            System.Threading.Tasks.Task<Shared.PacketOut> Server.IObjectImpl.BuildValuesUpdateFor(Server.IPlayer @plr)
+            {
+
+                return base.InvokeMethodAsync<Shared.PacketOut>(-684828005, new object[] {@plr is global::Orleans.Grain ? @plr.AsReference<Server.IPlayer>() : @plr} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.Update()
+            {
+
+                return base.InvokeMethodAsync<object>(-1356403447, null );
+            }
+            
             System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(int @field, int @index)
             {
 
@@ -3621,16 +7801,70 @@ namespace Server
                 return base.InvokeMethodAsync<object>(-140687627, new object[] {@field, @val} );
             }
             
+            System.Threading.Tasks.Task<Server.IMap> Server.IObjectImpl.GetMap()
+            {
+
+                return base.InvokeMethodAsync<Server.IMap>(-2063265882, null );
+            }
+            
             System.Threading.Tasks.Task Server.IObjectImpl.SetMap(Server.IMap @map)
             {
 
                 return base.InvokeMethodAsync<object>(2124193760, new object[] {@map is global::Orleans.Grain ? @map.AsReference<Server.IMap>() : @map} );
             }
             
+            System.Threading.Tasks.Task Server.IObjectImpl.ClearMap()
+            {
+
+                return base.InvokeMethodAsync<object>(939583700, null );
+            }
+            
             System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsCellActivator()
             {
 
                 return base.InvokeMethodAsync<System.Boolean>(-1893562941, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsPlayer()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-1523856837, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsUnit()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1951711301, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsCreature()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-927314476, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsPet()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1612767703, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsVehicle()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-313953098, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsTransport()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(1810721655, null );
+            }
+            
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsGameObject()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-235749357, null );
             }
         }
     }
@@ -3677,6 +7911,32 @@ namespace Server
                                 return ((IUnit)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1822423030: 
                                 return ((IUnit)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IUnit)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IUnit)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IUnit)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IUnit)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IUnit)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IUnit)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IUnit)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IUnit)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IUnit)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IUnit)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IUnit)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IUnit)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IUnit)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 194300607: 
                                 return ((IUnit)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1305326038: 
@@ -3695,10 +7955,28 @@ namespace Server
                                 return ((IUnit)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -140687627: 
                                 return ((IUnit)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IUnit)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnit)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IUnit)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
                                 return ((IUnit)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IUnit)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IUnit)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IUnit)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IUnit)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IUnit)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IUnit)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IUnit)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }case -459325194:  // IUnitImpl
@@ -3722,6 +8000,32 @@ namespace Server
                                 return ((IUnitImpl)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1822423030: 
                                 return ((IUnitImpl)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IUnitImpl)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IUnitImpl)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IUnitImpl)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IUnitImpl)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IUnitImpl)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IUnitImpl)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IUnitImpl)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IUnitImpl)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IUnitImpl)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IUnitImpl)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IUnitImpl)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IUnitImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IUnitImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 194300607: 
                                 return ((IUnitImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1305326038: 
@@ -3740,10 +8044,28 @@ namespace Server
                                 return ((IUnitImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -140687627: 
                                 return ((IUnitImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IUnitImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnitImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IUnitImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
                                 return ((IUnitImpl)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IUnitImpl)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IUnitImpl)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IUnitImpl)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IUnitImpl)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IUnitImpl)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IUnitImpl)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IUnitImpl)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }case 1962518542:  // IObjectImpl
@@ -3761,6 +8083,32 @@ namespace Server
                                 return ((IObjectImpl)grain).GetGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1822423030: 
                                 return ((IObjectImpl)grain).GetPackedGUID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 166514075: 
+                                return ((IObjectImpl)grain).GetPositionX().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 437724131: 
+                                return ((IObjectImpl)grain).GetPositionY().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1183954579: 
+                                return ((IObjectImpl)grain).GetPositionZ().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1856558624: 
+                                return ((IObjectImpl)grain).GetOrientation().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 48269821: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 668678885: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet_Add().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1748861840: 
+                                return ((IObjectImpl)grain).UpdateInRangeSet_Remove().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1415061848: 
+                                return ((IObjectImpl)grain).RemoveInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1175709360: 
+                                return ((IObjectImpl)grain).AddInRangeObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1], (Boolean)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -314520557: 
+                                return ((IObjectImpl)grain).CanSee((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -596183580: 
+                                return ((IObjectImpl)grain).BuildCreateUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -684828005: 
+                                return ((IObjectImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1356403447: 
+                                return ((IObjectImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 194300607: 
                                 return ((IObjectImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1305326038: 
@@ -3779,10 +8127,28 @@ namespace Server
                                 return ((IObjectImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -140687627: 
                                 return ((IObjectImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -2063265882: 
+                                return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 939583700: 
+                                return ((IObjectImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
                                 return ((IObjectImpl)grain).IsCellActivator().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1523856837: 
+                                return ((IObjectImpl)grain).IsPlayer().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1951711301: 
+                                return ((IObjectImpl)grain).IsUnit().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -927314476: 
+                                return ((IObjectImpl)grain).IsCreature().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1612767703: 
+                                return ((IObjectImpl)grain).IsPet().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -313953098: 
+                                return ((IObjectImpl)grain).IsVehicle().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1810721655: 
+                                return ((IObjectImpl)grain).IsTransport().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -235749357: 
+                                return ((IObjectImpl)grain).IsGameObject().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }case 436426678:  // IBaseObjectImpl
@@ -3830,6 +8196,32 @@ namespace Server
                             return "GetGUID";
                     case 1822423030:
                             return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
                     case 194300607:
                             return "GetByte";
                     case -1305326038:
@@ -3848,10 +8240,28 @@ namespace Server
                             return "SetUInt64";
                     case -140687627:
                             return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
                     case -1893562941:
                             return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -3877,6 +8287,32 @@ namespace Server
                             return "GetGUID";
                     case 1822423030:
                             return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
                     case 194300607:
                             return "GetByte";
                     case -1305326038:
@@ -3895,10 +8331,28 @@ namespace Server
                             return "SetUInt64";
                     case -140687627:
                             return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
                     case -1893562941:
                             return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -3918,6 +8372,32 @@ namespace Server
                             return "GetGUID";
                     case 1822423030:
                             return "GetPackedGUID";
+                    case 166514075:
+                            return "GetPositionX";
+                    case 437724131:
+                            return "GetPositionY";
+                    case 1183954579:
+                            return "GetPositionZ";
+                    case 1856558624:
+                            return "GetOrientation";
+                    case 48269821:
+                            return "UpdateInRangeSet";
+                    case 668678885:
+                            return "UpdateInRangeSet_Add";
+                    case 1748861840:
+                            return "UpdateInRangeSet_Remove";
+                    case 1415061848:
+                            return "RemoveInRangeObject";
+                    case -1175709360:
+                            return "AddInRangeObject";
+                    case -314520557:
+                            return "CanSee";
+                    case -596183580:
+                            return "BuildCreateUpdateFor";
+                    case -684828005:
+                            return "BuildValuesUpdateFor";
+                    case -1356403447:
+                            return "Update";
                     case 194300607:
                             return "GetByte";
                     case -1305326038:
@@ -3936,10 +8416,28 @@ namespace Server
                             return "SetUInt64";
                     case -140687627:
                             return "SetGUID";
+                    case -2063265882:
+                            return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 939583700:
+                            return "ClearMap";
                     case -1893562941:
                             return "IsCellActivator";
+                    case -1523856837:
+                            return "IsPlayer";
+                    case 1951711301:
+                            return "IsUnit";
+                    case -927314476:
+                            return "IsCreature";
+                    case 1612767703:
+                            return "IsPet";
+                    case -313953098:
+                            return "IsVehicle";
+                    case 1810721655:
+                            return "IsTransport";
+                    case -235749357:
+                            return "IsGameObject";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -4289,6 +8787,12 @@ namespace Server
                 return base.InvokeMethodAsync<Shared.ObjectGUID>(962302109, new object[] {@objectType} );
             }
             
+            System.Threading.Tasks.Task<Shared.ObjectGUID> Server.ICreator.GenerateCreatureGUID(uint @Entry)
+            {
+
+                return base.InvokeMethodAsync<Shared.ObjectGUID>(-498054261, new object[] {@Entry} );
+            }
+            
             System.Threading.Tasks.Task<System.Tuple<Shared.LoginErrorCode, Server.IPlayer>> Server.ICreator.CreatePlayer(Shared.PlayerCreateData @info)
             {
 
@@ -4325,6 +8829,8 @@ namespace Server
                                 return ((ICreator)grain).GenerateInstanceID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 962302109: 
                                 return ((ICreator)grain).GenerateGUID((ObjectType)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -498054261: 
+                                return ((ICreator)grain).GenerateCreatureGUID((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1489183713: 
                                 return ((ICreator)grain).CreatePlayer((PlayerCreateData)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             default: 
@@ -4355,6 +8861,8 @@ namespace Server
                             return "GenerateInstanceID";
                     case 962302109:
                             return "GenerateGUID";
+                    case -498054261:
+                            return "GenerateCreatureGUID";
                     case -1489183713:
                             return "CreatePlayer";
                     
@@ -5549,6 +10057,270 @@ namespace InterfacesSerializers
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
     [global::Orleans.CodeGeneration.RegisterSerializerAttribute()]
+    internal class Shared_CreatureTemplateSerialization
+    {
+        
+        static Shared_CreatureTemplateSerialization()
+        {
+            Register();
+        }
+        
+        public static object DeepCopier(object original)
+        {
+            Shared.CreatureTemplate input = ((Shared.CreatureTemplate)(original));
+            Shared.CreatureTemplate result = new Shared.CreatureTemplate();
+            Orleans.Serialization.SerializationContext.Current.RecordObject(original, result);
+            result.AIName = input.AIName;
+            result.ArmorModifier = input.ArmorModifier;
+            result.BaseAttackTime = input.BaseAttackTime;
+            result.BaseVariance = input.BaseVariance;
+            result.DamageModifier = input.DamageModifier;
+            result.ExperienceModifier = input.ExperienceModifier;
+            result.HealthModifier = input.HealthModifier;
+            result.HoverHeight = input.HoverHeight;
+            result.IconName = input.IconName;
+            result.InhabitType = input.InhabitType;
+            result.KillCredit1 = input.KillCredit1;
+            result.KillCredit2 = input.KillCredit2;
+            result.ManaModifier = input.ManaModifier;
+            result.MovementType = input.MovementType;
+            result.PetSpellDataId = input.PetSpellDataId;
+            result.RacialLeader = input.RacialLeader;
+            result.RangeAttackTime = input.RangeAttackTime;
+            result.RangeVariance = input.RangeVariance;
+            result.RegenHealth = input.RegenHealth;
+            result.ScriptName = input.ScriptName;
+            result.VehicleId = input.VehicleId;
+            result.VerifiedBuild = input.VerifiedBuild;
+            result.difficulty_entry_1 = input.difficulty_entry_1;
+            result.difficulty_entry_2 = input.difficulty_entry_2;
+            result.difficulty_entry_3 = input.difficulty_entry_3;
+            result.dmgschool = input.dmgschool;
+            result.dynamicflags = input.dynamicflags;
+            result.entry = input.entry;
+            result.exp = input.exp;
+            result.faction = input.faction;
+            result.family = input.family;
+            result.flags_extra = input.flags_extra;
+            result.gossip_menu_id = input.gossip_menu_id;
+            result.lootid = input.lootid;
+            result.maxgold = input.maxgold;
+            result.maxlevel = input.maxlevel;
+            result.mechanic_immune_mask = input.mechanic_immune_mask;
+            result.mingold = input.mingold;
+            result.minlevel = input.minlevel;
+            result.modelid1 = input.modelid1;
+            result.modelid2 = input.modelid2;
+            result.modelid3 = input.modelid3;
+            result.modelid4 = input.modelid4;
+            result.movementId = input.movementId;
+            result.name = input.name;
+            result.npcflag = input.npcflag;
+            result.pickpocketloot = input.pickpocketloot;
+            result.rank = input.rank;
+            result.resistance1 = input.resistance1;
+            result.resistance2 = input.resistance2;
+            result.resistance3 = input.resistance3;
+            result.resistance4 = input.resistance4;
+            result.resistance5 = input.resistance5;
+            result.resistance6 = input.resistance6;
+            result.scale = input.scale;
+            result.skinloot = input.skinloot;
+            result.speed_run = input.speed_run;
+            result.speed_walk = input.speed_walk;
+            result.spell1 = input.spell1;
+            result.spell2 = input.spell2;
+            result.spell3 = input.spell3;
+            result.spell4 = input.spell4;
+            result.spell5 = input.spell5;
+            result.spell6 = input.spell6;
+            result.spell7 = input.spell7;
+            result.spell8 = input.spell8;
+            result.subname = input.subname;
+            result.trainer_class = input.trainer_class;
+            result.trainer_race = input.trainer_race;
+            result.trainer_spell = input.trainer_spell;
+            result.trainer_type = input.trainer_type;
+            result.type = input.type;
+            result.type_flags = input.type_flags;
+            result.unit_class = input.unit_class;
+            result.unit_flags = input.unit_flags;
+            result.unit_flags2 = input.unit_flags2;
+            return result;
+        }
+        
+        public static void Serializer(object untypedInput, Orleans.Serialization.BinaryTokenStreamWriter stream, System.Type expected)
+        {
+            Shared.CreatureTemplate input = ((Shared.CreatureTemplate)(untypedInput));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.AIName, stream, typeof(string));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.ArmorModifier, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.BaseAttackTime, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.BaseVariance, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.DamageModifier, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.ExperienceModifier, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.HealthModifier, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.HoverHeight, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.IconName, stream, typeof(string));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.InhabitType, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.KillCredit1, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.KillCredit2, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.ManaModifier, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.MovementType, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.PetSpellDataId, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.RacialLeader, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.RangeAttackTime, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.RangeVariance, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.RegenHealth, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.ScriptName, stream, typeof(string));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.VehicleId, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.VerifiedBuild, stream, typeof(int));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.difficulty_entry_1, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.difficulty_entry_2, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.difficulty_entry_3, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.dmgschool, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.dynamicflags, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.entry, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.exp, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.faction, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.family, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.flags_extra, stream, typeof(int));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.gossip_menu_id, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.lootid, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.maxgold, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.maxlevel, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.mechanic_immune_mask, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.mingold, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.minlevel, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.modelid1, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.modelid2, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.modelid3, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.modelid4, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.movementId, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.name, stream, typeof(string));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.npcflag, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.pickpocketloot, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.rank, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.resistance1, stream, typeof(int));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.resistance2, stream, typeof(int));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.resistance3, stream, typeof(int));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.resistance4, stream, typeof(int));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.resistance5, stream, typeof(int));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.resistance6, stream, typeof(int));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.scale, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.skinloot, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.speed_run, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.speed_walk, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.spell1, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.spell2, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.spell3, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.spell4, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.spell5, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.spell6, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.spell7, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.spell8, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.subname, stream, typeof(string));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.trainer_class, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.trainer_race, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.trainer_spell, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.trainer_type, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.type, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.type_flags, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.unit_class, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.unit_flags, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.unit_flags2, stream, typeof(uint));
+        }
+        
+        public static object Deserializer(System.Type expected, global::Orleans.Serialization.BinaryTokenStreamReader stream)
+        {
+            Shared.CreatureTemplate result = new Shared.CreatureTemplate();
+            result.AIName = ((string)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(string), stream)));
+            result.ArmorModifier = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.BaseAttackTime = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.BaseVariance = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.DamageModifier = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.ExperienceModifier = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.HealthModifier = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.HoverHeight = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.IconName = ((string)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(string), stream)));
+            result.InhabitType = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.KillCredit1 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.KillCredit2 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.ManaModifier = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.MovementType = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.PetSpellDataId = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.RacialLeader = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.RangeAttackTime = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.RangeVariance = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.RegenHealth = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.ScriptName = ((string)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(string), stream)));
+            result.VehicleId = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.VerifiedBuild = ((int)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(int), stream)));
+            result.difficulty_entry_1 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.difficulty_entry_2 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.difficulty_entry_3 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.dmgschool = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.dynamicflags = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.entry = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.exp = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.faction = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.family = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.flags_extra = ((int)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(int), stream)));
+            result.gossip_menu_id = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.lootid = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.maxgold = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.maxlevel = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.mechanic_immune_mask = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.mingold = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.minlevel = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.modelid1 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.modelid2 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.modelid3 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.modelid4 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.movementId = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.name = ((string)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(string), stream)));
+            result.npcflag = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.pickpocketloot = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.rank = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.resistance1 = ((int)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(int), stream)));
+            result.resistance2 = ((int)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(int), stream)));
+            result.resistance3 = ((int)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(int), stream)));
+            result.resistance4 = ((int)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(int), stream)));
+            result.resistance5 = ((int)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(int), stream)));
+            result.resistance6 = ((int)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(int), stream)));
+            result.scale = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.skinloot = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.speed_run = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.speed_walk = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.spell1 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.spell2 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.spell3 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.spell4 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.spell5 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.spell6 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.spell7 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.spell8 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.subname = ((string)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(string), stream)));
+            result.trainer_class = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.trainer_race = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.trainer_spell = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.trainer_type = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.type = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.type_flags = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.unit_class = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.unit_flags = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.unit_flags2 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            return result;
+        }
+        
+        public static void Register()
+        {
+            global::Orleans.Serialization.SerializationManager.Register(typeof(Shared.CreatureTemplate), DeepCopier, Serializer, Deserializer);
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    [global::Orleans.CodeGeneration.RegisterSerializerAttribute()]
     internal class Shared_ObjectGUIDSerialization
     {
         
@@ -5630,51 +10402,6 @@ namespace InterfacesSerializers
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
     [global::Orleans.CodeGeneration.RegisterSerializerAttribute()]
-    internal class Shared_PlayerCreateDataSerialization
-    {
-        
-        static Shared_PlayerCreateDataSerialization()
-        {
-            Register();
-        }
-        
-        public static object DeepCopier(object original)
-        {
-            Shared.PlayerCreateData input = ((Shared.PlayerCreateData)(original));
-            Shared.PlayerCreateData result = new Shared.PlayerCreateData();
-            Orleans.Serialization.SerializationContext.Current.RecordObject(original, result);
-            result.AccountName = input.AccountName;
-            result.CreateData = input.CreateData;
-            result.RealmID = input.RealmID;
-            return result;
-        }
-        
-        public static void Serializer(object untypedInput, Orleans.Serialization.BinaryTokenStreamWriter stream, System.Type expected)
-        {
-            Shared.PlayerCreateData input = ((Shared.PlayerCreateData)(untypedInput));
-            Orleans.Serialization.SerializationManager.SerializeInner(input.AccountName, stream, typeof(string));
-            Orleans.Serialization.SerializationManager.SerializeInner(input.CreateData, stream, typeof(Shared.CMSG_CHAR_CREATE));
-            Orleans.Serialization.SerializationManager.SerializeInner(input.RealmID, stream, typeof(int));
-        }
-        
-        public static object Deserializer(System.Type expected, global::Orleans.Serialization.BinaryTokenStreamReader stream)
-        {
-            Shared.PlayerCreateData result = new Shared.PlayerCreateData();
-            result.AccountName = ((string)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(string), stream)));
-            result.CreateData = ((Shared.CMSG_CHAR_CREATE)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(Shared.CMSG_CHAR_CREATE), stream)));
-            result.RealmID = ((int)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(int), stream)));
-            return result;
-        }
-        
-        public static void Register()
-        {
-            global::Orleans.Serialization.SerializationManager.Register(typeof(Shared.PlayerCreateData), DeepCopier, Serializer, Deserializer);
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
-    [global::Orleans.CodeGeneration.RegisterSerializerAttribute()]
     internal class Shared_PacketOutSerialization
     {
         
@@ -5725,6 +10452,51 @@ namespace InterfacesSerializers
                             | (System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic)));
             fieldInfo2 = typeof(Shared.PacketOut).GetField("type", (System.Reflection.BindingFlags.Instance 
                             | (System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic)));
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    [global::Orleans.CodeGeneration.RegisterSerializerAttribute()]
+    internal class Shared_PlayerCreateDataSerialization
+    {
+        
+        static Shared_PlayerCreateDataSerialization()
+        {
+            Register();
+        }
+        
+        public static object DeepCopier(object original)
+        {
+            Shared.PlayerCreateData input = ((Shared.PlayerCreateData)(original));
+            Shared.PlayerCreateData result = new Shared.PlayerCreateData();
+            Orleans.Serialization.SerializationContext.Current.RecordObject(original, result);
+            result.AccountName = input.AccountName;
+            result.CreateData = input.CreateData;
+            result.RealmID = input.RealmID;
+            return result;
+        }
+        
+        public static void Serializer(object untypedInput, Orleans.Serialization.BinaryTokenStreamWriter stream, System.Type expected)
+        {
+            Shared.PlayerCreateData input = ((Shared.PlayerCreateData)(untypedInput));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.AccountName, stream, typeof(string));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.CreateData, stream, typeof(Shared.CMSG_CHAR_CREATE));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.RealmID, stream, typeof(int));
+        }
+        
+        public static object Deserializer(System.Type expected, global::Orleans.Serialization.BinaryTokenStreamReader stream)
+        {
+            Shared.PlayerCreateData result = new Shared.PlayerCreateData();
+            result.AccountName = ((string)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(string), stream)));
+            result.CreateData = ((Shared.CMSG_CHAR_CREATE)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(Shared.CMSG_CHAR_CREATE), stream)));
+            result.RealmID = ((int)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(int), stream)));
+            return result;
+        }
+        
+        public static void Register()
+        {
+            global::Orleans.Serialization.SerializationManager.Register(typeof(Shared.PlayerCreateData), DeepCopier, Serializer, Deserializer);
         }
     }
     
