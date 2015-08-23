@@ -53,8 +53,16 @@ namespace Server.Networking
 
         public Task OnNextAsync(SocketCommand item, StreamSequenceToken token)
         {
-            if (item == SocketCommand.DisconnectClient)
-                sock.Dispose();
+            switch (item.GetCommand())
+            {
+                case SocketCommands.DisconnectClient: sock.Dispose(); break;
+                case SocketCommands.SetAccount:
+                    {
+                        IAccount acc = (IAccount)item.GetData(0);
+                    }
+                    break;
+            }
+
             return TaskDone.Done;
         }
     }
@@ -74,6 +82,10 @@ namespace Server.Networking
 
         public ARC4 Decrypt = null;
         public ARC4 Encrypt = null;
+
+        //cached data
+        public IAccount _account = null;
+        public IPlayer _player = null;
 
         public ServerSocket() { }
         public ServerSocket(AddressFamily addressFamily, SocketType sockType, ProtocolType protoType)

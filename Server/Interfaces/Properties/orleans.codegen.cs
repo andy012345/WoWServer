@@ -10977,6 +10977,48 @@ namespace InterfacesSerializers
     [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
     [global::Orleans.CodeGeneration.RegisterSerializerAttribute()]
+    internal class Shared_SocketCommandSerialization
+    {
+        
+        static Shared_SocketCommandSerialization()
+        {
+            Register();
+        }
+        
+        public static object DeepCopier(object original)
+        {
+            Shared.SocketCommand input = ((Shared.SocketCommand)(original));
+            Shared.SocketCommand result = ((Shared.SocketCommand)(System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(Shared.SocketCommand))));
+            Orleans.Serialization.SerializationContext.Current.RecordObject(original, result);
+            result._command = input._command;
+            result._extraData = ((object[])(Orleans.Serialization.SerializationManager.DeepCopyInner(input._extraData)));
+            return result;
+        }
+        
+        public static void Serializer(object untypedInput, Orleans.Serialization.BinaryTokenStreamWriter stream, System.Type expected)
+        {
+            Shared.SocketCommand input = ((Shared.SocketCommand)(untypedInput));
+            Orleans.Serialization.SerializationManager.SerializeInner(input._command, stream, typeof(Shared.SocketCommands));
+            Orleans.Serialization.SerializationManager.SerializeInner(input._extraData, stream, typeof(object[]));
+        }
+        
+        public static object Deserializer(System.Type expected, global::Orleans.Serialization.BinaryTokenStreamReader stream)
+        {
+            Shared.SocketCommand result = ((Shared.SocketCommand)(System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(Shared.SocketCommand))));
+            result._command = ((Shared.SocketCommands)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(Shared.SocketCommands), stream)));
+            result._extraData = ((object[])(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(object[]), stream)));
+            return result;
+        }
+        
+        public static void Register()
+        {
+            global::Orleans.Serialization.SerializationManager.Register(typeof(Shared.SocketCommand), DeepCopier, Serializer, Deserializer);
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    [global::Orleans.CodeGeneration.RegisterSerializerAttribute()]
     internal class Shared_CMSG_AUTH_SESSIONSerialization
     {
         

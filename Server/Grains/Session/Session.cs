@@ -101,7 +101,7 @@ namespace Server
         {
             //and lets disconnect anyone on the other end!
             if (_stream.CommandStream != null)
-                _stream.CommandStream.OnNextAsync(SocketCommand.DisconnectClient);
+                _stream.CommandStream.OnNextAsync(new SocketCommand(SocketCommands.DisconnectClient));
 
             DelayDeactivation(TimeSpan.FromSeconds(1)); //let gc have this back
             //DeactivateOnIdle();

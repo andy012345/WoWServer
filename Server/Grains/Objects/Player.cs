@@ -427,17 +427,25 @@ namespace Server
 
         public async Task BuildInitialUpdate()
         {
-            var update = await BuildCreateUpdateFor(ToRef() as IPlayer);
+            var update = await BuildCreateUpdateFor(this as IPlayer);
 
             PacketOut pkt = new PacketOut(RealmOp.SMSG_UPDATE_OBJECT);
             pkt.Write((UInt32)1);
             pkt.Write(update);
             await SendPacket(pkt);
 
+
+            foreach (var updatedata in State.PendingUpdateData)
+            {
+                pkt.Reset(RealmOp.SMSG_UPDATE_OBJECT);
+                pkt.Write((UInt32)1);
+                pkt.Write(updatedata);
+                await SendPacket(pkt);
+            }
+
+            State.PendingUpdateData.Clear();
             await SendTimeSyncReq();
-
             await SendLoginEffect();
-
             await SendAuraUpdateAll();
         }
 
@@ -492,7 +500,7 @@ namespace Server
 
         public override async Task OnAddInRangeObject(ObjectGUID guid, IObjectImpl obj)
         {
-            State.PendingUpdateData.Add(await obj.BuildCreateUpdateFor(ToRef() as IPlayer));
+            State.PendingUpdateData.Add(await obj.BuildCreateUpdateFor(this as IPlayer));
         }
     }
 }

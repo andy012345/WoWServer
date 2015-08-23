@@ -197,10 +197,13 @@ namespace Server
             State.MapID = await map.GetMapID();
             State.InstanceID = await map.GetInstanceID();
 
+            await UpdateInRangeSet();
+
             var asref = ToRef();
             if (asref is IPlayer)
             {
                 IPlayer plrthis = asref as IPlayer;
+                IPlayer plrthis2 = this as IPlayer;
                 await plrthis.BuildInitialUpdate();
             }
         }

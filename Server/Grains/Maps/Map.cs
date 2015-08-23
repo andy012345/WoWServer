@@ -104,13 +104,14 @@ namespace Server
 
         public async Task<bool> AddObject(IObjectImpl obj)
         {
+            List<Task> tasks = new List<Task>();
             var guid = await obj.GetGUID();
 
             var isactivator = await obj.IsCellActivator();
 
             var posx = await obj.GetPositionX();
             var posy = await obj.GetPositionY();
-            var cell = await GetCell(posx, posy);
+            var cell = await GetCell(posx, posy, true);
 
             ServerLog.Debug("Adding {0} to map {1} instance {2} at {3}, {4}", guid.ToUInt64(), State.MapID, State.InstanceID, posx, posy);
 
@@ -119,18 +120,18 @@ namespace Server
                 return false;
 
             objectMap.Add(guid, obj);
-            await obj.SetMap(this);
+            tasks.Add(obj.SetMap(this));
             //await obj.SetCell(cell);
 
-            cell.AddObject(guid, obj);
+            tasks.Add(cell.AddObject(guid, obj));
 
             if (isactivator)
             {
                 activeObjects.Add(obj);
-                await AddRefCells(posx, posy);
+                 tasks.Add(AddRefCells(posx, posy));
             }
 
-            await obj.UpdateInRangeSet();
+            await Task.WhenAll(tasks);
 
             return true;
         }
@@ -174,7 +175,7 @@ namespace Server
             {
                 for (var y = celly - 1; x < celly + 1; ++y)
                 {
-                    var cell = await GetCellDirect(x, y);
+                    var cell = await GetCellDirect(x, y, true);
 
                     if (cell != null)
                         tasks.Add(cell.AddRef());
@@ -194,7 +195,7 @@ namespace Server
             {
                 for (var y = celly - 1; x < celly + 1; ++y)
                 {
-                    var cell = await GetCellDirect(x, y);
+                    var cell = await GetCellDirect(x, y, true);
 
                     if (cell != null)
                         tasks.Add(cell.DecRef());
@@ -221,7 +222,7 @@ namespace Server
 
             if (cell != null)
             {
-                cell.RemoveObject(await obj.GetGUID());
+                await cell.RemoveObject(await obj.GetGUID());
             }
         }
 

@@ -148,6 +148,10 @@ namespace Server
         {
             var type = await s.GetSessionType();
 
+            var stream = await s.GetSessionStream();
+            if (stream != null && stream.CommandStream != null)
+                await stream.CommandStream.OnNextAsync(new SocketCommand(SocketCommands.SetAccount, new object[] { this.AsReference<IAccount>() }));
+
             switch (type)
             {
                 case SessionType.AuthSession:
