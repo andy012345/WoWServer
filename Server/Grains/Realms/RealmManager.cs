@@ -200,5 +200,16 @@ namespace Server
             await AddMap(MapID, instanceid, RealmID);
             return map;
         }
+
+        public async Task SetRealmOffline(int id)
+        {
+            var realm = await GetRealm(id);
+
+            if (realm == null)
+                return;
+
+            realm.SetOffline();
+            await WriteStateAsync();
+        }
     }
 }

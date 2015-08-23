@@ -393,34 +393,28 @@ namespace Server
                 return base.InvokeMethodAsync<object>(1433401269, null );
             }
             
-            System.Threading.Tasks.Task Server.IMapCell.AddCreature(Shared.CreatureEntry @creature)
-            {
-
-                return base.InvokeMethodAsync<object>(112603947, new object[] {@creature} );
-            }
-            
-            System.Threading.Tasks.Task<System.Collections.Generic.Dictionary<Shared.ObjectGUID, Server.IObjectImpl>> Server.IMapCell.GetObjectMap()
-            {
-
-                return base.InvokeMethodAsync<System.Collections.Generic.Dictionary<Shared.ObjectGUID,Server.IObjectImpl>>(-790080664, null );
-            }
-            
             System.Threading.Tasks.Task Server.IMapCell.Update()
             {
 
                 return base.InvokeMethodAsync<object>(-1356403447, null );
             }
             
-            System.Threading.Tasks.Task Server.IMapCell.Create(uint @InstanceID)
+            System.Threading.Tasks.Task Server.IMapCell.Create(uint @InstanceID, uint @cellx, uint @celly)
             {
 
-                return base.InvokeMethodAsync<object>(227697294, new object[] {@InstanceID} );
+                return base.InvokeMethodAsync<object>(274234201, new object[] {@InstanceID, @cellx, @celly} );
             }
             
             System.Threading.Tasks.Task<bool> Server.IMapCell.IsValid()
             {
 
                 return base.InvokeMethodAsync<System.Boolean>(-663875885, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IMapCell.UpdateInRange(Server.IObjectImpl @obj)
+            {
+
+                return base.InvokeMethodAsync<object>(-284093588, new object[] {@obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj} );
             }
         }
     }
@@ -459,16 +453,14 @@ namespace Server
                                 return ((IMapCell)grain).AddRef().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 1433401269: 
                                 return ((IMapCell)grain).DecRef().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 112603947: 
-                                return ((IMapCell)grain).AddCreature((CreatureEntry)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -790080664: 
-                                return ((IMapCell)grain).GetObjectMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IMapCell)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 227697294: 
-                                return ((IMapCell)grain).Create((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 274234201: 
+                                return ((IMapCell)grain).Create((UInt32)arguments[0], (UInt32)arguments[1], (UInt32)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -663875885: 
                                 return ((IMapCell)grain).IsValid().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -284093588: 
+                                return ((IMapCell)grain).UpdateInRange((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }
@@ -503,16 +495,14 @@ namespace Server
                             return "AddRef";
                     case 1433401269:
                             return "DecRef";
-                    case 112603947:
-                            return "AddCreature";
-                    case -790080664:
-                            return "GetObjectMap";
                     case -1356403447:
                             return "Update";
-                    case 227697294:
+                    case 274234201:
                             return "Create";
                     case -663875885:
                             return "IsValid";
+                    case -284093588:
+                            return "UpdateInRange";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -654,10 +644,22 @@ namespace Server
                 return base.InvokeMethodAsync<object>(1256474764, new object[] {@obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj} );
             }
             
-            System.Threading.Tasks.Task Server.IMap.OnObjectUpdated(Server.IObjectImpl @obj)
+            System.Threading.Tasks.Task Server.IMap.OnCellActivate(Server.IMapCell @cell)
             {
 
-                return base.InvokeMethodAsync<object>(-1231155966, new object[] {@obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj} );
+                return base.InvokeMethodAsync<object>(1051812713, new object[] {@cell is global::Orleans.Grain ? @cell.AsReference<Server.IMapCell>() : @cell} );
+            }
+            
+            System.Threading.Tasks.Task Server.IMap.OnCellDeactivate(Server.IMapCell @cell)
+            {
+
+                return base.InvokeMethodAsync<object>(332960665, new object[] {@cell is global::Orleans.Grain ? @cell.AsReference<Server.IMapCell>() : @cell} );
+            }
+            
+            System.Threading.Tasks.Task Server.IMap.OnObjectUpdated(Shared.ObjectGUID @guid)
+            {
+
+                return base.InvokeMethodAsync<object>(-290715139, new object[] {@guid} );
             }
             
             System.Threading.Tasks.Task Server.IMap.SpawnCreatures(Shared.CreatureEntry[] @creatures)
@@ -704,8 +706,12 @@ namespace Server
                                 return ((IMap)grain).AddObject((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1256474764: 
                                 return ((IMap)grain).UpdateInRangeObject((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1231155966: 
-                                return ((IMap)grain).OnObjectUpdated((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1051812713: 
+                                return ((IMap)grain).OnCellActivate((IMapCell)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 332960665: 
+                                return ((IMap)grain).OnCellDeactivate((IMapCell)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -290715139: 
+                                return ((IMap)grain).OnObjectUpdated((ObjectGUID)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1562962289: 
                                 return ((IMap)grain).SpawnCreatures((CreatureEntry[])arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             default: 
@@ -744,7 +750,11 @@ namespace Server
                             return "AddObject";
                     case 1256474764:
                             return "UpdateInRangeObject";
-                    case -1231155966:
+                    case 1051812713:
+                            return "OnCellActivate";
+                    case 332960665:
+                            return "OnCellDeactivate";
+                    case -290715139:
                             return "OnObjectUpdated";
                     case -1562962289:
                             return "SpawnCreatures";
@@ -8580,6 +8590,12 @@ namespace Server
                 return base.InvokeMethodAsync<object>(574707288, new object[] {@id} );
             }
             
+            System.Threading.Tasks.Task Server.IRealmManager.SetRealmOffline(int @id)
+            {
+
+                return base.InvokeMethodAsync<object>(1380451899, new object[] {@id} );
+            }
+            
             System.Threading.Tasks.Task<Server.IMap> Server.IRealmManager.GetMap(uint @MapId, uint @InstanceID, uint @RealmID)
             {
 
@@ -8628,6 +8644,8 @@ namespace Server
                                 return ((IRealmManager)grain).GetRealms((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 574707288: 
                                 return ((IRealmManager)grain).PingRealm((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1380451899: 
+                                return ((IRealmManager)grain).SetRealmOffline((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -764093020: 
                                 return ((IRealmManager)grain).GetMap((UInt32)arguments[0], (UInt32)arguments[1], (UInt32)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1781421754: 
@@ -8666,6 +8684,8 @@ namespace Server
                             return "GetRealms";
                     case 574707288:
                             return "PingRealm";
+                    case 1380451899:
+                            return "SetRealmOffline";
                     case -764093020:
                             return "GetMap";
                     case -1781421754:
@@ -10550,6 +10570,8 @@ namespace InterfacesSerializers
         
         private static System.Reflection.FieldInfo fieldInfo2;
         
+        private static System.Reflection.FieldInfo fieldInfo3;
+        
         static Shared_RealmStatusSerialization()
         {
             Register();
@@ -10564,6 +10586,8 @@ namespace InterfacesSerializers
             object objResult = ((object)(result));
             object temp2 = fieldInfo2.GetValue(input);
             fieldInfo2.SetValue(objResult, temp2);
+            object temp3 = input.LastPingUT;
+            fieldInfo3.SetValue(objResult, temp3);
             return objResult;
         }
         
@@ -10572,6 +10596,7 @@ namespace InterfacesSerializers
             Shared.RealmStatus input = ((Shared.RealmStatus)(untypedInput));
             Orleans.Serialization.SerializationManager.SerializeInner(input.CurrentPlayers, stream, typeof(int));
             Orleans.Serialization.SerializationManager.SerializeInner(fieldInfo2.GetValue(input), stream, typeof(System.DateTime));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.LastPingUT, stream, typeof(uint));
         }
         
         public static object Deserializer(System.Type expected, global::Orleans.Serialization.BinaryTokenStreamReader stream)
@@ -10581,6 +10606,8 @@ namespace InterfacesSerializers
             object objResult = ((object)(result));
             object temp2 = ((System.DateTime)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(System.DateTime), stream)));
             fieldInfo2.SetValue(objResult, temp2);
+            object temp3 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            fieldInfo3.SetValue(objResult, temp3);
             return objResult;
         }
         
@@ -10588,6 +10615,8 @@ namespace InterfacesSerializers
         {
             global::Orleans.Serialization.SerializationManager.Register(typeof(Shared.RealmStatus), DeepCopier, Serializer, Deserializer);
             fieldInfo2 = typeof(Shared.RealmStatus).GetField("LastPing", (System.Reflection.BindingFlags.Instance 
+                            | (System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic)));
+            fieldInfo3 = typeof(Shared.RealmStatus).GetField("LastPingUT", (System.Reflection.BindingFlags.Instance 
                             | (System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic)));
         }
     }

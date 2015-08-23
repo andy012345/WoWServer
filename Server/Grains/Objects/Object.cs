@@ -357,10 +357,10 @@ namespace Server
 
         public async Task OnFieldChange(int field)
         {
-            var map = await GetMap();
+            var map = _GetMap();
 
             if (map != null)
-                await map.OnObjectUpdated(ToRef());
+                await map.OnObjectUpdated(oGUID);
         }
 
         void _BuildMovementUpdate(ObjectUpdateType type, ObjectUpdateFlags flags, ref PacketOut pkt)

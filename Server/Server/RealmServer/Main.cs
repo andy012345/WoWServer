@@ -12,6 +12,8 @@ namespace Server.RealmServer
     public class Main
     {
         public static RealmPacketHandler PacketHandler = new RealmPacketHandler();
+        public static List<RealmClient> Realms = new List<RealmClient>();
+        public static bool Running = false;
 
         public static void Run()
         {
@@ -74,6 +76,23 @@ namespace Server.RealmServer
 
                 //RealmPacketHandler 
             }
+
+            Running = true;
         }
+
+        public static void Stop()
+        {
+            if (!Running)
+                return;
+
+            foreach (var r in Realms)
+            {
+                r.Dispose();
+            }
+
+            Realms.Clear();
+            Running = false;
+        }
+
     }
 }

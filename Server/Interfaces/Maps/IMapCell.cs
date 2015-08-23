@@ -17,14 +17,12 @@ namespace Server
         Task AddRef();
         Task DecRef();
 
-        Task AddCreature(CreatureEntry creature);
-        Task<Dictionary<ObjectGUID, IObjectImpl>> GetObjectMap();
-
         Task Update();
 
-        Task Create(UInt32 InstanceID);
-
+        Task Create(UInt32 InstanceID, UInt32 cellx, UInt32 celly);
 
         Task<bool> IsValid();
+
+        Task UpdateInRange(IObjectImpl obj);
     }
 }

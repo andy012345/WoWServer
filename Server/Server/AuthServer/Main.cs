@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Server.Networking;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -13,6 +14,9 @@ namespace Server.AuthServer
     public class Main
     {
         public static LogonPacketHandler LogonPacketHandler = new LogonPacketHandler();
+
+        public static ServerSocket MainSocket = null;
+        public static bool Running = false;
 
         public static void Run()
         {
@@ -47,11 +51,24 @@ namespace Server.AuthServer
             LogonPacketHandler.Init();
 
 
-            Networking.ServerSocket sock = new Networking.ServerSocket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            sock.SetProcessor(new LogonPacketProcessor());
-            sock.Bind(ushort.Parse(port));
-            sock.Listen(listenbacklog == null ? 50 : int.Parse(listenbacklog));
-            sock.Accept();
+            MainSocket = new Networking.ServerSocket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            MainSocket.SetProcessor(new LogonPacketProcessor());
+            MainSocket.Bind(ushort.Parse(port));
+            MainSocket.Listen(listenbacklog == null ? 50 : int.Parse(listenbacklog));
+            MainSocket.Accept();
+
+            Running = true;
+        }
+
+        public static void Stop()
+        {
+            if (!Running)
+                return;
+
+            if (MainSocket != null)
+                MainSocket.Dispose();
+
+            Running = false;
         }
     }
 }

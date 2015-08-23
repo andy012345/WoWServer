@@ -37,7 +37,7 @@ namespace Server.RealmServer
                 while (cancelToken.IsCancellationRequested == false)
                 {
                     await realm_manager.PingRealm(settings.ID);
-                    await Task.Delay(TimeSpan.FromSeconds(30));
+                    await Task.Delay(TimeSpan.FromSeconds(5));
                 }
             },  cancelToken);
         }
@@ -51,12 +51,21 @@ namespace Server.RealmServer
             }
         }
 
+        public void SendRealmOffline()
+        {
+            if (!Orleans.GrainClient.IsInitialized)
+                throw new Exception("Attempting to set realm offline with no connection to backend");
+
+            var realm_manager = Orleans.GrainClient.GrainFactory.GetGrain<IRealmManager>(0);
+
+            realm_manager.SetRealmOffline(settings.ID).Wait();
+        }
+
         protected override void Dispose(bool disposing)
         {
-            base.Dispose(disposing);
-
             if (disposing)
             {
+                SendRealmOffline();
                 PingRunnerCancel();
                 
                 if (PingTaskCancelSource != null)
@@ -65,6 +74,8 @@ namespace Server.RealmServer
                 if (PingTask != null)
                     PingTask.Dispose();
             }
+            base.Dispose(disposing);
+
         }
     }
 }

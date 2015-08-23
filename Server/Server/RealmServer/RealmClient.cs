@@ -13,7 +13,7 @@ using Shared;
 
 namespace Server.RealmServer
 {
-    public class RealmClient
+    public class RealmClient : IDisposable
     {
         RealmSettings settings = null;
         RealmClientSocket sock = null;
@@ -40,6 +40,21 @@ namespace Server.RealmServer
 
         public void Init()
         {
+        }
+
+
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                if (sock != null)
+                    sock.Dispose();
+            }
         }
     }
 }

@@ -1,12 +1,10 @@
 ﻿using Orleans;
-using Orleans.Providers;
 using Orleans.Concurrency;
+using Orleans.Providers;
+using Shared;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
-using Shared;
 
 namespace Server
 {
@@ -16,6 +14,12 @@ namespace Server
         public UInt32 InstanceID { get; set; } //our index accessor
         public UInt32 RealmID { get; set; } //for non instanced maps
         public UInt32 ExpireTime { get; set; }
+
+        public List<ObjectGUID> ObjectList { get; set; }
+        public List<ObjectGUID> ActiveObjects { get; set; }
+        public List<UInt64> ActiveCells { get; set; }
+        public List<ObjectGUID> UpdatedObjects { get; set; } //objects which have a values update to push out from SMSG_UPDATE_OBJECT
+
         public bool Exists { get; set; }
     }
 
@@ -25,10 +29,7 @@ namespace Server
     [StorageProvider(ProviderName = "Default")]
     public partial class Map : Grain<MapState>, IMap
     {
-        Dictionary<ObjectGUID, IObjectImpl> objectMap = new Dictionary<ObjectGUID, IObjectImpl>();
-        List<IObjectImpl> activeObjects = new List<IObjectImpl>();
         IDisposable UpdateTask = null;
-        List<IObjectImpl> updateObjects = new List<IObjectImpl>();
         Dictionary<UInt64, List<CreatureEntry>> CreatureEntryByCellKey = new Dictionary<ulong, List<CreatureEntry>>();
 
         public override async Task OnActivateAsync()
@@ -38,22 +39,26 @@ namespace Server
             await base.OnActivateAsync();
         }
 
-        public async Task Create(UInt32 MapID, UInt32 InstanceID, UInt32 RealmID)
+        public override async Task OnDeactivateAsync()
         {
-            if (_IsValid()) //already created
-                return;
-
-            State.MapID = MapID;
-            State.InstanceID = InstanceID;
-            State.RealmID = RealmID;
-
-            State.Exists = true;
-            await OnConstruct();
-            await Save();
+            await base.OnDeactivateAsync();
+            if (_IsValid())
+                await Save();
         }
 
         public async Task OnConstruct()
         {
+            if (State.ObjectList == null)
+                State.ObjectList = new List<ObjectGUID>();
+            if (State.ActiveCells == null)
+                State.ActiveCells = new List<UInt64>();
+            if (State.ActiveObjects == null)
+                State.ActiveObjects = new List<ObjectGUID>();
+            if (State.UpdatedObjects == null)
+                State.UpdatedObjects = new List<ObjectGUID>();
+
+            UpdateTask = RegisterTimer(Update, null, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
+
             await InitMapCells();
 
             List<Task> tasks = new List<Task>();
@@ -78,25 +83,35 @@ namespace Server
                 }
             }
 
-            UpdateTask = RegisterTimer(Update, null, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
-
             await Task.WhenAll(tasks);
+        }
+
+        public async Task Create(UInt32 MapID, UInt32 InstanceID, UInt32 RealmID)
+        {
+            if (_IsValid()) //already created
+                return;
+
+            State.MapID = MapID;
+            State.InstanceID = InstanceID;
+            State.RealmID = RealmID;
+
+            State.Exists = true;
+            await OnConstruct();
+            await Save();
         }
 
         public bool _IsValid() { return State.Exists; }
         public Task<bool> IsValid() { return Task.FromResult(_IsValid()); }
-        public async Task Save() { if (_IsValid()) return; await WriteStateAsync(); }
+        public async Task Save() { if (!_IsValid()) return; await WriteStateAsync(); }
 
         public IObjectImpl GetObjectByGUID(ObjectGUID guid)
         {
-            IObjectImpl ret = null;
-            objectMap.TryGetValue(guid, out ret);
-            return ret;
+            return GetObjectByGUID(guid.ToUInt64());
         }
 
         public IObjectImpl GetObjectByGUID(UInt64 guid)
         {
-            return GetObjectByGUID(new ObjectGUID(guid));
+            return GrainFactory.GetGrain<IObjectImpl>((Int64)guid);
         }
 
         public Task<UInt32> GetMapID() { return Task.FromResult(State.MapID); }
@@ -119,7 +134,8 @@ namespace Server
             if (cell == null)
                 return false;
 
-            objectMap.Add(guid, obj);
+            State.ObjectList.Add(guid);
+
             tasks.Add(obj.SetMap(this));
             //await obj.SetCell(cell);
 
@@ -127,13 +143,21 @@ namespace Server
 
             if (isactivator)
             {
-                activeObjects.Add(obj);
-                 tasks.Add(AddRefCells(posx, posy));
+                State.ActiveObjects.Add(guid);
+                tasks.Add(AddRefCells(posx, posy));
             }
 
             await Task.WhenAll(tasks);
 
             return true;
+        }
+
+        public Task RemoveObject(ObjectGUID guid, IObjectImpl obj)
+        {
+            State.ActiveObjects.Remove(guid);
+            
+
+            return TaskDone.Done;
         }
 
         //Returns a key of the cell ((x << 32) | y) and updates cell references
@@ -207,7 +231,9 @@ namespace Server
 
         public async Task RemoveObject(IObjectImpl obj)
         {
-            activeObjects.Remove(obj);
+            var guid = await obj.GetGUID();
+
+            State.ObjectList.Remove(guid);
 
             var isactivator = await obj.IsCellActivator();
             var posx = await obj.GetPositionX();
@@ -215,15 +241,13 @@ namespace Server
 
             if (isactivator)
             {
-                activeObjects.Remove(obj);
+                State.ActiveObjects.Remove(guid);
                 await DecRefCells(posx, posy);
             }
             var cell = await GetCell(posx, posy);
 
             if (cell != null)
-            {
-                await cell.RemoveObject(await obj.GetGUID());
-            }
+                await cell.RemoveObject(guid);
         }
 
         public async Task SpawnCreatures(CreatureEntry[] cres)
@@ -253,6 +277,7 @@ namespace Server
 
         public async Task UpdateInRangeObject(IObjectImpl obj)
         {
+            List<Task> tasks = new List<Task>();
             var posx = await obj.GetPositionX();
             var posy = await obj.GetPositionY();
             var cellx = GetCellX(posx);
@@ -270,34 +295,42 @@ namespace Server
                     var cell = await GetCellDirect(x, y);
 
                     if (cell != null)
-                    {
-                        foreach (var o in (await cell.GetObjectMap()))
-                        {
-                            var cansee = await obj.CanSee(o.Value);
-
-                            if (cansee)
-                                await obj.AddInRangeObject(o.Key, o.Value);
-                        }
-                    }
+                        tasks.Add(cell.UpdateInRange(obj));
                 }
             }
+
+            await Task.WhenAll(tasks);
         }
 
-        public Task OnObjectUpdated(IObjectImpl obj)
+        public Task OnObjectUpdated(ObjectGUID guid)
         {
-            updateObjects.Add(obj);
+            State.UpdatedObjects.Add(guid);
+            return TaskDone.Done;
+        }
+
+        public Task OnCellActivate(IMapCell cell)
+        {
+            State.ActiveCells.Add((UInt64)cell.GetPrimaryKeyLong());
+            return TaskDone.Done;
+        }
+        public Task OnCellDeactivate(IMapCell cell)
+        {
+            State.ActiveCells.Remove((UInt64)cell.GetPrimaryKeyLong());
             return TaskDone.Done;
         }
 
         public async Task Update(object state)
         {
-            List<Task> UpdateTasks = new List<Task>();
-            foreach (var obj in activeObjects)
+            List<Task> tasks = new List<Task>();
+
+            foreach (var key in State.ActiveCells)
             {
-                UpdateTasks.Add(obj.Update());
+                var cell = GrainFactory.GetGrain<IMapCell>((Int64)key);
+                tasks.Add(cell.Update());
+
             }
 
-            await Task.WhenAll(UpdateTasks);
+            await Task.WhenAll(tasks);
         }
     }
 }

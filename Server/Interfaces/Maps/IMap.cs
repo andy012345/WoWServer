@@ -14,10 +14,14 @@ namespace Server
         Task<UInt32> GetInstanceID();
         Task Create(UInt32 MapID, UInt32 InstanceID, UInt32 RealmID);
 
+
         Task<bool> AddObject(IObjectImpl obj);
         Task UpdateInRangeObject(IObjectImpl obj);
 
-        Task OnObjectUpdated(IObjectImpl obj);
+        Task OnCellActivate(IMapCell cell);
+        Task OnCellDeactivate(IMapCell cell);
+
+        Task OnObjectUpdated(ObjectGUID guid);
 
         Task SpawnCreatures(CreatureEntry[] creatures);
     }

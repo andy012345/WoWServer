@@ -20,23 +20,49 @@ namespace Server
     {
         public object Json { get; private set; }
 
+        public static bool Running = false;
+        public static List<WebServiceHost> hosts = new List<WebServiceHost>();
+        public static List<ServiceEndpoint> endpoints = new List<ServiceEndpoint>();
+
         public static void Run()
         {
-            return;
-            //if (System.IO.File.Exists("Config-Web.xml"))
+            //return;
+            if (System.IO.File.Exists("Config-Web.xml"))
             {
                 if (!System.IO.File.Exists("Config-Client.xml"))
                     throw new InvalidOperationException("WebService cannot start without client support");
 
-                //start web server :)
-                WebServiceHost host = new WebServiceHost(typeof(Service), new Uri("http://localhost.com:9000/")); //todo: move to config
-                ServiceEndpoint endpoint = host.AddServiceEndpoint(typeof(IService), new WebHttpBinding(), "service");
-                host.Open();
+                WebServiceHost host;
+                ServiceEndpoint endpoint;
 
-                WebServiceHost host2 = new WebServiceHost(typeof(AccountService), new Uri("http://localhost.com:9000/")); //todo: move to config
-                ServiceEndpoint endpoint2 = host2.AddServiceEndpoint(typeof(IAccountService), new WebHttpBinding(), "account");
-                host2.Open();
+                //start web server :)
+                host = new WebServiceHost(typeof(Service), new Uri("http://localhost.com:9000/")); //todo: move to config
+                endpoint = host.AddServiceEndpoint(typeof(IService), new WebHttpBinding(), "service");
+                host.Open();
+                hosts.Add(host);
+                endpoints.Add(endpoint);
+
+                host = new WebServiceHost(typeof(AccountService), new Uri("http://localhost.com:9000/")); //todo: move to config
+                endpoint = host.AddServiceEndpoint(typeof(IAccountService), new WebHttpBinding(), "account");
+                host.Open();
+                hosts.Add(host);
+                endpoints.Add(endpoint);
+
+                Running = true;
             }
+        }
+
+        public static void Stop()
+        {
+            if (!Running)
+                return;
+
+            foreach (var h in hosts)
+                h.Close();
+            hosts.Clear();
+            endpoints.Clear();
+
+            Running = false;
         }
 
         public static HttpResponseMessage ToJSON(object responseModel)

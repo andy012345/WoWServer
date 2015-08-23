@@ -11,11 +11,13 @@ namespace Server
     {
         static void Main(string[] args)
         {
+            AppDomain orleansHostDomain = null;
+
             if (System.IO.File.Exists("Config-Server.xml"))
             {
                 Console.WriteLine("Starting orleans server...");
 
-                AppDomain hostDomain = AppDomain.CreateDomain("OrleansHost", null, new AppDomainSetup
+                orleansHostDomain = AppDomain.CreateDomain("OrleansHost", null, new AppDomainSetup
                 {
                     AppDomainInitializer = InitSilo,
                     AppDomainInitializerArguments = args,
@@ -35,39 +37,10 @@ namespace Server
 
                 //woo test code
                 IAccount test = factory.GetGrain<IAccount>("TESTACCOUNT");
-
                 test.CreateAccount("test").Wait();
 
-                Random rnd = new Random();
 
                 test.SetPassword("Test");
-
-
-                Console.WriteLine("Test");
-
-//                 IPlayer test1 = factory.GetGrain<IPlayer>(0);
-//                 IUnit test2 = factory.GetGrain<IUnit>(0);
-//                 IObject test3 = factory.GetGrain<IObject>(0);
-// 
-//                 test1.GetPrimaryKeyLong();
-// 
-//                 List<string> testres = new List<string>();
-// 
-//                 testres.Add(test1.VirtualCall().Result);
-//                 testres.Add(test2.VirtualCall().Result);
-//                 testres.Add(test3.VirtualCall().Result);
-//                 testres.Add(test1.PlayerCall().Result);
-//                 testres.Add(test1.UnitCall().Result);
-//                 testres.Add(test1.ObjectCall().Result);
-//                 testres.Add(test2.UnitCall().Result);
-//                 testres.Add(test2.ObjectCall().Result);
-//                 testres.Add(test3.ObjectCall().Result);
-
-//                 foreach (var line in testres)
-//                     Console.WriteLine("{0}", line);
-
-                var manager = factory.GetGrain<IDataStoreManager>(0);
-                manager.GetPlayerCreateInfo(0, 0);
             }
 
             WebService.Run();
@@ -75,6 +48,17 @@ namespace Server
             RealmServer.Main.Run();
 
             Console.ReadLine();
+
+
+            WebService.Stop();
+            AuthServer.Main.Stop();
+            RealmServer.Main.Stop();
+
+            if (Orleans.GrainClient.IsInitialized)
+                Orleans.GrainClient.Uninitialize();
+
+            if (orleansHostDomain != null)
+                orleansHostDomain.DoCallBack(ShutdownSilo);
         }
 
         static void InitSilo(string[] args)
@@ -91,6 +75,7 @@ namespace Server
         {
             if (hostWrapper != null)
             {
+                hostWrapper.Stop();
                 hostWrapper.Dispose();
                 GC.SuppressFinalize(hostWrapper);
             }

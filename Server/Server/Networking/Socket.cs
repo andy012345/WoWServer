@@ -212,8 +212,12 @@ namespace Server.Networking
                 sock.Dispose();
                 sock = null;
                 processor = null;
-                session.OnSocketDisconnect();
-                session = null;
+
+                if (session != null)
+                {
+                    session.OnSocketDisconnect();
+                    session = null;
+                }
 
                 if (packetObserverHandle != null)
                     packetObserverHandle.UnsubscribeAsync().Wait();

@@ -24,8 +24,9 @@ namespace Shared
     public class RealmStatus
     {
         public int CurrentPlayers = 0;
+        public UInt32 LastPingUT = 0;
         DateTime LastPing;
-        public void PingStatus() { LastPing = DateTime.UtcNow; }
+        public void PingStatus() { LastPing = DateTime.UtcNow; LastPingUT = Time.GetUnixTime(); }
 
         public bool IsOnline()
         {
