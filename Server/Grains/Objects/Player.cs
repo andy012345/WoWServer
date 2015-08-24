@@ -154,9 +154,9 @@ namespace Server
             State.Class = info.CreateData.Class;
             State.Gender = info.CreateData.Gender;
             State.RealmID = (UInt32)info.RealmID;
-            Gender = info.CreateData.Gender;
-            Class = (byte)State.Class;
-            Race = (byte)State.Race;
+            await SetGender(info.CreateData.Gender);
+            await SetRace(info.CreateData.Race);
+            await SetClass(info.CreateData.Class);
             Skin = info.CreateData.Skin;
             Face = info.CreateData.Face;
             HairStyle = info.CreateData.HairStyle;
@@ -172,18 +172,18 @@ namespace Server
             if (chrclass == null || chrrace == null || creationinfo == null)
                 return LoginErrorCode.CHAR_CREATE_ERROR;
 
-            Faction = (int)chrrace.Faction;
-            PowerType = (byte)chrclass.powerType;
+            await SetFaction((int)chrrace.Faction);
+            await SetPowerType((byte)chrclass.powerType);
 
-            if (Gender == 0) //male
+            if (_GetGender() == 0) //male
             {
-                DisplayID = (int)chrrace.ModelMale;
-                NativeDisplayID = (int)chrrace.ModelMale;
+                await SetDisplayID((int)chrrace.ModelMale);
+                await SetNativeDisplayID((int)chrrace.ModelMale);
             }
             else
             {
-                DisplayID = (int)chrrace.ModelFemale;
-                NativeDisplayID = (int)chrrace.ModelFemale;
+                await SetDisplayID((int)chrrace.ModelFemale);
+                await SetNativeDisplayID((int)chrrace.ModelFemale);
             }
 
             State.PositionX = creationinfo.position_x;
@@ -219,9 +219,9 @@ namespace Server
             {
                 p.Write(oGUID);
                 p.WriteCString(State.Name);
-                p.Write((byte)State.Race);
-                p.Write((byte)State.Class);
-                p.Write(Gender);
+                p.Write(_GetRace());
+                p.Write(_GetClass());
+                p.Write(_GetGender());
                 p.Write(Skin);
                 p.Write(Face);
                 p.Write(HairStyle);
@@ -434,16 +434,6 @@ namespace Server
             pkt.Write(update);
             await SendPacket(pkt);
 
-
-            foreach (var updatedata in State.PendingUpdateData)
-            {
-                pkt.Reset(RealmOp.SMSG_UPDATE_OBJECT);
-                pkt.Write((UInt32)1);
-                pkt.Write(updatedata);
-                await SendPacket(pkt);
-            }
-
-            State.PendingUpdateData.Clear();
             await SendTimeSyncReq();
             await SendLoginEffect();
             await SendAuraUpdateAll();
@@ -501,6 +491,30 @@ namespace Server
         public override async Task OnAddInRangeObject(ObjectGUID guid, IObjectImpl obj)
         {
             State.PendingUpdateData.Add(await obj.BuildCreateUpdateFor(this as IPlayer));
+        }
+
+        public override async Task Update()
+        {
+            await base.Update();
+
+            await BuildPendingUpdateData();
+        }
+
+        public async Task BuildPendingUpdateData()
+        {
+            List<Task> tasks = new List<Task>();
+            PacketOut pkt = new PacketOut(RealmOp.SMSG_UPDATE_OBJECT);
+            foreach (var updatedata in State.PendingUpdateData)
+            {
+                pkt.Reset(RealmOp.SMSG_UPDATE_OBJECT);
+                pkt.Write((UInt32)1);
+                pkt.Write(updatedata);
+                tasks.Add(SendPacket(pkt));
+            }
+
+            State.PendingUpdateData.Clear();
+
+            await Task.WhenAll(tasks);
         }
     }
 }

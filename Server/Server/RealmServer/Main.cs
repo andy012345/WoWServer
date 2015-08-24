@@ -72,6 +72,7 @@ namespace Server.RealmServer
                 attrib = el.GetAttribute("Category"); if (attrib != null && attrib.Length > 0) settings.Cat = int.Parse(attrib);
 
                 RealmClient client = new RealmClient(settings);
+                Realms.Add(client);
                 client.Run();
 
                 //RealmPacketHandler 

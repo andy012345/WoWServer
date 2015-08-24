@@ -20,6 +20,8 @@ namespace Shared
         TYPEMASK_SEER = TYPEMASK_PLAYER | TYPEMASK_UNIT | TYPEMASK_DYNAMICOBJECT
     };
 
+
+    [Flags]
     public enum HighGuid
     {
         HIGHGUID_ITEM = 0x4000,                      // blizz 4000
@@ -60,6 +62,8 @@ namespace Shared
 
         public UInt64 ToUInt64() { return _value; }
         public Int64 ToInt64() { return (Int64)_value; }
+
+        public HighGuid ToHighGUID() { return (HighGuid)(_value >> 48); }
 
         public byte[] ToPackedBytes()
         {

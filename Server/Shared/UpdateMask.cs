@@ -8,11 +8,13 @@ namespace Shared
 {
     public class UpdateMask
     {
-        private int m_maxBlockCount;
-        private uint[] m_blocks;
+        public int m_maxBlockCount;
+        public uint[] m_blocks;
 
-        protected internal int m_lowestIndex;
-        protected internal int m_highestIndex;
+        public int m_lowestIndex;
+        public int m_highestIndex;
+
+        public UpdateMask() { }
 
         public UpdateMask(int highestField)
         {
@@ -21,38 +23,8 @@ namespace Shared
             Clear();
         }
 
-        public int MaxBlockCount
-        {
-            get { return m_maxBlockCount; }
-        }
-
-        public uint[] Blocks
-        {
-            get { return m_blocks; }
-        }
-
-        public int LowestIndex
-        {
-            get { return m_lowestIndex; }
-        }
-
-        public int HighestIndex
-        {
-            get
-            {
-                return m_highestIndex;
-            }
-            set
-            {
-                m_maxBlockCount = (value >> 5) + 1;
-
-                if (m_maxBlockCount > m_blocks.Length)
-                {
-                    Array.Resize(ref m_blocks, m_maxBlockCount);
-                }
-
-            }
-        }
+        public int GetMaxBlockCount() { return m_maxBlockCount; }
+        public uint[] GetBlocks() { return m_blocks; }
 
         public bool HasBitsSet
         {

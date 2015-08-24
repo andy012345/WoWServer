@@ -18,6 +18,7 @@ namespace Server
         public List<ObjectGUID> ObjectList { get; set; }
         public List<ObjectGUID> ActiveObjects { get; set; }
         public List<UInt64> ActiveCells { get; set; }
+        public List<UInt64> CreatedCells { get; set; }
         public List<ObjectGUID> UpdatedObjects { get; set; } //objects which have a values update to push out from SMSG_UPDATE_OBJECT
 
         public bool Exists { get; set; }
@@ -29,7 +30,11 @@ namespace Server
     [StorageProvider(ProviderName = "Default")]
     public partial class Map : Grain<MapState>, IMap
     {
+        public const UInt32 MapUpdateInterval = 100; //100ms
+        public const UInt32 MapSaveInterval = 300000; //5m
+
         IDisposable UpdateTask = null;
+        IDisposable SaveTask = null;
         Dictionary<UInt64, List<CreatureEntry>> CreatureEntryByCellKey = new Dictionary<ulong, List<CreatureEntry>>();
 
         public override async Task OnActivateAsync()
@@ -52,12 +57,15 @@ namespace Server
                 State.ObjectList = new List<ObjectGUID>();
             if (State.ActiveCells == null)
                 State.ActiveCells = new List<UInt64>();
+            if (State.CreatedCells == null)
+                State.CreatedCells = new List<UInt64>();
             if (State.ActiveObjects == null)
                 State.ActiveObjects = new List<ObjectGUID>();
             if (State.UpdatedObjects == null)
                 State.UpdatedObjects = new List<ObjectGUID>();
 
-            UpdateTask = RegisterTimer(Update, null, TimeSpan.FromMilliseconds(100), TimeSpan.FromMilliseconds(100));
+            SetupUpdateTask();
+            SetupSaveTask();
 
             await InitMapCells();
 
@@ -122,22 +130,23 @@ namespace Server
             List<Task> tasks = new List<Task>();
             var guid = await obj.GetGUID();
 
+            if (State.ObjectList.Contains(guid))
+                throw new Exception("Attempting to add object to map but already on this map");
+
             var isactivator = await obj.IsCellActivator();
 
             var posx = await obj.GetPositionX();
             var posy = await obj.GetPositionY();
-            var cell = await GetCell(posx, posy, true);
+            var cellkey = GetCellKey(posx, posy);
+            var cell = await GetCell(cellkey, true);
 
             ServerLog.Debug("Adding {0} to map {1} instance {2} at {3}, {4}", guid.ToUInt64(), State.MapID, State.InstanceID, posx, posy);
-
 
             if (cell == null)
                 return false;
 
-            State.ObjectList.Add(guid);
-
             tasks.Add(obj.SetMap(this));
-            //await obj.SetCell(cell);
+            State.ObjectList.Add(guid);
 
             tasks.Add(cell.AddObject(guid, obj));
 
@@ -155,8 +164,6 @@ namespace Server
         public Task RemoveObject(ObjectGUID guid, IObjectImpl obj)
         {
             State.ActiveObjects.Remove(guid);
-            
-
             return TaskDone.Done;
         }
 
@@ -197,7 +204,7 @@ namespace Server
 
             for (var x = cellx - 1; x < cellx + 1; ++x)
             {
-                for (var y = celly - 1; x < celly + 1; ++y)
+                for (var y = celly - 1; y < celly + 1; ++y)
                 {
                     var cell = await GetCellDirect(x, y, true);
 
@@ -244,10 +251,14 @@ namespace Server
                 State.ActiveObjects.Remove(guid);
                 await DecRefCells(posx, posy);
             }
-            var cell = await GetCell(posx, posy);
 
-            if (cell != null)
-                await cell.RemoveObject(guid);
+            var cellkey = await obj.GetCell();
+
+            if (cellkey != 0)
+            {
+                var cell = await GetCell(cellkey);
+                await cell.RemoveObject(guid, obj);
+            }
         }
 
         public async Task SpawnCreatures(CreatureEntry[] cres)
@@ -260,7 +271,7 @@ namespace Server
             {
                 var guid = await creator.GenerateCreatureGUID(cre.id);
 
-                ServerLog.Debug("Spawning creature {0} due to cell activation", cre.guid);
+                //ServerLog.Debug("Spawning creature {0} due to cell activation", cre.guid);
 
                 var creature = GrainFactory.GetGrain<ICreature>(guid.ToInt64());
                 creaturespawns.Add(creature);
@@ -319,8 +330,10 @@ namespace Server
             return TaskDone.Done;
         }
 
-        public async Task Update(object state)
+        public async Task Update()
         {
+            SetupUpdateTask();
+
             List<Task> tasks = new List<Task>();
 
             foreach (var key in State.ActiveCells)
@@ -331,6 +344,23 @@ namespace Server
             }
 
             await Task.WhenAll(tasks);
+        }
+
+        protected void SetupUpdateTask()
+        {
+            UpdateTask = RegisterTimer(o =>
+            {
+                //Console.WriteLine("*** Map Update Instance {0} ***", State.InstanceID);
+                return Update();
+            }, null, TimeSpan.FromMilliseconds(MapUpdateInterval), TimeSpan.FromSeconds(-1));
+        }
+
+        protected void SetupSaveTask()
+        {
+            SaveTask = RegisterTimer(o =>
+            {
+                return Save();
+            }, null, TimeSpan.FromMilliseconds(MapSaveInterval), TimeSpan.FromSeconds(MapSaveInterval));
         }
     }
 }

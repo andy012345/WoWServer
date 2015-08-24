@@ -39,19 +39,21 @@ namespace Server
 
 
         //Update FIelds
-        Task<byte> GetByte(int field, int index);
-        Task<UInt32> GetUInt32(int field);
-        Task<float> GetFloat(UInt32 field);
-        Task SetByte(int field, int index, byte val);
-        Task SetUInt32(int field, UInt32 val);
-        Task SetInt32(int field, int val);
-        Task SetFloat(int field, float val);
-        Task SetUInt64(int field, UInt64 val);
-        Task SetGUID(int field, ObjectGUID val);
+        Task<byte> GetByte(object field, int index);
+        Task<UInt32> GetUInt32(object field);
+        Task<float> GetFloat(object field);
+        Task SetByte(object field, int index, byte val);
+        Task SetUInt32(object field, UInt32 val);
+        Task SetInt32(object field, int val);
+        Task SetFloat(object field, float val);
+        Task SetUInt64(object field, UInt64 val);
+        Task SetGUID(object field, ObjectGUID val);
 
         //Maps
         Task<IMap> GetMap();
         Task SetMap(IMap map);
+        Task SetCell(UInt64 cellkey);
+        Task<UInt64> GetCell();
         Task ClearMap();
         Task<bool> IsCellActivator();
 

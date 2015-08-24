@@ -13,7 +13,7 @@ namespace Server
     {
         Task Init(UInt32 cellx, UInt32 celly, IMap parent);
         Task AddObject(ObjectGUID guid, IObjectImpl obj);
-        Task RemoveObject(ObjectGUID guid);
+        Task RemoveObject(ObjectGUID guid, IObjectImpl obj);
         Task AddRef();
         Task DecRef();
 

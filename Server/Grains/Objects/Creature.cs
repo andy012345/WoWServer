@@ -69,11 +69,11 @@ namespace Server
 
                 if (template != null)
                 {
-                    await SetUInt32((int)EUnitFields.UNIT_NPC_FLAGS, template.npcflag);
-                    Faction = (Int32)template.faction;
-                    NativeDisplayID = (Int32)template.modelid1;
-                    DisplayID = (Int32)template.modelid1;
-                    Class = (byte)template.unit_class;
+                    await SetUInt32(EUnitFields.UNIT_NPC_FLAGS, template.npcflag);
+                    await SetFaction((int)template.faction);
+                    await SetNativeDisplayID((int)template.modelid1);
+                    await SetDisplayID((int)template.modelid1);
+                    await SetClass((byte)template.unit_class);
                 }
             }
 
@@ -83,8 +83,8 @@ namespace Server
 
                 if (entry != null)
                 {
-                    NativeDisplayID = (Int32)entry.modelid;
-                    DisplayID = (Int32)entry.modelid;
+                    await SetNativeDisplayID((int)entry.modelid);
+                    await SetDisplayID((int)entry.modelid);
                 }
             }
 

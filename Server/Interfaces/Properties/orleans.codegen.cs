@@ -375,10 +375,10 @@ namespace Server
                 return base.InvokeMethodAsync<object>(1709859866, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj} );
             }
             
-            System.Threading.Tasks.Task Server.IMapCell.RemoveObject(Shared.ObjectGUID @guid)
+            System.Threading.Tasks.Task Server.IMapCell.RemoveObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj)
             {
 
-                return base.InvokeMethodAsync<object>(1718968129, new object[] {@guid} );
+                return base.InvokeMethodAsync<object>(-1030340031, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj} );
             }
             
             System.Threading.Tasks.Task Server.IMapCell.AddRef()
@@ -447,8 +447,8 @@ namespace Server
                                 return ((IMapCell)grain).Init((UInt32)arguments[0], (UInt32)arguments[1], (IMap)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 1709859866: 
                                 return ((IMapCell)grain).AddObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1718968129: 
-                                return ((IMapCell)grain).RemoveObject((ObjectGUID)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1030340031: 
+                                return ((IMapCell)grain).RemoveObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -121618869: 
                                 return ((IMapCell)grain).AddRef().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 1433401269: 
@@ -489,7 +489,7 @@ namespace Server
                             return "Init";
                     case 1709859866:
                             return "AddObject";
-                    case 1718968129:
+                    case -1030340031:
                             return "RemoveObject";
                     case -121618869:
                             return "AddRef";
@@ -1341,58 +1341,58 @@ namespace Server
                 return base.InvokeMethodAsync<object>(-1356403447, null );
             }
             
-            System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(int @field, int @index)
+            System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(object @field, int @index)
             {
 
-                return base.InvokeMethodAsync<System.Byte>(194300607, new object[] {@field, @index} );
+                return base.InvokeMethodAsync<System.Byte>(1183483657, new object[] {@field, @index} );
             }
             
-            System.Threading.Tasks.Task<uint> Server.IObjectImpl.GetUInt32(int @field)
+            System.Threading.Tasks.Task<uint> Server.IObjectImpl.GetUInt32(object @field)
             {
 
-                return base.InvokeMethodAsync<System.UInt32>(-1305326038, new object[] {@field} );
+                return base.InvokeMethodAsync<System.UInt32>(-557202625, new object[] {@field} );
             }
             
-            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetFloat(uint @field)
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetFloat(object @field)
             {
 
-                return base.InvokeMethodAsync<System.Single>(-1053963025, new object[] {@field} );
+                return base.InvokeMethodAsync<System.Single>(1044973385, new object[] {@field} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetByte(int @field, int @index, byte @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetByte(object @field, int @index, byte @val)
             {
 
-                return base.InvokeMethodAsync<object>(-1778927808, new object[] {@field, @index, @val} );
+                return base.InvokeMethodAsync<object>(-1336362613, new object[] {@field, @index, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt32(int @field, uint @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt32(object @field, uint @val)
             {
 
-                return base.InvokeMethodAsync<object>(-890930237, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-1928648525, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetInt32(int @field, int @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetInt32(object @field, int @val)
             {
 
-                return base.InvokeMethodAsync<object>(-1920519729, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-21267500, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetFloat(int @field, float @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetFloat(object @field, float @val)
             {
 
-                return base.InvokeMethodAsync<object>(1703182622, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(995425448, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt64(int @field, ulong @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt64(object @field, ulong @val)
             {
 
-                return base.InvokeMethodAsync<object>(-2061902484, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(1125137820, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetGUID(int @field, Shared.ObjectGUID @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetGUID(object @field, Shared.ObjectGUID @val)
             {
 
-                return base.InvokeMethodAsync<object>(-140687627, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-1935978507, new object[] {@field, @val} );
             }
             
             System.Threading.Tasks.Task<Server.IMap> Server.IObjectImpl.GetMap()
@@ -1405,6 +1405,18 @@ namespace Server
             {
 
                 return base.InvokeMethodAsync<object>(2124193760, new object[] {@map is global::Orleans.Grain ? @map.AsReference<Server.IMap>() : @map} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetCell(ulong @cellkey)
+            {
+
+                return base.InvokeMethodAsync<object>(533658636, new object[] {@cellkey} );
+            }
+            
+            System.Threading.Tasks.Task<ulong> Server.IObjectImpl.GetCell()
+            {
+
+                return base.InvokeMethodAsync<System.UInt64>(1105280656, null );
             }
             
             System.Threading.Tasks.Task Server.IObjectImpl.ClearMap()
@@ -1525,28 +1537,32 @@ namespace Server
                                 return ((IObjectImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IObjectImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IObjectImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IObjectImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IObjectImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IObjectImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IObjectImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IObjectImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IObjectImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IObjectImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IObjectImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IObjectImpl)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IObjectImpl)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IObjectImpl)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IObjectImpl)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IObjectImpl)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IObjectImpl)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IObjectImpl)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IObjectImpl)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IObjectImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IObjectImpl)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IObjectImpl)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IObjectImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -1632,28 +1648,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -1918,58 +1938,58 @@ namespace Server
                 return base.InvokeMethodAsync<object>(-1356403447, null );
             }
             
-            System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(int @field, int @index)
+            System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(object @field, int @index)
             {
 
-                return base.InvokeMethodAsync<System.Byte>(194300607, new object[] {@field, @index} );
+                return base.InvokeMethodAsync<System.Byte>(1183483657, new object[] {@field, @index} );
             }
             
-            System.Threading.Tasks.Task<uint> Server.IObjectImpl.GetUInt32(int @field)
+            System.Threading.Tasks.Task<uint> Server.IObjectImpl.GetUInt32(object @field)
             {
 
-                return base.InvokeMethodAsync<System.UInt32>(-1305326038, new object[] {@field} );
+                return base.InvokeMethodAsync<System.UInt32>(-557202625, new object[] {@field} );
             }
             
-            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetFloat(uint @field)
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetFloat(object @field)
             {
 
-                return base.InvokeMethodAsync<System.Single>(-1053963025, new object[] {@field} );
+                return base.InvokeMethodAsync<System.Single>(1044973385, new object[] {@field} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetByte(int @field, int @index, byte @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetByte(object @field, int @index, byte @val)
             {
 
-                return base.InvokeMethodAsync<object>(-1778927808, new object[] {@field, @index, @val} );
+                return base.InvokeMethodAsync<object>(-1336362613, new object[] {@field, @index, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt32(int @field, uint @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt32(object @field, uint @val)
             {
 
-                return base.InvokeMethodAsync<object>(-890930237, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-1928648525, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetInt32(int @field, int @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetInt32(object @field, int @val)
             {
 
-                return base.InvokeMethodAsync<object>(-1920519729, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-21267500, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetFloat(int @field, float @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetFloat(object @field, float @val)
             {
 
-                return base.InvokeMethodAsync<object>(1703182622, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(995425448, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt64(int @field, ulong @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt64(object @field, ulong @val)
             {
 
-                return base.InvokeMethodAsync<object>(-2061902484, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(1125137820, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetGUID(int @field, Shared.ObjectGUID @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetGUID(object @field, Shared.ObjectGUID @val)
             {
 
-                return base.InvokeMethodAsync<object>(-140687627, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-1935978507, new object[] {@field, @val} );
             }
             
             System.Threading.Tasks.Task<Server.IMap> Server.IObjectImpl.GetMap()
@@ -1982,6 +2002,18 @@ namespace Server
             {
 
                 return base.InvokeMethodAsync<object>(2124193760, new object[] {@map is global::Orleans.Grain ? @map.AsReference<Server.IMap>() : @map} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetCell(ulong @cellkey)
+            {
+
+                return base.InvokeMethodAsync<object>(533658636, new object[] {@cellkey} );
+            }
+            
+            System.Threading.Tasks.Task<ulong> Server.IObjectImpl.GetCell()
+            {
+
+                return base.InvokeMethodAsync<System.UInt64>(1105280656, null );
             }
             
             System.Threading.Tasks.Task Server.IObjectImpl.ClearMap()
@@ -2108,28 +2140,32 @@ namespace Server
                                 return ((IUnitImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IUnitImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IUnitImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IUnitImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IUnitImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IUnitImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IUnitImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IUnitImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IUnitImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IUnitImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IUnitImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IUnitImpl)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IUnitImpl)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IUnitImpl)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IUnitImpl)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IUnitImpl)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IUnitImpl)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IUnitImpl)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IUnitImpl)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IUnitImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IUnitImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnitImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IUnitImpl)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IUnitImpl)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IUnitImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -2191,28 +2227,32 @@ namespace Server
                                 return ((IObjectImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IObjectImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IObjectImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IObjectImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IObjectImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IObjectImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IObjectImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IObjectImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IObjectImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IObjectImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IObjectImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IObjectImpl)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IObjectImpl)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IObjectImpl)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IObjectImpl)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IObjectImpl)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IObjectImpl)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IObjectImpl)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IObjectImpl)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IObjectImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IObjectImpl)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IObjectImpl)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IObjectImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -2304,28 +2344,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -2389,28 +2433,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -2730,58 +2778,58 @@ namespace Server
                 return base.InvokeMethodAsync<object>(-1356403447, null );
             }
             
-            System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(int @field, int @index)
+            System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(object @field, int @index)
             {
 
-                return base.InvokeMethodAsync<System.Byte>(194300607, new object[] {@field, @index} );
+                return base.InvokeMethodAsync<System.Byte>(1183483657, new object[] {@field, @index} );
             }
             
-            System.Threading.Tasks.Task<uint> Server.IObjectImpl.GetUInt32(int @field)
+            System.Threading.Tasks.Task<uint> Server.IObjectImpl.GetUInt32(object @field)
             {
 
-                return base.InvokeMethodAsync<System.UInt32>(-1305326038, new object[] {@field} );
+                return base.InvokeMethodAsync<System.UInt32>(-557202625, new object[] {@field} );
             }
             
-            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetFloat(uint @field)
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetFloat(object @field)
             {
 
-                return base.InvokeMethodAsync<System.Single>(-1053963025, new object[] {@field} );
+                return base.InvokeMethodAsync<System.Single>(1044973385, new object[] {@field} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetByte(int @field, int @index, byte @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetByte(object @field, int @index, byte @val)
             {
 
-                return base.InvokeMethodAsync<object>(-1778927808, new object[] {@field, @index, @val} );
+                return base.InvokeMethodAsync<object>(-1336362613, new object[] {@field, @index, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt32(int @field, uint @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt32(object @field, uint @val)
             {
 
-                return base.InvokeMethodAsync<object>(-890930237, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-1928648525, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetInt32(int @field, int @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetInt32(object @field, int @val)
             {
 
-                return base.InvokeMethodAsync<object>(-1920519729, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-21267500, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetFloat(int @field, float @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetFloat(object @field, float @val)
             {
 
-                return base.InvokeMethodAsync<object>(1703182622, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(995425448, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt64(int @field, ulong @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt64(object @field, ulong @val)
             {
 
-                return base.InvokeMethodAsync<object>(-2061902484, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(1125137820, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetGUID(int @field, Shared.ObjectGUID @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetGUID(object @field, Shared.ObjectGUID @val)
             {
 
-                return base.InvokeMethodAsync<object>(-140687627, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-1935978507, new object[] {@field, @val} );
             }
             
             System.Threading.Tasks.Task<Server.IMap> Server.IObjectImpl.GetMap()
@@ -2794,6 +2842,18 @@ namespace Server
             {
 
                 return base.InvokeMethodAsync<object>(2124193760, new object[] {@map is global::Orleans.Grain ? @map.AsReference<Server.IMap>() : @map} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetCell(ulong @cellkey)
+            {
+
+                return base.InvokeMethodAsync<object>(533658636, new object[] {@cellkey} );
+            }
+            
+            System.Threading.Tasks.Task<ulong> Server.IObjectImpl.GetCell()
+            {
+
+                return base.InvokeMethodAsync<System.UInt64>(1105280656, null );
             }
             
             System.Threading.Tasks.Task Server.IObjectImpl.ClearMap()
@@ -2938,28 +2998,32 @@ namespace Server
                                 return ((IPlayerImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IPlayerImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IPlayerImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IPlayerImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IPlayerImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IPlayerImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IPlayerImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IPlayerImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IPlayerImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IPlayerImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IPlayerImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IPlayerImpl)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IPlayerImpl)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IPlayerImpl)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IPlayerImpl)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IPlayerImpl)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IPlayerImpl)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IPlayerImpl)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IPlayerImpl)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IPlayerImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IPlayerImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IPlayerImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IPlayerImpl)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IPlayerImpl)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IPlayerImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -3027,28 +3091,32 @@ namespace Server
                                 return ((IUnitImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IUnitImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IUnitImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IUnitImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IUnitImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IUnitImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IUnitImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IUnitImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IUnitImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IUnitImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IUnitImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IUnitImpl)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IUnitImpl)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IUnitImpl)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IUnitImpl)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IUnitImpl)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IUnitImpl)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IUnitImpl)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IUnitImpl)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IUnitImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IUnitImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnitImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IUnitImpl)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IUnitImpl)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IUnitImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -3110,28 +3178,32 @@ namespace Server
                                 return ((IObjectImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IObjectImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IObjectImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IObjectImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IObjectImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IObjectImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IObjectImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IObjectImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IObjectImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IObjectImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IObjectImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IObjectImpl)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IObjectImpl)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IObjectImpl)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IObjectImpl)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IObjectImpl)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IObjectImpl)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IObjectImpl)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IObjectImpl)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IObjectImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IObjectImpl)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IObjectImpl)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IObjectImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -3241,28 +3313,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -3332,28 +3408,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -3417,28 +3497,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -3759,58 +3843,58 @@ namespace Server
                 return base.InvokeMethodAsync<object>(-1356403447, null );
             }
             
-            System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(int @field, int @index)
+            System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(object @field, int @index)
             {
 
-                return base.InvokeMethodAsync<System.Byte>(194300607, new object[] {@field, @index} );
+                return base.InvokeMethodAsync<System.Byte>(1183483657, new object[] {@field, @index} );
             }
             
-            System.Threading.Tasks.Task<uint> Server.IObjectImpl.GetUInt32(int @field)
+            System.Threading.Tasks.Task<uint> Server.IObjectImpl.GetUInt32(object @field)
             {
 
-                return base.InvokeMethodAsync<System.UInt32>(-1305326038, new object[] {@field} );
+                return base.InvokeMethodAsync<System.UInt32>(-557202625, new object[] {@field} );
             }
             
-            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetFloat(uint @field)
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetFloat(object @field)
             {
 
-                return base.InvokeMethodAsync<System.Single>(-1053963025, new object[] {@field} );
+                return base.InvokeMethodAsync<System.Single>(1044973385, new object[] {@field} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetByte(int @field, int @index, byte @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetByte(object @field, int @index, byte @val)
             {
 
-                return base.InvokeMethodAsync<object>(-1778927808, new object[] {@field, @index, @val} );
+                return base.InvokeMethodAsync<object>(-1336362613, new object[] {@field, @index, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt32(int @field, uint @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt32(object @field, uint @val)
             {
 
-                return base.InvokeMethodAsync<object>(-890930237, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-1928648525, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetInt32(int @field, int @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetInt32(object @field, int @val)
             {
 
-                return base.InvokeMethodAsync<object>(-1920519729, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-21267500, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetFloat(int @field, float @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetFloat(object @field, float @val)
             {
 
-                return base.InvokeMethodAsync<object>(1703182622, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(995425448, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt64(int @field, ulong @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt64(object @field, ulong @val)
             {
 
-                return base.InvokeMethodAsync<object>(-2061902484, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(1125137820, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetGUID(int @field, Shared.ObjectGUID @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetGUID(object @field, Shared.ObjectGUID @val)
             {
 
-                return base.InvokeMethodAsync<object>(-140687627, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-1935978507, new object[] {@field, @val} );
             }
             
             System.Threading.Tasks.Task<Server.IMap> Server.IObjectImpl.GetMap()
@@ -3823,6 +3907,18 @@ namespace Server
             {
 
                 return base.InvokeMethodAsync<object>(2124193760, new object[] {@map is global::Orleans.Grain ? @map.AsReference<Server.IMap>() : @map} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetCell(ulong @cellkey)
+            {
+
+                return base.InvokeMethodAsync<object>(533658636, new object[] {@cellkey} );
+            }
+            
+            System.Threading.Tasks.Task<ulong> Server.IObjectImpl.GetCell()
+            {
+
+                return base.InvokeMethodAsync<System.UInt64>(1105280656, null );
             }
             
             System.Threading.Tasks.Task Server.IObjectImpl.ClearMap()
@@ -3967,28 +4063,32 @@ namespace Server
                                 return ((IPlayer)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IPlayer)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IPlayer)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IPlayer)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IPlayer)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IPlayer)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IPlayer)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IPlayer)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IPlayer)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IPlayer)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IPlayer)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IPlayer)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IPlayer)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IPlayer)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IPlayer)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IPlayer)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IPlayer)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IPlayer)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IPlayer)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IPlayer)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IPlayer)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IPlayer)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IPlayer)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IPlayer)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IPlayer)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -4074,28 +4174,32 @@ namespace Server
                                 return ((IPlayerImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IPlayerImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IPlayerImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IPlayerImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IPlayerImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IPlayerImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IPlayerImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IPlayerImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IPlayerImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IPlayerImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IPlayerImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IPlayerImpl)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IPlayerImpl)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IPlayerImpl)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IPlayerImpl)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IPlayerImpl)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IPlayerImpl)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IPlayerImpl)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IPlayerImpl)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IPlayerImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IPlayerImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IPlayerImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IPlayerImpl)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IPlayerImpl)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IPlayerImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -4163,28 +4267,32 @@ namespace Server
                                 return ((IUnitImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IUnitImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IUnitImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IUnitImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IUnitImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IUnitImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IUnitImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IUnitImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IUnitImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IUnitImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IUnitImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IUnitImpl)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IUnitImpl)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IUnitImpl)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IUnitImpl)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IUnitImpl)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IUnitImpl)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IUnitImpl)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IUnitImpl)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IUnitImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IUnitImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnitImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IUnitImpl)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IUnitImpl)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IUnitImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -4246,28 +4354,32 @@ namespace Server
                                 return ((IObjectImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IObjectImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IObjectImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IObjectImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IObjectImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IObjectImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IObjectImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IObjectImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IObjectImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IObjectImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IObjectImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IObjectImpl)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IObjectImpl)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IObjectImpl)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IObjectImpl)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IObjectImpl)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IObjectImpl)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IObjectImpl)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IObjectImpl)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IObjectImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IObjectImpl)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IObjectImpl)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IObjectImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -4377,28 +4489,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -4486,28 +4602,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -4577,28 +4697,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -4662,28 +4786,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -4930,58 +5058,58 @@ namespace Server
                 return base.InvokeMethodAsync<object>(-1356403447, null );
             }
             
-            System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(int @field, int @index)
+            System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(object @field, int @index)
             {
 
-                return base.InvokeMethodAsync<System.Byte>(194300607, new object[] {@field, @index} );
+                return base.InvokeMethodAsync<System.Byte>(1183483657, new object[] {@field, @index} );
             }
             
-            System.Threading.Tasks.Task<uint> Server.IObjectImpl.GetUInt32(int @field)
+            System.Threading.Tasks.Task<uint> Server.IObjectImpl.GetUInt32(object @field)
             {
 
-                return base.InvokeMethodAsync<System.UInt32>(-1305326038, new object[] {@field} );
+                return base.InvokeMethodAsync<System.UInt32>(-557202625, new object[] {@field} );
             }
             
-            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetFloat(uint @field)
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetFloat(object @field)
             {
 
-                return base.InvokeMethodAsync<System.Single>(-1053963025, new object[] {@field} );
+                return base.InvokeMethodAsync<System.Single>(1044973385, new object[] {@field} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetByte(int @field, int @index, byte @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetByte(object @field, int @index, byte @val)
             {
 
-                return base.InvokeMethodAsync<object>(-1778927808, new object[] {@field, @index, @val} );
+                return base.InvokeMethodAsync<object>(-1336362613, new object[] {@field, @index, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt32(int @field, uint @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt32(object @field, uint @val)
             {
 
-                return base.InvokeMethodAsync<object>(-890930237, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-1928648525, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetInt32(int @field, int @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetInt32(object @field, int @val)
             {
 
-                return base.InvokeMethodAsync<object>(-1920519729, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-21267500, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetFloat(int @field, float @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetFloat(object @field, float @val)
             {
 
-                return base.InvokeMethodAsync<object>(1703182622, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(995425448, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt64(int @field, ulong @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt64(object @field, ulong @val)
             {
 
-                return base.InvokeMethodAsync<object>(-2061902484, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(1125137820, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetGUID(int @field, Shared.ObjectGUID @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetGUID(object @field, Shared.ObjectGUID @val)
             {
 
-                return base.InvokeMethodAsync<object>(-140687627, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-1935978507, new object[] {@field, @val} );
             }
             
             System.Threading.Tasks.Task<Server.IMap> Server.IObjectImpl.GetMap()
@@ -4994,6 +5122,18 @@ namespace Server
             {
 
                 return base.InvokeMethodAsync<object>(2124193760, new object[] {@map is global::Orleans.Grain ? @map.AsReference<Server.IMap>() : @map} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetCell(ulong @cellkey)
+            {
+
+                return base.InvokeMethodAsync<object>(533658636, new object[] {@cellkey} );
+            }
+            
+            System.Threading.Tasks.Task<ulong> Server.IObjectImpl.GetCell()
+            {
+
+                return base.InvokeMethodAsync<System.UInt64>(1105280656, null );
             }
             
             System.Threading.Tasks.Task Server.IObjectImpl.ClearMap()
@@ -5114,28 +5254,32 @@ namespace Server
                                 return ((IObject)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IObject)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IObject)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IObject)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IObject)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IObject)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IObject)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IObject)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IObject)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IObject)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IObject)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IObject)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IObject)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IObject)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IObject)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IObject)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IObject)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IObject)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IObject)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IObject)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IObject)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObject)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IObject)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IObject)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IObject)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -5197,28 +5341,32 @@ namespace Server
                                 return ((IObjectImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IObjectImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IObjectImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IObjectImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IObjectImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IObjectImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IObjectImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IObjectImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IObjectImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IObjectImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IObjectImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IObjectImpl)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IObjectImpl)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IObjectImpl)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IObjectImpl)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IObjectImpl)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IObjectImpl)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IObjectImpl)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IObjectImpl)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IObjectImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IObjectImpl)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IObjectImpl)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IObjectImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -5304,28 +5452,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -5389,28 +5541,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -5682,58 +5838,58 @@ namespace Server
                 return base.InvokeMethodAsync<object>(-1356403447, null );
             }
             
-            System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(int @field, int @index)
+            System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(object @field, int @index)
             {
 
-                return base.InvokeMethodAsync<System.Byte>(194300607, new object[] {@field, @index} );
+                return base.InvokeMethodAsync<System.Byte>(1183483657, new object[] {@field, @index} );
             }
             
-            System.Threading.Tasks.Task<uint> Server.IObjectImpl.GetUInt32(int @field)
+            System.Threading.Tasks.Task<uint> Server.IObjectImpl.GetUInt32(object @field)
             {
 
-                return base.InvokeMethodAsync<System.UInt32>(-1305326038, new object[] {@field} );
+                return base.InvokeMethodAsync<System.UInt32>(-557202625, new object[] {@field} );
             }
             
-            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetFloat(uint @field)
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetFloat(object @field)
             {
 
-                return base.InvokeMethodAsync<System.Single>(-1053963025, new object[] {@field} );
+                return base.InvokeMethodAsync<System.Single>(1044973385, new object[] {@field} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetByte(int @field, int @index, byte @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetByte(object @field, int @index, byte @val)
             {
 
-                return base.InvokeMethodAsync<object>(-1778927808, new object[] {@field, @index, @val} );
+                return base.InvokeMethodAsync<object>(-1336362613, new object[] {@field, @index, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt32(int @field, uint @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt32(object @field, uint @val)
             {
 
-                return base.InvokeMethodAsync<object>(-890930237, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-1928648525, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetInt32(int @field, int @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetInt32(object @field, int @val)
             {
 
-                return base.InvokeMethodAsync<object>(-1920519729, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-21267500, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetFloat(int @field, float @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetFloat(object @field, float @val)
             {
 
-                return base.InvokeMethodAsync<object>(1703182622, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(995425448, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt64(int @field, ulong @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt64(object @field, ulong @val)
             {
 
-                return base.InvokeMethodAsync<object>(-2061902484, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(1125137820, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetGUID(int @field, Shared.ObjectGUID @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetGUID(object @field, Shared.ObjectGUID @val)
             {
 
-                return base.InvokeMethodAsync<object>(-140687627, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-1935978507, new object[] {@field, @val} );
             }
             
             System.Threading.Tasks.Task<Server.IMap> Server.IObjectImpl.GetMap()
@@ -5746,6 +5902,18 @@ namespace Server
             {
 
                 return base.InvokeMethodAsync<object>(2124193760, new object[] {@map is global::Orleans.Grain ? @map.AsReference<Server.IMap>() : @map} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetCell(ulong @cellkey)
+            {
+
+                return base.InvokeMethodAsync<object>(533658636, new object[] {@cellkey} );
+            }
+            
+            System.Threading.Tasks.Task<ulong> Server.IObjectImpl.GetCell()
+            {
+
+                return base.InvokeMethodAsync<System.UInt64>(1105280656, null );
             }
             
             System.Threading.Tasks.Task Server.IObjectImpl.ClearMap()
@@ -5874,28 +6042,32 @@ namespace Server
                                 return ((ICreatureImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((ICreatureImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((ICreatureImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((ICreatureImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((ICreatureImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((ICreatureImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((ICreatureImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((ICreatureImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((ICreatureImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((ICreatureImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((ICreatureImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((ICreatureImpl)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((ICreatureImpl)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((ICreatureImpl)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((ICreatureImpl)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((ICreatureImpl)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((ICreatureImpl)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((ICreatureImpl)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((ICreatureImpl)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((ICreatureImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((ICreatureImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((ICreatureImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((ICreatureImpl)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((ICreatureImpl)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((ICreatureImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -5963,28 +6135,32 @@ namespace Server
                                 return ((IUnitImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IUnitImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IUnitImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IUnitImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IUnitImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IUnitImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IUnitImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IUnitImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IUnitImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IUnitImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IUnitImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IUnitImpl)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IUnitImpl)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IUnitImpl)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IUnitImpl)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IUnitImpl)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IUnitImpl)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IUnitImpl)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IUnitImpl)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IUnitImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IUnitImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnitImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IUnitImpl)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IUnitImpl)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IUnitImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -6046,28 +6222,32 @@ namespace Server
                                 return ((IObjectImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IObjectImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IObjectImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IObjectImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IObjectImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IObjectImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IObjectImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IObjectImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IObjectImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IObjectImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IObjectImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IObjectImpl)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IObjectImpl)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IObjectImpl)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IObjectImpl)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IObjectImpl)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IObjectImpl)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IObjectImpl)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IObjectImpl)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IObjectImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IObjectImpl)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IObjectImpl)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IObjectImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -6161,28 +6341,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -6252,28 +6436,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -6337,28 +6525,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -6631,58 +6823,58 @@ namespace Server
                 return base.InvokeMethodAsync<object>(-1356403447, null );
             }
             
-            System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(int @field, int @index)
+            System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(object @field, int @index)
             {
 
-                return base.InvokeMethodAsync<System.Byte>(194300607, new object[] {@field, @index} );
+                return base.InvokeMethodAsync<System.Byte>(1183483657, new object[] {@field, @index} );
             }
             
-            System.Threading.Tasks.Task<uint> Server.IObjectImpl.GetUInt32(int @field)
+            System.Threading.Tasks.Task<uint> Server.IObjectImpl.GetUInt32(object @field)
             {
 
-                return base.InvokeMethodAsync<System.UInt32>(-1305326038, new object[] {@field} );
+                return base.InvokeMethodAsync<System.UInt32>(-557202625, new object[] {@field} );
             }
             
-            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetFloat(uint @field)
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetFloat(object @field)
             {
 
-                return base.InvokeMethodAsync<System.Single>(-1053963025, new object[] {@field} );
+                return base.InvokeMethodAsync<System.Single>(1044973385, new object[] {@field} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetByte(int @field, int @index, byte @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetByte(object @field, int @index, byte @val)
             {
 
-                return base.InvokeMethodAsync<object>(-1778927808, new object[] {@field, @index, @val} );
+                return base.InvokeMethodAsync<object>(-1336362613, new object[] {@field, @index, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt32(int @field, uint @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt32(object @field, uint @val)
             {
 
-                return base.InvokeMethodAsync<object>(-890930237, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-1928648525, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetInt32(int @field, int @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetInt32(object @field, int @val)
             {
 
-                return base.InvokeMethodAsync<object>(-1920519729, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-21267500, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetFloat(int @field, float @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetFloat(object @field, float @val)
             {
 
-                return base.InvokeMethodAsync<object>(1703182622, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(995425448, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt64(int @field, ulong @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt64(object @field, ulong @val)
             {
 
-                return base.InvokeMethodAsync<object>(-2061902484, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(1125137820, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetGUID(int @field, Shared.ObjectGUID @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetGUID(object @field, Shared.ObjectGUID @val)
             {
 
-                return base.InvokeMethodAsync<object>(-140687627, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-1935978507, new object[] {@field, @val} );
             }
             
             System.Threading.Tasks.Task<Server.IMap> Server.IObjectImpl.GetMap()
@@ -6695,6 +6887,18 @@ namespace Server
             {
 
                 return base.InvokeMethodAsync<object>(2124193760, new object[] {@map is global::Orleans.Grain ? @map.AsReference<Server.IMap>() : @map} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetCell(ulong @cellkey)
+            {
+
+                return base.InvokeMethodAsync<object>(533658636, new object[] {@cellkey} );
+            }
+            
+            System.Threading.Tasks.Task<ulong> Server.IObjectImpl.GetCell()
+            {
+
+                return base.InvokeMethodAsync<System.UInt64>(1105280656, null );
             }
             
             System.Threading.Tasks.Task Server.IObjectImpl.ClearMap()
@@ -6823,28 +7027,32 @@ namespace Server
                                 return ((ICreature)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((ICreature)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((ICreature)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((ICreature)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((ICreature)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((ICreature)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((ICreature)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((ICreature)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((ICreature)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((ICreature)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((ICreature)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((ICreature)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((ICreature)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((ICreature)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((ICreature)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((ICreature)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((ICreature)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((ICreature)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((ICreature)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((ICreature)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((ICreature)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((ICreature)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((ICreature)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((ICreature)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((ICreature)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -6914,28 +7122,32 @@ namespace Server
                                 return ((ICreatureImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((ICreatureImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((ICreatureImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((ICreatureImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((ICreatureImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((ICreatureImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((ICreatureImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((ICreatureImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((ICreatureImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((ICreatureImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((ICreatureImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((ICreatureImpl)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((ICreatureImpl)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((ICreatureImpl)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((ICreatureImpl)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((ICreatureImpl)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((ICreatureImpl)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((ICreatureImpl)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((ICreatureImpl)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((ICreatureImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((ICreatureImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((ICreatureImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((ICreatureImpl)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((ICreatureImpl)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((ICreatureImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -7003,28 +7215,32 @@ namespace Server
                                 return ((IUnitImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IUnitImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IUnitImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IUnitImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IUnitImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IUnitImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IUnitImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IUnitImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IUnitImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IUnitImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IUnitImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IUnitImpl)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IUnitImpl)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IUnitImpl)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IUnitImpl)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IUnitImpl)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IUnitImpl)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IUnitImpl)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IUnitImpl)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IUnitImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IUnitImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnitImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IUnitImpl)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IUnitImpl)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IUnitImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -7086,28 +7302,32 @@ namespace Server
                                 return ((IObjectImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IObjectImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IObjectImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IObjectImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IObjectImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IObjectImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IObjectImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IObjectImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IObjectImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IObjectImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IObjectImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IObjectImpl)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IObjectImpl)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IObjectImpl)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IObjectImpl)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IObjectImpl)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IObjectImpl)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IObjectImpl)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IObjectImpl)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IObjectImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IObjectImpl)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IObjectImpl)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IObjectImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -7201,28 +7421,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -7294,28 +7518,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -7385,28 +7613,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -7470,28 +7702,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -7757,58 +7993,58 @@ namespace Server
                 return base.InvokeMethodAsync<object>(-1356403447, null );
             }
             
-            System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(int @field, int @index)
+            System.Threading.Tasks.Task<byte> Server.IObjectImpl.GetByte(object @field, int @index)
             {
 
-                return base.InvokeMethodAsync<System.Byte>(194300607, new object[] {@field, @index} );
+                return base.InvokeMethodAsync<System.Byte>(1183483657, new object[] {@field, @index} );
             }
             
-            System.Threading.Tasks.Task<uint> Server.IObjectImpl.GetUInt32(int @field)
+            System.Threading.Tasks.Task<uint> Server.IObjectImpl.GetUInt32(object @field)
             {
 
-                return base.InvokeMethodAsync<System.UInt32>(-1305326038, new object[] {@field} );
+                return base.InvokeMethodAsync<System.UInt32>(-557202625, new object[] {@field} );
             }
             
-            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetFloat(uint @field)
+            System.Threading.Tasks.Task<float> Server.IObjectImpl.GetFloat(object @field)
             {
 
-                return base.InvokeMethodAsync<System.Single>(-1053963025, new object[] {@field} );
+                return base.InvokeMethodAsync<System.Single>(1044973385, new object[] {@field} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetByte(int @field, int @index, byte @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetByte(object @field, int @index, byte @val)
             {
 
-                return base.InvokeMethodAsync<object>(-1778927808, new object[] {@field, @index, @val} );
+                return base.InvokeMethodAsync<object>(-1336362613, new object[] {@field, @index, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt32(int @field, uint @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt32(object @field, uint @val)
             {
 
-                return base.InvokeMethodAsync<object>(-890930237, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-1928648525, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetInt32(int @field, int @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetInt32(object @field, int @val)
             {
 
-                return base.InvokeMethodAsync<object>(-1920519729, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-21267500, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetFloat(int @field, float @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetFloat(object @field, float @val)
             {
 
-                return base.InvokeMethodAsync<object>(1703182622, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(995425448, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt64(int @field, ulong @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetUInt64(object @field, ulong @val)
             {
 
-                return base.InvokeMethodAsync<object>(-2061902484, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(1125137820, new object[] {@field, @val} );
             }
             
-            System.Threading.Tasks.Task Server.IObjectImpl.SetGUID(int @field, Shared.ObjectGUID @val)
+            System.Threading.Tasks.Task Server.IObjectImpl.SetGUID(object @field, Shared.ObjectGUID @val)
             {
 
-                return base.InvokeMethodAsync<object>(-140687627, new object[] {@field, @val} );
+                return base.InvokeMethodAsync<object>(-1935978507, new object[] {@field, @val} );
             }
             
             System.Threading.Tasks.Task<Server.IMap> Server.IObjectImpl.GetMap()
@@ -7821,6 +8057,18 @@ namespace Server
             {
 
                 return base.InvokeMethodAsync<object>(2124193760, new object[] {@map is global::Orleans.Grain ? @map.AsReference<Server.IMap>() : @map} );
+            }
+            
+            System.Threading.Tasks.Task Server.IObjectImpl.SetCell(ulong @cellkey)
+            {
+
+                return base.InvokeMethodAsync<object>(533658636, new object[] {@cellkey} );
+            }
+            
+            System.Threading.Tasks.Task<ulong> Server.IObjectImpl.GetCell()
+            {
+
+                return base.InvokeMethodAsync<System.UInt64>(1105280656, null );
             }
             
             System.Threading.Tasks.Task Server.IObjectImpl.ClearMap()
@@ -7947,28 +8195,32 @@ namespace Server
                                 return ((IUnit)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IUnit)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IUnit)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IUnit)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IUnit)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IUnit)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IUnit)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IUnit)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IUnit)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IUnit)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IUnit)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IUnit)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IUnit)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IUnit)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IUnit)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IUnit)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IUnit)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IUnit)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IUnit)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IUnit)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IUnit)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnit)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IUnit)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IUnit)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IUnit)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -8036,28 +8288,32 @@ namespace Server
                                 return ((IUnitImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IUnitImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IUnitImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IUnitImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IUnitImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IUnitImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IUnitImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IUnitImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IUnitImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IUnitImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IUnitImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IUnitImpl)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IUnitImpl)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IUnitImpl)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IUnitImpl)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IUnitImpl)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IUnitImpl)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IUnitImpl)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IUnitImpl)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IUnitImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IUnitImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnitImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IUnitImpl)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IUnitImpl)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IUnitImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -8119,28 +8375,32 @@ namespace Server
                                 return ((IObjectImpl)grain).BuildValuesUpdateFor((IPlayer)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1356403447: 
                                 return ((IObjectImpl)grain).Update().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 194300607: 
-                                return ((IObjectImpl)grain).GetByte((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1305326038: 
-                                return ((IObjectImpl)grain).GetUInt32((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1053963025: 
-                                return ((IObjectImpl)grain).GetFloat((UInt32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case -1778927808: 
-                                return ((IObjectImpl)grain).SetByte((Int32)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -890930237: 
-                                return ((IObjectImpl)grain).SetUInt32((Int32)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -1920519729: 
-                                return ((IObjectImpl)grain).SetInt32((Int32)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case 1703182622: 
-                                return ((IObjectImpl)grain).SetFloat((Int32)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -2061902484: 
-                                return ((IObjectImpl)grain).SetUInt64((Int32)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
-                            case -140687627: 
-                                return ((IObjectImpl)grain).SetGUID((Int32)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1183483657: 
+                                return ((IObjectImpl)grain).GetByte((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -557202625: 
+                                return ((IObjectImpl)grain).GetUInt32((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case 1044973385: 
+                                return ((IObjectImpl)grain).GetFloat((Object)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1336362613: 
+                                return ((IObjectImpl)grain).SetByte((Object)arguments[0], (Int32)arguments[1], (Byte)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1928648525: 
+                                return ((IObjectImpl)grain).SetUInt32((Object)arguments[0], (UInt32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -21267500: 
+                                return ((IObjectImpl)grain).SetInt32((Object)arguments[0], (Int32)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 995425448: 
+                                return ((IObjectImpl)grain).SetFloat((Object)arguments[0], (Single)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1125137820: 
+                                return ((IObjectImpl)grain).SetUInt64((Object)arguments[0], (UInt64)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1935978507: 
+                                return ((IObjectImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 533658636: 
+                                return ((IObjectImpl)grain).SetCell((UInt64)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1105280656: 
+                                return ((IObjectImpl)grain).GetCell().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 939583700: 
                                 return ((IObjectImpl)grain).ClearMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -1893562941: 
@@ -8232,28 +8492,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -8323,28 +8587,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -8408,28 +8676,32 @@ namespace Server
                             return "BuildValuesUpdateFor";
                     case -1356403447:
                             return "Update";
-                    case 194300607:
+                    case 1183483657:
                             return "GetByte";
-                    case -1305326038:
+                    case -557202625:
                             return "GetUInt32";
-                    case -1053963025:
+                    case 1044973385:
                             return "GetFloat";
-                    case -1778927808:
+                    case -1336362613:
                             return "SetByte";
-                    case -890930237:
+                    case -1928648525:
                             return "SetUInt32";
-                    case -1920519729:
+                    case -21267500:
                             return "SetInt32";
-                    case 1703182622:
+                    case 995425448:
                             return "SetFloat";
-                    case -2061902484:
+                    case 1125137820:
                             return "SetUInt64";
-                    case -140687627:
+                    case -1935978507:
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
                     case 2124193760:
                             return "SetMap";
+                    case 533658636:
+                            return "SetCell";
+                    case 1105280656:
+                            return "GetCell";
                     case 939583700:
                             return "ClearMap";
                     case -1893562941:
@@ -8690,6 +8962,171 @@ namespace Server
                             return "GetMap";
                     case -1781421754:
                             return "GetMap";
+                    
+                        default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                    }
+
+                default:
+                    throw new System.InvalidCastException("interfaceId="+interfaceId);
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    public class ObjectGetterFactory
+    {
+        
+
+                        [System.Obsolete("This method has been deprecated. Please use GrainFactory.GetGrain<IObjectGetter> instead.")]
+                        public static IObjectGetter GetGrain(long primaryKey)
+                        {
+                            return Cast(global::Orleans.CodeGeneration.GrainFactoryBase.MakeGrainReferenceInternal(typeof(IObjectGetter), primaryKey));
+                        }
+
+                        [System.Obsolete("This method has been deprecated. Please use GrainFactory.GetGrain<IObjectGetter> instead.")]
+                        public static IObjectGetter GetGrain(long primaryKey, string grainClassNamePrefix)
+                        {
+                            return Cast(global::Orleans.CodeGeneration.GrainFactoryBase.MakeGrainReferenceInternal(typeof(IObjectGetter), primaryKey, grainClassNamePrefix));
+                        }
+
+            public static IObjectGetter Cast(global::Orleans.Runtime.IAddressable grainRef)
+            {
+                
+                return ObjectGetterReference.Cast(grainRef);
+            }
+        
+        [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+        [System.SerializableAttribute()]
+        [global::Orleans.CodeGeneration.GrainReferenceAttribute("Server.IObjectGetter")]
+        internal class ObjectGetterReference : global::Orleans.Runtime.GrainReference, global::Orleans.Runtime.IAddressable, Server.IObjectGetter
+        {
+            
+
+            public static IObjectGetter Cast(global::Orleans.Runtime.IAddressable grainRef)
+            {
+                
+                return (IObjectGetter) global::Orleans.Runtime.GrainReference.CastInternal(typeof(IObjectGetter), (global::Orleans.Runtime.GrainReference gr) => { return new ObjectGetterReference(gr);}, grainRef, 1923301731);
+            }
+            
+            protected internal ObjectGetterReference(global::Orleans.Runtime.GrainReference reference) : 
+                    base(reference)
+            {
+            }
+            
+            protected internal ObjectGetterReference(SerializationInfo info, StreamingContext context) : 
+                    base(info, context)
+            {
+            }
+            
+            protected override int InterfaceId
+            {
+                get
+                {
+                    return 1923301731;
+                }
+            }
+            
+            public override string InterfaceName
+            {
+                get
+                {
+                    return "Server.IObjectGetter";
+                }
+            }
+            
+            [global::Orleans.CodeGeneration.CopierMethodAttribute()]
+            public static object _Copier(object original)
+            {
+                ObjectGetterReference input = ((ObjectGetterReference)(original));
+                return ((ObjectGetterReference)(global::Orleans.Runtime.GrainReference.CopyGrainReference(input)));
+            }
+            
+            [global::Orleans.CodeGeneration.SerializerMethodAttribute()]
+            public static void _Serializer(object original, global::Orleans.Serialization.BinaryTokenStreamWriter stream, System.Type expected)
+            {
+                ObjectGetterReference input = ((ObjectGetterReference)(original));
+                global::Orleans.Runtime.GrainReference.SerializeGrainReference(input, stream, expected);
+            }
+            
+            [global::Orleans.CodeGeneration.DeserializerMethodAttribute()]
+            public static object _Deserializer(System.Type expected, global::Orleans.Serialization.BinaryTokenStreamReader stream)
+            {
+                return ObjectGetterReference.Cast(((global::Orleans.Runtime.GrainReference)(global::Orleans.Runtime.GrainReference.DeserializeGrainReference(expected, stream))));
+            }
+            
+            public override bool IsCompatible(int interfaceId)
+            {
+                return (interfaceId == this.InterfaceId);
+            }
+            
+            protected override string GetMethodName(int interfaceId, int methodId)
+            {
+                return ObjectGetterMethodInvoker.GetMethodName(interfaceId, methodId);
+            }
+            
+            System.Threading.Tasks.Task<Server.IObjectImpl> Server.IObjectGetter.GetObject(Shared.ObjectGUID @guid)
+            {
+
+                return base.InvokeMethodAsync<Server.IObjectImpl>(788538833, new object[] {@guid} );
+            }
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    [global::Orleans.CodeGeneration.MethodInvokerAttribute("Server.IObjectGetter", 1923301731)]
+    internal class ObjectGetterMethodInvoker : global::Orleans.CodeGeneration.IGrainMethodInvoker
+    {
+        
+        int global::Orleans.CodeGeneration.IGrainMethodInvoker.InterfaceId
+        {
+            get
+            {
+                return 1923301731;
+            }
+        }
+        
+        global::System.Threading.Tasks.Task<object> global::Orleans.CodeGeneration.IGrainMethodInvoker.Invoke(global::Orleans.Runtime.IAddressable grain, int interfaceId, int methodId, object[] arguments)
+        {
+
+            try
+            {                    if (grain == null) throw new System.ArgumentNullException("grain");
+                switch (interfaceId)
+                {
+                    case 1923301731:  // IObjectGetter
+                        switch (methodId)
+                        {
+                            case 788538833: 
+                                return ((IObjectGetter)grain).GetObject((ObjectGUID)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            default: 
+                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
+                        }
+                    default:
+                        throw new System.InvalidCastException("interfaceId="+interfaceId);
+                }
+            }
+            catch(Exception ex)
+            {
+                var t = new System.Threading.Tasks.TaskCompletionSource<object>();
+                t.SetException(ex);
+                return t.Task;
+            }
+        }
+        
+        public static string GetMethodName(int interfaceId, int methodId)
+        {
+
+            switch (interfaceId)
+            {
+                
+                case 1923301731:  // IObjectGetter
+                    switch (methodId)
+                    {
+                        case 788538833:
+                            return "GetObject";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);

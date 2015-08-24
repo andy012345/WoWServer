@@ -48,6 +48,7 @@ namespace Server
 
         public UInt32 MapID { get; set; }
         public UInt32 InstanceID { get; set; }
+        public UInt64 CurrentCellID { get; set; }
 
         public TypeID MyType { get; set; }
 
@@ -141,38 +142,38 @@ namespace Server
 
         #region UpdateFields
 
-        public byte _GetByte(int field, int index) { return State.UpdateFields[field].GetByte(index); }
-        public UInt32 _GetUInt32(int field) { return State.UpdateFields[field].GetUInt32(); }
-        public Int32 _GetInt32(int field) { return State.UpdateFields[field].GetInt32(); }
-        public UInt64 _GetUInt64(int field)
+        public byte _GetByte(object field, int index) { return State.UpdateFields[(int)field].GetByte(index); }
+        public UInt32 _GetUInt32(object field) { return State.UpdateFields[(int)field].GetUInt32(); }
+        public Int32 _GetInt32(object field) { return State.UpdateFields[(int)field].GetInt32(); }
+        public UInt64 _GetUInt64(object field)
         {
             var low = _GetUInt32(field);
-            var high = _GetUInt32(field + 1);
+            var high = _GetUInt32((int)field + 1);
 
             var ret = (UInt64)low;
             ret |= (UInt64)high << 32;
             return ret;
         }
-        public float _GetFloat(UInt32 field) { return State.UpdateFields[field].GetFloat(); }
-        public async Task SetByte(int field, int index, byte val) { State.UpdateFields[field].Set(index, val); await OnFieldChange(field); }
-        public async Task SetUInt32(int field, UInt32 val) { State.UpdateFields[field].Set(val); await OnFieldChange(field); }
-        public async Task SetInt32(int field, int val) { State.UpdateFields[field].Set(val); await OnFieldChange(field); }
-        public async Task SetFloat(int field, float val) { State.UpdateFields[field].Set(val); await OnFieldChange(field); }
+        public float _GetFloat(object field) { return State.UpdateFields[(int)field].GetFloat(); }
+        public async Task SetByte(object field, int index, byte val) { State.UpdateFields[(int)field].Set(index, val); await OnFieldChange(field); }
+        public async Task SetUInt32(object field, UInt32 val) { State.UpdateFields[(int)field].Set(val); await OnFieldChange(field); }
+        public async Task SetInt32(object field, int val) { State.UpdateFields[(int)field].Set(val); await OnFieldChange(field); }
+        public async Task SetFloat(object field, float val) { State.UpdateFields[(int)field].Set(val); await OnFieldChange(field); }
 
-        public async Task SetGUID(int field, ObjectGUID val) { await SetUInt64(field, val.ToUInt64()); await OnFieldChange(field); }
-        public async Task SetUInt64(int field, UInt64 val)
+        public async Task SetGUID(object field, ObjectGUID val) { await SetUInt64(field, val.ToUInt64()); await OnFieldChange(field); }
+        public async Task SetUInt64(object field, UInt64 val)
         {
             UInt32 high = (UInt32)(val >> 32);
             UInt32 low = (UInt32)val;
             await SetUInt32(field, low);
-            await SetUInt32(field + 1, high);
+            await SetUInt32((int)field + 1, high);
             await OnFieldChange(field);
         }
 
         //Tasks for external people
-        public Task<byte> GetByte(int field, int index) { return Task.FromResult(_GetByte(field, index)); }
-        public Task<UInt32> GetUInt32(int field) { return Task.FromResult(_GetUInt32(field)); }
-        public Task<float> GetFloat(UInt32 field) { return Task.FromResult(_GetFloat(field)); }
+        public Task<byte> GetByte(object field, int index) { return Task.FromResult(_GetByte(field, index)); }
+        public Task<UInt32> GetUInt32(object field) { return Task.FromResult(_GetUInt32(field)); }
+        public Task<float> GetFloat(object field) { return Task.FromResult(_GetFloat(field)); }
 
         #endregion
 
@@ -227,6 +228,9 @@ namespace Server
             State.InstanceID = 0;
             return TaskDone.Done;
         }
+
+        public Task SetCell(UInt64 cellkey) { State.CurrentCellID = cellkey; return TaskDone.Done; }
+        public Task<UInt64> GetCell() { return Task.FromResult(State.CurrentCellID); }
 
         public virtual Task<bool> IsCellActivator() { return Task.FromResult(false); }
 
@@ -346,7 +350,7 @@ namespace Server
                 updateFlags |= ObjectUpdateFlags.UPDATEFLAG_SELF;
 
             PacketOut p = new PacketOut();
-            
+
             p.Write((byte)updateType);
             p.Write(pGUID);
             p.Write((byte)State.MyType);
@@ -355,7 +359,7 @@ namespace Server
             return Task.FromResult(p);
         }
 
-        public async Task OnFieldChange(int field)
+        public async Task OnFieldChange(object field)
         {
             var map = _GetMap();
 
@@ -497,9 +501,9 @@ namespace Server
                 mask.SetBit(i);
             }
 
-            pkt.Write((byte)mask.MaxBlockCount);
-            for (var i = 0; i < mask.MaxBlockCount; ++i)
-                pkt.Write(mask.Blocks[i]);
+            pkt.Write((byte)mask.GetMaxBlockCount());
+            for (var i = 0; i < mask.GetMaxBlockCount(); ++i)
+                pkt.Write(mask.m_blocks[i]);
 
             pkt.Write(tmp);
         }

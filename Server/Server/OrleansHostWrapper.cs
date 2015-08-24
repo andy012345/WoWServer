@@ -81,7 +81,6 @@ namespace Server
             try
             {
                 siloHost.ShutdownOrleansSilo();
-                siloHost.WaitForOrleansSiloShutdown();
 
                 Console.WriteLine(string.Format("Orleans silo '{0}' shutdown.", siloHost.Name));
             }

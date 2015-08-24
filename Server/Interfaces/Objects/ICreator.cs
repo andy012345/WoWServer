@@ -7,6 +7,11 @@ using Shared;
 
 namespace Server
 {
+    public interface IObjectGetter : IGrainWithIntegerKey
+    {
+        Task<IObjectImpl> GetObject(ObjectGUID guid);            
+    }
+
     public interface ICreator : IGrainWithIntegerKey
     {
         Task<UInt32> GenerateInstanceID();

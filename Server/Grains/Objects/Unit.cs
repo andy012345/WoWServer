@@ -27,58 +27,29 @@ namespace Server
             State.UpdateFlags = ObjectUpdateFlags.UPDATEFLAG_LIVING | ObjectUpdateFlags.UPDATEFLAG_STATIONARY_POSITION;
         }
 
+        public async Task SetDisplayID(int val) { await SetInt32(EUnitFields.UNIT_FIELD_DISPLAYID, val); }
+        public async Task SetNativeDisplayID(int val) { await SetInt32(EUnitFields.UNIT_FIELD_NATIVEDISPLAYID, val); }
+        public async Task SetFaction(int val) { await SetInt32(EUnitFields.UNIT_FIELD_FACTIONTEMPLATE, val); }
+        public async Task SetRace(byte val) { await SetByte(EUnitFields.UNIT_FIELD_BYTES_0, 0, val); }
+        public async Task SetClass(byte val) { await SetByte(EUnitFields.UNIT_FIELD_BYTES_0, 1, val); }
+        public async Task SetGender(byte val) { await SetByte(EUnitFields.UNIT_FIELD_BYTES_0, 2, val); }
+        public async Task SetPowerType(byte val) { await SetByte(EUnitFields.UNIT_FIELD_BYTES_0, 3, val); }
+        public async Task SetBaseHealth(UInt32 val) { await SetUInt32(EUnitFields.UNIT_FIELD_BASE_HEALTH, val); }
+        public async Task SetHealth(UInt32 val) { await SetUInt32(EUnitFields.UNIT_FIELD_HEALTH, val); }
+        public async Task SetMaxHealth(UInt32 val) { await SetUInt32(EUnitFields.UNIT_FIELD_MAXHEALTH, val); }
 
-        #region Unitfield Getters and Setters
-        public int DisplayID
-        {
-            get { return _GetInt32((int)EUnitFields.UNIT_FIELD_DISPLAYID); }
-            set { SetInt32((int)EUnitFields.UNIT_FIELD_DISPLAYID, value); }
-        }
 
-        public int NativeDisplayID
-        {
-            get { return _GetInt32((int)EUnitFields.UNIT_FIELD_NATIVEDISPLAYID); }
-            set { SetInt32((int)EUnitFields.UNIT_FIELD_NATIVEDISPLAYID, value); }
-        }
+        public Task<int> GetDisplayID() { return Task.FromResult(_GetDisplayID()); }
+        public Task<int> GetNativeDisplayID() { return Task.FromResult(_GetNativeDisplayID()); }
 
-        public int Faction
-        {
-            get { return _GetInt32((int)EUnitFields.UNIT_FIELD_FACTIONTEMPLATE); }
-            set { SetInt32((int)EUnitFields.UNIT_FIELD_FACTIONTEMPLATE, value); }
-        }
+        protected int _GetDisplayID() { return _GetInt32(EUnitFields.UNIT_FIELD_DISPLAYID); }
+        protected int _GetNativeDisplayID() { return _GetInt32(EUnitFields.UNIT_FIELD_NATIVEDISPLAYID); }
+        protected byte _GetRace() { return _GetByte(EUnitFields.UNIT_FIELD_BYTES_0, 0); }
+        protected byte _GetClass() { return _GetByte(EUnitFields.UNIT_FIELD_BYTES_0, 1); }
+        protected byte _GetGender() { return _GetByte(EUnitFields.UNIT_FIELD_BYTES_0, 2); }
+        protected byte _GetPowerType() { return _GetByte(EUnitFields.UNIT_FIELD_BYTES_0, 3); }
 
-        public byte Gender
-        {
-            get { return _GetByte((int)EUnitFields.UNIT_FIELD_BYTES_0, 2); }
-            set { SetByte((int)EUnitFields.UNIT_FIELD_BYTES_0, 2, value); }
-        }
-        public byte Race
-        {
-            get { return _GetByte((int)EUnitFields.UNIT_FIELD_BYTES_0, 0); }
-            set { SetByte((int)EUnitFields.UNIT_FIELD_BYTES_0, 0, value); }
-        }
-        public byte Class
-        {
-            get { return _GetByte((int)EUnitFields.UNIT_FIELD_BYTES_0, 1); }
-            set { SetByte((int)EUnitFields.UNIT_FIELD_BYTES_0, 1, value); }
-        }
-        public byte PowerType
-        {
-            get { return _GetByte((int)EUnitFields.UNIT_FIELD_BYTES_0, 3); }
-            set { SetByte((int)EUnitFields.UNIT_FIELD_BYTES_0, 3, value); }
-        }
-
-        public UInt32 BaseHealth
-        {
-            get { return _GetUInt32((int)EUnitFields.UNIT_FIELD_BASE_HEALTH); }
-            set { SetUInt32((int)EUnitFields.UNIT_FIELD_BASE_HEALTH, value); }
-        }
-
-        public Task<int> GetDisplayID() { return Task.FromResult(DisplayID); }
-        public Task<int> GetNativeDisplayID() { return Task.FromResult(NativeDisplayID); }
 
         public override bool _IsUnit() { return true; }
-
-        #endregion
     }
 }
