@@ -433,6 +433,7 @@ namespace Server
                 return;
 
             await player.Login();
+            State.ActivePlayer = await player.GetGUID();
         }
     }
 }

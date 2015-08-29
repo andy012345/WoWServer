@@ -37,6 +37,8 @@ namespace Server
         IDisposable SaveTask = null;
         Dictionary<UInt64, List<CreatureEntry>> CreatureEntryByCellKey = new Dictionary<ulong, List<CreatureEntry>>();
 
+        protected Dictionary<ObjectGUID, IObjectImpl> _objectCache = new Dictionary<ObjectGUID, IObjectImpl>();
+
         public override async Task OnActivateAsync()
         {
             if (_IsValid())
@@ -91,6 +93,14 @@ namespace Server
                 }
             }
 
+            var object_getter = GrainFactory.GetGrain<IObjectGetter>(0);
+
+            foreach (var guid in State.ObjectList)
+            {
+                var obj = await object_getter.GetObject(guid);
+                _objectCache.Add(guid, obj);
+            }
+
             await Task.WhenAll(tasks);
         }
 
@@ -125,13 +135,25 @@ namespace Server
         public Task<UInt32> GetMapID() { return Task.FromResult(State.MapID); }
         public Task<UInt32> GetInstanceID() { return Task.FromResult(State.InstanceID); }
 
-        public async Task<bool> AddObject(IObjectImpl obj)
+        public async Task<MapAddResult> AddObject(IObjectImpl obj)
         {
             List<Task> tasks = new List<Task>();
             var guid = await obj.GetGUID();
 
+            if ((await obj.IsOnMap()))
+            {
+                var currentmap = await obj.GetMap();
+
+                if (currentmap != this.AsReference<IMap>())
+                {
+                    //could be doing a map quick-change
+                    await currentmap.RemoveObject(guid, obj);
+                }
+            }
+
+
             if (State.ObjectList.Contains(guid))
-                throw new Exception("Attempting to add object to map but already on this map");
+                return MapAddResult.AlreadyOnMap;
 
             var isactivator = await obj.IsCellActivator();
 
@@ -143,10 +165,11 @@ namespace Server
             ServerLog.Debug("Adding {0} to map {1} instance {2} at {3}, {4}", guid.ToUInt64(), State.MapID, State.InstanceID, posx, posy);
 
             if (cell == null)
-                return false;
+                return MapAddResult.InvalidPosition;
 
             tasks.Add(obj.SetMap(this));
             State.ObjectList.Add(guid);
+            _objectCache.Add(guid, obj);
 
             tasks.Add(cell.AddObject(guid, obj));
 
@@ -158,13 +181,32 @@ namespace Server
 
             await Task.WhenAll(tasks);
 
-            return true;
+            return MapAddResult.OK;
         }
 
-        public Task RemoveObject(ObjectGUID guid, IObjectImpl obj)
+        public async Task RemoveObject(ObjectGUID guid, IObjectImpl obj)
         {
+            State.ObjectList.Remove(guid);
             State.ActiveObjects.Remove(guid);
-            return TaskDone.Done;
+            State.UpdatedObjects.Remove(guid);
+            _objectCache.Remove(guid);
+
+            bool activator = await obj.IsCellActivator();
+            if (activator)
+            {
+                var posx = await obj.GetPositionX();
+                var posy = await obj.GetPositionY();
+
+                await DecRefCells(posx, posy);
+            }
+
+        }
+
+        public Task<IObjectImpl> GetObject(ObjectGUID guid)
+        {
+            IObjectImpl retval;
+            _objectCache.TryGetValue(guid, out retval);
+            return Task.FromResult(retval);
         }
 
         //Returns a key of the cell ((x << 32) | y) and updates cell references
@@ -202,9 +244,9 @@ namespace Server
             var celly = GetCellY(posy);
 
 
-            for (var x = cellx - 1; x < cellx + 1; ++x)
+            for (var x = cellx - 1; x <= cellx + 1; ++x)
             {
-                for (var y = celly - 1; y < celly + 1; ++y)
+                for (var y = celly - 1; y <= celly + 1; ++y)
                 {
                     var cell = await GetCellDirect(x, y, true);
 
@@ -222,9 +264,9 @@ namespace Server
             var cellx = GetCellX(posx);
             var celly = GetCellY(posy);
 
-            for (var x = cellx - 1; x < cellx + 1; ++x)
+            for (var x = cellx - 1; x <= cellx + 1; ++x)
             {
-                for (var y = celly - 1; x < celly + 1; ++y)
+                for (var y = celly - 1; x <= celly + 1; ++y)
                 {
                     var cell = await GetCellDirect(x, y, true);
 
@@ -299,9 +341,9 @@ namespace Server
             if (player)
                 ServerLog.Debug("Updating inrange for player");
 
-             for (var x = cellx - 1; x < cellx + 1; ++x)
+             for (var x = cellx - 1; x <= cellx + 1; ++x)
              {
-                 for (var y = celly - 1; y < celly + 1; ++y)
+                 for (var y = celly - 1; y <= celly + 1; ++y)
                  {
                     var cell = await GetCellDirect(x, y);
 

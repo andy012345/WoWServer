@@ -58,6 +58,7 @@ namespace Server
         public UpdateMask UpdateFieldsMask { get; set; }
 
         public ObjectUpdateFlags UpdateFlags { get; set; }
+        public List<ObjectGUID> InRangeObjects { get; set; }
     }
 
     public class ObjectImpl : Object<ObjectData>, IObject
@@ -70,7 +71,8 @@ namespace Server
         protected ObjectGUID oGUID = null;
         protected PackedGUID pGUID = null;
 
-        Dictionary<ObjectGUID, IObjectImpl> _inrangeObjects = new Dictionary<ObjectGUID, IObjectImpl>();
+        protected Dictionary<ObjectGUID, IObjectImpl> _inrangeObjects = new Dictionary<ObjectGUID, IObjectImpl>();
+        protected Dictionary<ObjectGUID, IObjectImpl> _inrangePlayers = new Dictionary<ObjectGUID, IObjectImpl>();
 
         public async override Task OnActivateAsync()
         {
@@ -84,11 +86,28 @@ namespace Server
         {
             if (_IsValid())
             {
+                List<Task> tasks = new List<Task>();
                 await SetFloat((int)EObjectFields.OBJECT_FIELD_SCALE_X, 1.0f); //default scale
 
                 if (State.UpdateFieldsMask == null)
                     State.UpdateFieldsMask = new UpdateMask(State.UpdateFields.Length);
+                if (State.InRangeObjects == null)
+                    State.InRangeObjects = new List<ObjectGUID>();
+
+                var object_manager = GrainFactory.GetGrain<IObjectGetter>(0);
+
+                foreach (var guid in State.InRangeObjects)
+                    tasks.Add(AddInRangeObject(guid, true));
+                await Task.WhenAll(tasks);
             }
+        }
+
+        public override  async Task OnDeactivateAsync()
+        {
+            if (_IsValid())
+                await Save();
+
+            await base.OnDeactivateAsync();
         }
 
         public Task<bool> IsValid() { return Task.FromResult(State.Exists); }
@@ -222,6 +241,13 @@ namespace Server
             return map;
         }
 
+        public Task<bool> IsOnMap()
+        {
+            if (State.InstanceID == 0)
+                return Task.FromResult(false);
+            return Task.FromResult(true);
+        }
+
         public Task ClearMap()
         {
             State.MapID = 0xFFFFFFFF;
@@ -262,17 +288,28 @@ namespace Server
             }
         }
 
+        public async Task AddInRangeObject(ObjectGUID guid, bool add_other = true)
+        {
+            var object_manager = GrainFactory.GetGrain<IObjectGetter>(0);
+            var obj = await object_manager.GetObject(guid);
+            await AddInRangeObject(guid, obj, add_other);
+        }
+
         public async Task AddInRangeObject(ObjectGUID guid, IObjectImpl obj, bool add_other = true)
         {
             if (_inrangeObjects.ContainsKey(guid))
                 return; //already in
 
             _inrangeObjects.Add(guid, obj);
+            State.InRangeObjects.Add(guid);
+
+            if (obj is IPlayer)
+                _inrangePlayers.Add(guid, obj as IPlayer);
 
             await OnAddInRangeObject(guid, obj);
 
             if (add_other)
-                await obj.AddInRangeObject(oGUID, ToRef(), false);
+                await obj.AddInRangeObject(oGUID, this, false);
         }
 
         public virtual Task OnAddInRangeObject(ObjectGUID guid, IObjectImpl obj) { return TaskDone.Done; }
@@ -280,6 +317,8 @@ namespace Server
         public async Task RemoveInRangeObject(ObjectGUID guid, IObjectImpl obj, bool remove_other = true)
         {
             _inrangeObjects.Remove(guid);
+            State.InRangeObjects.Remove(guid);
+            _inrangePlayers.Remove(guid);
             if (remove_other)
                 await obj.RemoveInRangeObject(oGUID, ToRef(), false);
         }

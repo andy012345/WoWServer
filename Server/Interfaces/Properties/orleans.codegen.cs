@@ -632,10 +632,22 @@ namespace Server
                 return base.InvokeMethodAsync<object>(274234201, new object[] {@MapID, @InstanceID, @RealmID} );
             }
             
-            System.Threading.Tasks.Task<bool> Server.IMap.AddObject(Server.IObjectImpl @obj)
+            System.Threading.Tasks.Task<Server.IObjectImpl> Server.IMap.GetObject(Shared.ObjectGUID @guid)
             {
 
-                return base.InvokeMethodAsync<System.Boolean>(482762363, new object[] {@obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj} );
+                return base.InvokeMethodAsync<Server.IObjectImpl>(788538833, new object[] {@guid} );
+            }
+            
+            System.Threading.Tasks.Task<Shared.MapAddResult> Server.IMap.AddObject(Server.IObjectImpl @obj)
+            {
+
+                return base.InvokeMethodAsync<Shared.MapAddResult>(482762363, new object[] {@obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj} );
+            }
+            
+            System.Threading.Tasks.Task Server.IMap.RemoveObject(Shared.ObjectGUID @guid, Server.IObjectImpl @obj)
+            {
+
+                return base.InvokeMethodAsync<object>(-1030340031, new object[] {@guid, @obj is global::Orleans.Grain ? @obj.AsReference<Server.IObjectImpl>() : @obj} );
             }
             
             System.Threading.Tasks.Task Server.IMap.UpdateInRangeObject(Server.IObjectImpl @obj)
@@ -702,8 +714,12 @@ namespace Server
                                 return ((IMap)grain).GetInstanceID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 274234201: 
                                 return ((IMap)grain).Create((UInt32)arguments[0], (UInt32)arguments[1], (UInt32)arguments[2]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 788538833: 
+                                return ((IMap)grain).GetObject((ObjectGUID)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 482762363: 
                                 return ((IMap)grain).AddObject((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1030340031: 
+                                return ((IMap)grain).RemoveObject((ObjectGUID)arguments[0], (IObjectImpl)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 1256474764: 
                                 return ((IMap)grain).UpdateInRangeObject((IObjectImpl)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 1051812713: 
@@ -746,8 +762,12 @@ namespace Server
                             return "GetInstanceID";
                     case 274234201:
                             return "Create";
+                    case 788538833:
+                            return "GetObject";
                     case 482762363:
                             return "AddObject";
+                    case -1030340031:
+                            return "RemoveObject";
                     case 1256474764:
                             return "UpdateInRangeObject";
                     case 1051812713:
@@ -1401,6 +1421,12 @@ namespace Server
                 return base.InvokeMethodAsync<Server.IMap>(-2063265882, null );
             }
             
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsOnMap()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-536678569, null );
+            }
+            
             System.Threading.Tasks.Task Server.IObjectImpl.SetMap(Server.IMap @map)
             {
 
@@ -1557,6 +1583,8 @@ namespace Server
                                 return ((IObjectImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IObjectImpl)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -1668,6 +1696,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -1998,6 +2028,12 @@ namespace Server
                 return base.InvokeMethodAsync<Server.IMap>(-2063265882, null );
             }
             
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsOnMap()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-536678569, null );
+            }
+            
             System.Threading.Tasks.Task Server.IObjectImpl.SetMap(Server.IMap @map)
             {
 
@@ -2160,6 +2196,8 @@ namespace Server
                                 return ((IUnitImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IUnitImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IUnitImpl)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnitImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -2247,6 +2285,8 @@ namespace Server
                                 return ((IObjectImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IObjectImpl)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -2364,6 +2404,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -2453,6 +2495,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -2838,6 +2882,12 @@ namespace Server
                 return base.InvokeMethodAsync<Server.IMap>(-2063265882, null );
             }
             
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsOnMap()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-536678569, null );
+            }
+            
             System.Threading.Tasks.Task Server.IObjectImpl.SetMap(Server.IMap @map)
             {
 
@@ -3018,6 +3068,8 @@ namespace Server
                                 return ((IPlayerImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IPlayerImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IPlayerImpl)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IPlayerImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -3111,6 +3163,8 @@ namespace Server
                                 return ((IUnitImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IUnitImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IUnitImpl)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnitImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -3198,6 +3252,8 @@ namespace Server
                                 return ((IObjectImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IObjectImpl)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -3333,6 +3389,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -3428,6 +3486,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -3517,6 +3577,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -3903,6 +3965,12 @@ namespace Server
                 return base.InvokeMethodAsync<Server.IMap>(-2063265882, null );
             }
             
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsOnMap()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-536678569, null );
+            }
+            
             System.Threading.Tasks.Task Server.IObjectImpl.SetMap(Server.IMap @map)
             {
 
@@ -4083,6 +4151,8 @@ namespace Server
                                 return ((IPlayer)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IPlayer)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IPlayer)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IPlayer)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -4194,6 +4264,8 @@ namespace Server
                                 return ((IPlayerImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IPlayerImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IPlayerImpl)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IPlayerImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -4287,6 +4359,8 @@ namespace Server
                                 return ((IUnitImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IUnitImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IUnitImpl)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnitImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -4374,6 +4448,8 @@ namespace Server
                                 return ((IObjectImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IObjectImpl)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -4509,6 +4585,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -4622,6 +4700,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -4717,6 +4797,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -4806,6 +4888,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -5118,6 +5202,12 @@ namespace Server
                 return base.InvokeMethodAsync<Server.IMap>(-2063265882, null );
             }
             
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsOnMap()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-536678569, null );
+            }
+            
             System.Threading.Tasks.Task Server.IObjectImpl.SetMap(Server.IMap @map)
             {
 
@@ -5274,6 +5364,8 @@ namespace Server
                                 return ((IObject)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IObject)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IObject)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObject)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -5361,6 +5453,8 @@ namespace Server
                                 return ((IObjectImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IObjectImpl)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -5472,6 +5566,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -5561,6 +5657,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -5898,6 +5996,12 @@ namespace Server
                 return base.InvokeMethodAsync<Server.IMap>(-2063265882, null );
             }
             
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsOnMap()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-536678569, null );
+            }
+            
             System.Threading.Tasks.Task Server.IObjectImpl.SetMap(Server.IMap @map)
             {
 
@@ -6062,6 +6166,8 @@ namespace Server
                                 return ((ICreatureImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((ICreatureImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((ICreatureImpl)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((ICreatureImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -6155,6 +6261,8 @@ namespace Server
                                 return ((IUnitImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IUnitImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IUnitImpl)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnitImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -6242,6 +6350,8 @@ namespace Server
                                 return ((IObjectImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IObjectImpl)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -6361,6 +6471,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -6456,6 +6568,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -6545,6 +6659,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -6883,6 +6999,12 @@ namespace Server
                 return base.InvokeMethodAsync<Server.IMap>(-2063265882, null );
             }
             
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsOnMap()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-536678569, null );
+            }
+            
             System.Threading.Tasks.Task Server.IObjectImpl.SetMap(Server.IMap @map)
             {
 
@@ -7047,6 +7169,8 @@ namespace Server
                                 return ((ICreature)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((ICreature)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((ICreature)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((ICreature)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -7142,6 +7266,8 @@ namespace Server
                                 return ((ICreatureImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((ICreatureImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((ICreatureImpl)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((ICreatureImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -7235,6 +7361,8 @@ namespace Server
                                 return ((IUnitImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IUnitImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IUnitImpl)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnitImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -7322,6 +7450,8 @@ namespace Server
                                 return ((IObjectImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IObjectImpl)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -7441,6 +7571,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -7538,6 +7670,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -7633,6 +7767,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -7722,6 +7858,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -8053,6 +8191,12 @@ namespace Server
                 return base.InvokeMethodAsync<Server.IMap>(-2063265882, null );
             }
             
+            System.Threading.Tasks.Task<bool> Server.IObjectImpl.IsOnMap()
+            {
+
+                return base.InvokeMethodAsync<System.Boolean>(-536678569, null );
+            }
+            
             System.Threading.Tasks.Task Server.IObjectImpl.SetMap(Server.IMap @map)
             {
 
@@ -8215,6 +8359,8 @@ namespace Server
                                 return ((IUnit)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IUnit)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IUnit)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnit)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -8308,6 +8454,8 @@ namespace Server
                                 return ((IUnitImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IUnitImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IUnitImpl)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IUnitImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -8395,6 +8543,8 @@ namespace Server
                                 return ((IObjectImpl)grain).SetGUID((Object)arguments[0], (ObjectGUID)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -2063265882: 
                                 return ((IObjectImpl)grain).GetMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -536678569: 
+                                return ((IObjectImpl)grain).IsOnMap().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 2124193760: 
                                 return ((IObjectImpl)grain).SetMap((IMap)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 533658636: 
@@ -8512,6 +8662,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -8607,6 +8759,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:
@@ -8696,6 +8850,8 @@ namespace Server
                             return "SetGUID";
                     case -2063265882:
                             return "GetMap";
+                    case -536678569:
+                            return "IsOnMap";
                     case 2124193760:
                             return "SetMap";
                     case 533658636:

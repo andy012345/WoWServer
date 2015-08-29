@@ -54,6 +54,7 @@
     <Compile Include="DBC\DBCStructs\CharStartOutfit.cs" />
     <Compile Include="DBC\DBCStructs\Spell.cs" />
     <Compile Include="DBC\DBCStructs\Map.cs" />
+    <Compile Include="Enums\Map.cs" />
     <Compile Include="Helpers\Array.cs" />
     <Compile Include="Crypto\BigInteger.cs" />
     <Compile Include="DBC\DBCStructs\GTable.cs" />

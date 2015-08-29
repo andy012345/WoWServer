@@ -51,6 +51,7 @@ namespace Server
 
         //Maps
         Task<IMap> GetMap();
+        Task<bool> IsOnMap();
         Task SetMap(IMap map);
         Task SetCell(UInt64 cellkey);
         Task<UInt64> GetCell();

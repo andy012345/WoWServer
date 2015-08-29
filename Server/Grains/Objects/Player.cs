@@ -411,7 +411,45 @@ namespace Server
             var realm_manager = GrainFactory.GetGrain<IRealmManager>(0);
             var map = await realm_manager.GetMap(State.MapID, State.InstanceID, State.RealmID);
 
-            await map.AddObject(ToRef());
+            var mapresult = await map.AddObject(ToRef());
+
+            if (mapresult != MapAddResult.OK)
+            {
+                switch (mapresult)
+                {
+                    case MapAddResult.AlreadyOnMap:
+                        {
+                            //might be logging back in after a DC for example
+                            await BuildInitialUpdate();
+                            await BuildCreateUpdateAllInRange();
+                        }
+                        break;
+                }
+            }
+        }
+
+        public async Task AddToMap(UInt32 MapID, UInt32 InstanceID, UInt32 RealmID)
+        {
+            var realm_manager = GrainFactory.GetGrain<IRealmManager>(0);
+
+            var map = await realm_manager.GetMap(State.MapID, State.InstanceID, State.RealmID);
+            var current_map = _GetMap();
+
+            var mapresult = await map.AddObject(ToRef());
+
+            if (mapresult != MapAddResult.OK)
+            {
+                switch (mapresult)
+                {
+                    case MapAddResult.AlreadyOnMap:
+                        {
+                            //might be logging back in after a DC for example
+                            await BuildInitialUpdate();
+                            await BuildCreateUpdateAllInRange();
+                        }
+                        break;
+                }
+            }
         }
 
         public async Task SendBindPointUpdate()
@@ -490,7 +528,7 @@ namespace Server
 
         public override async Task OnAddInRangeObject(ObjectGUID guid, IObjectImpl obj)
         {
-            State.PendingUpdateData.Add(await obj.BuildCreateUpdateFor(this as IPlayer));
+            await BuildCreateUpdateForObject(obj);
         }
 
         public override async Task Update()
@@ -513,6 +551,23 @@ namespace Server
             }
 
             State.PendingUpdateData.Clear();
+
+            await Task.WhenAll(tasks);
+        }
+
+        public async Task BuildCreateUpdateForObject(IObjectImpl obj)
+        {
+            State.PendingUpdateData.Add(await obj.BuildCreateUpdateFor(this as IPlayer));
+        }
+
+        public async Task BuildCreateUpdateAllInRange()
+        {
+            List<Task> tasks = new List<Task>();
+
+            foreach (var obj in _inrangeObjects)
+            {
+                tasks.Add(BuildCreateUpdateForObject(obj.Value));
+            }
 
             await Task.WhenAll(tasks);
         }

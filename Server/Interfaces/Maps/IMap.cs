@@ -15,7 +15,9 @@ namespace Server
         Task Create(UInt32 MapID, UInt32 InstanceID, UInt32 RealmID);
 
 
-        Task<bool> AddObject(IObjectImpl obj);
+        Task<IObjectImpl> GetObject(ObjectGUID guid);
+        Task<MapAddResult> AddObject(IObjectImpl obj);
+        Task RemoveObject(ObjectGUID guid, IObjectImpl obj);
         Task UpdateInRangeObject(IObjectImpl obj);
 
         Task OnCellActivate(IMapCell cell);
