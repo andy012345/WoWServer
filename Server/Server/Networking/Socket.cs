@@ -58,9 +58,16 @@ namespace Server.Networking
                 case SocketCommands.DisconnectClient: sock.Dispose(); break;
                 case SocketCommands.SetAccount:
                     {
-                        IAccount acc = (IAccount)item.GetData(0);
+                        sock._account = (IAccount)item.GetData(0);
                     }
                     break;
+                case SocketCommands.SetPlayer:
+                    {
+                        sock._player = (IPlayer)item.GetData(0);
+                    }
+                    break;
+                case SocketCommands.ClearAccount: sock._account = null; break;
+                case SocketCommands.ClearPlayer: sock._player = null; break;
             }
 
             return TaskDone.Done;
@@ -128,7 +135,7 @@ namespace Server.Networking
                 throw new Exception("Socket: failed to get PacketStream provider");
 
             var packetstream = provider.GetStream<byte[]>(session.GetPrimaryKey(), "SessionPacketStream");
-            var commandstream = provider.GetStream<SocketCommand>(session.GetPrimaryKey(), "SessionCommandtStream");
+            var commandstream = provider.GetStream<SocketCommand>(session.GetPrimaryKey(), "SessionCommandStream");
 
             if (packetstream == null)
                 throw new Exception("Socket: failed to get packetstream");

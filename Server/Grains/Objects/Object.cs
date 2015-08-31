@@ -59,6 +59,7 @@ namespace Server
 
         public ObjectUpdateFlags UpdateFlags { get; set; }
         public List<ObjectGUID> InRangeObjects { get; set; }
+        public ObjectGUID SightBase { get; set; }
     }
 
     public class ObjectImpl : Object<ObjectData>, IObject
@@ -73,12 +74,10 @@ namespace Server
 
         protected Dictionary<ObjectGUID, IObjectImpl> _inrangeObjects = new Dictionary<ObjectGUID, IObjectImpl>();
         protected Dictionary<ObjectGUID, IObjectImpl> _inrangePlayers = new Dictionary<ObjectGUID, IObjectImpl>();
+        protected Dictionary<ObjectGUID, IObjectImpl> _inrangeObjectTracker = null;
 
         public async override Task OnActivateAsync()
         {
-            if (State.UpdateFields != null)
-                GUID = (UInt64)this.GetPrimaryKeyLong(); //create cached variables
-
             await base.OnActivateAsync();
         }
 
@@ -86,23 +85,26 @@ namespace Server
         {
             if (_IsValid())
             {
+                await SetGUID(new ObjectGUID(this.GetPrimaryKeyLong()));
+
                 List<Task> tasks = new List<Task>();
-                await SetFloat((int)EObjectFields.OBJECT_FIELD_SCALE_X, 1.0f); //default scale
+                tasks.Add(SetFloat((int)EObjectFields.OBJECT_FIELD_SCALE_X, 1.0f)); //default scale
 
                 if (State.UpdateFieldsMask == null)
                     State.UpdateFieldsMask = new UpdateMask(State.UpdateFields.Length);
                 if (State.InRangeObjects == null)
                     State.InRangeObjects = new List<ObjectGUID>();
+                if (State.SightBase == null)
+                    State.SightBase = new ObjectGUID(0);
 
-                var object_manager = GrainFactory.GetGrain<IObjectGetter>(0);
-
-                foreach (var guid in State.InRangeObjects)
-                    tasks.Add(AddInRangeObject(guid, true));
+                var inrange = State.InRangeObjects.ToArray(); //copy so we don't get enumeration errors
+                foreach (var guid in inrange)
+                    AddInRangeObjectImpl(guid, ObjectRetriever.GetObject(GrainFactory, guid));
                 await Task.WhenAll(tasks);
             }
         }
 
-        public override  async Task OnDeactivateAsync()
+        public override async Task OnDeactivateAsync()
         {
             if (_IsValid())
                 await Save();
@@ -136,27 +138,25 @@ namespace Server
             return TaskDone.Done;
         }
 
-        public Task CreateUpdateFieldsByType(ObjectType type)
+        public async Task CreateUpdateFieldsByType(ObjectType type)
         {
             switch (type)
             {
                 case ObjectType.Player:
                     {
-                        CreateUpdateFields((int)EUnitFields.PLAYER_END);
-                        Type = (UInt32)(TypeMask.TYPEMASK_PLAYER | TypeMask.TYPEMASK_UNIT | TypeMask.TYPEMASK_OBJECT);
+                        await CreateUpdateFields((int)EUnitFields.PLAYER_END);
+                        await SetType((UInt32)(TypeMask.TYPEMASK_PLAYER | TypeMask.TYPEMASK_UNIT | TypeMask.TYPEMASK_OBJECT));
                     }
                     break;
                 case ObjectType.Creature:
                     {
-                        CreateUpdateFields((int)EUnitFields.UNIT_END);
-                        Type = (UInt32)(TypeMask.TYPEMASK_UNIT | TypeMask.TYPEMASK_OBJECT);
+                        await CreateUpdateFields((int)EUnitFields.UNIT_END);
+                        await SetType((UInt32)(TypeMask.TYPEMASK_UNIT | TypeMask.TYPEMASK_OBJECT));
                     }
                     break;
 
                 default: throw new Exception("Cannot to create Update Fields by unknown object type");
             }
-
-            return TaskDone.Done;
         }
 
         #region UpdateFields
@@ -197,17 +197,15 @@ namespace Server
         #endregion
 
         #region Updatefield Getters and Setters
+        public async Task SetType(UInt32 val) { await SetUInt32(EObjectFields.OBJECT_FIELD_TYPE, val); }
+        public Task<UInt32> GetObjectType() { return Task.FromResult(_GetObjectType()); }
+        public UInt32 _GetObjectType() { return _GetUInt32(EObjectFields.OBJECT_FIELD_TYPE); }
 
-        public UInt32 Type
+        public async Task SetGUID(ObjectGUID guid)
         {
-            get { return _GetUInt32((int)EObjectFields.OBJECT_FIELD_TYPE); }
-            set { SetUInt32((int)EObjectFields.OBJECT_FIELD_TYPE, value); }
-        }
-
-        public UInt64 GUID
-        {
-            get { return _GetUInt64((int)EObjectFields.OBJECT_FIELD_GUID); }
-            set { SetUInt64((int)EObjectFields.OBJECT_FIELD_GUID, value); oGUID = new ObjectGUID(value); pGUID = new PackedGUID(value); }
+            await SetGUID(EObjectFields.OBJECT_FIELD_GUID, guid);
+            oGUID = guid;
+            pGUID = new PackedGUID(guid);
         }
 
         #endregion
@@ -262,8 +260,10 @@ namespace Server
 
         public async Task UpdateInRangeSet()
         {
-            await UpdateInRangeSet_Remove();
+            _inrangeObjectTracker = new Dictionary<ObjectGUID, IObjectImpl>();
             await UpdateInRangeSet_Add();
+            await UpdateInRangeSet_Remove();
+            _inrangeObjectTracker = null;
         }
 
         public async Task UpdateInRangeSet_Add()
@@ -273,7 +273,7 @@ namespace Server
             if (map == null)
                 return;
 
-            await map.UpdateInRangeObject(ToRef());
+            await map.UpdateInRangeObject(this);
         }
 
         public async Task UpdateInRangeSet_Remove()
@@ -281,6 +281,9 @@ namespace Server
             //Remove old
             foreach (var obj in _inrangeObjects)
             {
+                if (_inrangeObjectTracker.ContainsKey(obj.Key)) //we have just added this object, there's no reason to run this code as he's already proven to be seen
+                    continue;
+
                 var cansee = await CanSee(obj.Value);
 
                 if (!cansee)
@@ -290,21 +293,18 @@ namespace Server
 
         public async Task AddInRangeObject(ObjectGUID guid, bool add_other = true)
         {
-            var object_manager = GrainFactory.GetGrain<IObjectGetter>(0);
-            var obj = await object_manager.GetObject(guid);
+            var obj = ObjectRetriever.GetObject(GrainFactory, guid);
             await AddInRangeObject(guid, obj, add_other);
         }
 
         public async Task AddInRangeObject(ObjectGUID guid, IObjectImpl obj, bool add_other = true)
         {
+            if (guid == oGUID)
+                return; //not inrange of self
             if (_inrangeObjects.ContainsKey(guid))
-                return; //already in
+                return; //already inrange
 
-            _inrangeObjects.Add(guid, obj);
-            State.InRangeObjects.Add(guid);
-
-            if (obj is IPlayer)
-                _inrangePlayers.Add(guid, obj as IPlayer);
+            AddInRangeObjectImpl(guid, obj);
 
             await OnAddInRangeObject(guid, obj);
 
@@ -312,15 +312,36 @@ namespace Server
                 await obj.AddInRangeObject(oGUID, this, false);
         }
 
+        protected void AddInRangeObjectImpl(ObjectGUID guid, IObjectImpl obj)
+        {
+            if (!State.InRangeObjects.Contains(guid))
+                State.InRangeObjects.Add(guid);
+            if (!_inrangeObjects.ContainsKey(guid))
+            {
+                _inrangeObjects.Add(guid, obj);
+                if (obj is IPlayer)
+                    _inrangePlayers.Add(guid, obj);
+            }
+
+            if (_inrangeObjectTracker != null)
+                _inrangeObjectTracker.Add(guid, obj);
+        }
+
+        protected void RemoveInRangeObjectImpl(ObjectGUID guid, IObjectImpl obj)
+        {
+            State.InRangeObjects.Remove(guid);
+            _inrangeObjects.Remove(guid);
+            if (obj is IPlayer)
+                _inrangePlayers.Remove(guid);
+        }
+
         public virtual Task OnAddInRangeObject(ObjectGUID guid, IObjectImpl obj) { return TaskDone.Done; }
 
         public async Task RemoveInRangeObject(ObjectGUID guid, IObjectImpl obj, bool remove_other = true)
         {
-            _inrangeObjects.Remove(guid);
-            State.InRangeObjects.Remove(guid);
-            _inrangePlayers.Remove(guid);
+            RemoveInRangeObjectImpl(guid, obj);
             if (remove_other)
-                await obj.RemoveInRangeObject(oGUID, ToRef(), false);
+                await obj.RemoveInRangeObject(oGUID, this, false);
         }
 
         public Task<IObjectImpl> GetInRangeObject(ObjectGUID guid)
@@ -483,7 +504,7 @@ namespace Server
                     case TypeID.TYPEID_DYNAMICOBJECT:
                     case TypeID.TYPEID_CORPSE:
                         {
-                            pkt.Write((UInt32)GUID);
+                            pkt.Write((UInt32)_GetUInt64(EObjectFields.OBJECT_FIELD_GUID));
                         }
                         break;
                     case TypeID.TYPEID_UNIT: pkt.Write((UInt32)0xB); break;
@@ -588,6 +609,7 @@ namespace Server
         #endregion
 
         public virtual Task Update() { return TaskDone.Done; }
+
     }
 
     [Reentrant]

@@ -35,5 +35,6 @@ namespace Server
         Task HandleCharCreate(CMSG_CHAR_CREATE create);
 
         Task HandlePlayerLogin(CMSG_PLAYER_LOGIN pkt);
+        Task HandleNameQuery(CMSG_NAME_QUERY pkt);
     }
 }

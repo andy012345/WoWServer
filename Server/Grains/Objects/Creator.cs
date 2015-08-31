@@ -23,24 +23,22 @@ namespace Server
         public UInt32 MaxInstanceGUID { get { return _MaxInstanceGuid; } set { _MaxInstanceGuid = value; } }
     }
 
-    [Reentrant]
-    [StatelessWorker]
-    class ObjectGetter : Grain, IObjectGetter
+    public class ObjectRetriever
     {
-        public Task<IObjectImpl> GetObject(ObjectGUID guid)
+        public static IObjectImpl GetObject(IGrainFactory factory, ObjectGUID guid)
         {
             var highguid = guid.ToHighGUID();
 
             switch (highguid)
             {
-                case HighGuid.HIGHGUID_UNIT: { return Task.FromResult((IObjectImpl)GrainFactory.GetGrain<ICreature>(guid.ToInt64())); } break;
-                case HighGuid.HIGHGUID_PLAYER: { return Task.FromResult((IObjectImpl)GrainFactory.GetGrain<IPlayer>(guid.ToInt64())); } break;
+                case HighGuid.HIGHGUID_UNIT: { return factory.GetGrain<ICreature>(guid.ToInt64()); }
+                case HighGuid.HIGHGUID_PLAYER: { return factory.GetGrain<IPlayer>(guid.ToInt64()); }
             }
 
-
-            return Task.FromResult((IObjectImpl)GrainFactory.GetGrain<IObject>(0));
+            return factory.GetGrain<IObject>(0);
         }
     }
+
 
     [Reentrant]
     [StorageProvider(ProviderName = "Default")]

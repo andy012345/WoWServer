@@ -44,5 +44,17 @@ namespace Server.RealmServer
 
             return PacketProcessResult.Processed;
         }
+
+        [PacketHandler(RealmOp.CMSG_LOGOUT_REQUEST)]
+        public static PacketProcessResult HandleLogoutRequest(PacketProcessor p)
+        {
+            var player = p.sock._player;
+            if (player == null)
+                return PacketProcessResult.Processed;
+
+            player.Logout(true).Wait();
+
+            return PacketProcessResult.Processed;
+        }
     }
 }

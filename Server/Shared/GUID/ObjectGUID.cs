@@ -43,7 +43,9 @@ namespace Shared
     {
         public UInt64 _value = 0;
 
+        public ObjectGUID() {}
         public ObjectGUID(UInt64 g) { _value = g; }
+        public ObjectGUID(Int64 g) { _value = (UInt64)g; }
 
         public override bool Equals(object obj)
         {
@@ -118,6 +120,12 @@ namespace Shared
 
         public static bool operator ==(ObjectGUID x, ObjectGUID y)
         {
+            if (object.ReferenceEquals(x, null))
+            {
+                if (object.ReferenceEquals(y, null))
+                    return true;
+                return false;
+            }
             return x._value == y._value;
         }
         public static bool operator !=(ObjectGUID x, ObjectGUID y)

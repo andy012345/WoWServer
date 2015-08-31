@@ -49,6 +49,11 @@ namespace Server
         protected byte _GetGender() { return _GetByte(EUnitFields.UNIT_FIELD_BYTES_0, 2); }
         protected byte _GetPowerType() { return _GetByte(EUnitFields.UNIT_FIELD_BYTES_0, 3); }
 
+        public Task<byte> GetRace() { return Task.FromResult(_GetRace()); }
+        public Task<byte> GetClass() { return Task.FromResult(_GetClass()); }
+        public Task<byte> GetGender() { return Task.FromResult(_GetGender()); }
+        public Task<byte> GetPowerType() { return Task.FromResult(_GetPowerType()); }
+
 
         public override bool _IsUnit() { return true; }
     }

@@ -23,7 +23,7 @@ namespace Server
         Task<string> PlayerCall();
         Task<LoginErrorCode> Create(PlayerCreateData info);
         Task<PacketOut> BuildEnum();
-        Task Kick();
+        Task Kick(bool remove_from_world = false);
         Task<string> GetAccount();
         Task OnLogin();
         Task Login();
@@ -31,6 +31,16 @@ namespace Server
         Task SendPacket(PacketOut pkt);
 
         Task BuildInitialUpdate();
+
+        Task Logout(bool instant = false);
+        Task OnLogout();
+
+        Task<string> GetName();
+        Task<UInt32> GetRealmID();
+
+        Task<byte> GetRace();
+        Task<byte> GetGender();
+        Task<byte> GetClass();
     }
 
 }

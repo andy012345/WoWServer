@@ -85,6 +85,7 @@
     <Compile Include="Structs\RealmPackets\Ping.cs" />
     <Compile Include="Structs\RealmPackets\Character.cs" />
     <Compile Include="Structs\RealmPackets\AuthSession.cs" />
+    <Compile Include="Structs\RealmPackets\Queries.cs" />
     <Compile Include="Structs\SessionStream.cs" />
     <Compile Include="Structs\UpdateFieldVisibilityFlags.cs" />
     <Compile Include="Structs\UpdateField.cs" />

@@ -89,8 +89,8 @@ namespace Server
 
         public async override Task OnActivateAsync()
         {
-            await OnConstruct();
             await base.OnActivateAsync();
+            await OnConstruct();
         }
 
         public async override Task OnConstruct()
@@ -99,7 +99,7 @@ namespace Server
             if (_IsValid())
             {
                 State.MyType = TypeID.TYPEID_PLAYER;
-                Type = (UInt32)(TypeMask.TYPEMASK_PLAYER | TypeMask.TYPEMASK_UNIT | TypeMask.TYPEMASK_OBJECT);
+                await SetType((UInt32)(TypeMask.TYPEMASK_PLAYER | TypeMask.TYPEMASK_UNIT | TypeMask.TYPEMASK_OBJECT));
 
                 if (State.PendingUpdateData == null)
                     State.PendingUpdateData = new List<PacketOut>();
@@ -119,9 +119,11 @@ namespace Server
             return TaskDone.Done;
         }
 
-        public Task Kick()
+        public async Task Kick(bool remove_from_world = false)
         {
-            return TaskDone.Done;
+            if (remove_from_world)
+                await Logout(true);
+            await OnLogout();
         }
 
         public override bool _IsPlayer() { return true; }
@@ -132,6 +134,8 @@ namespace Server
             var account = GrainFactory.GetGrain<IAccount>(State.Account);
             var session = await account.GetRealmSession();
             _Stream = await session.GetSessionStream(); //cache this to send packets without tonnes of copying
+            if (_Stream != null)
+                await _Stream.CommandStream.OnNextAsync(new SocketCommand(SocketCommands.SetPlayer, new object[] { this.AsReference<IPlayer>() }));
         }
 
         public async Task SendPacket(PacketOut p)
@@ -145,7 +149,6 @@ namespace Server
         public async Task<LoginErrorCode> Create(PlayerCreateData info)
         {
             await Create();
-            GUID = (UInt64)this.GetPrimaryKeyLong(); //create cached variables
 
             State.Name = info.CreateData.Name;
             State.Account = info.AccountName;
@@ -157,13 +160,12 @@ namespace Server
             await SetGender(info.CreateData.Gender);
             await SetRace(info.CreateData.Race);
             await SetClass(info.CreateData.Class);
-            Skin = info.CreateData.Skin;
-            Face = info.CreateData.Face;
-            HairStyle = info.CreateData.HairStyle;
-            HairColor = info.CreateData.HairColor;
-            FacialHair = info.CreateData.FacialHair;
-            Type = (int)TypeID.TYPEID_PLAYER;
-
+            await SetSkin(info.CreateData.Skin);
+            await SetFace(info.CreateData.Face);
+            await SetHairStyle(info.CreateData.HairStyle);
+            await SetHairColor(info.CreateData.HairColor);
+            await SetFacialHair(info.CreateData.FacialHair);
+ 
             var datastore = GrainFactory.GetGrain<IDataStoreManager>(0);
             var chrclass = await datastore.GetChrClasses(info.CreateData.Class);
             var chrrace = await datastore.GetChrRaces(info.CreateData.Race);
@@ -222,11 +224,11 @@ namespace Server
                 p.Write(_GetRace());
                 p.Write(_GetClass());
                 p.Write(_GetGender());
-                p.Write(Skin);
-                p.Write(Face);
-                p.Write(HairStyle);
-                p.Write(HairColor);
-                p.Write(FacialHair);
+                p.Write(_GetSkin());
+                p.Write(_GetFace());
+                p.Write(_GetHairStyle());
+                p.Write(_GetHairColor());
+                p.Write(_GetFacialHair());
                 p.Write((byte)1); //level to do
                 p.Write((int)0); //zone to do
                 p.Write((int)0); //map to do
@@ -290,32 +292,21 @@ namespace Server
 
         #region Customisation
 
-        public byte Skin
-        {
-            get { return _GetByte((int)EUnitFields.PLAYER_BYTES, 0); }
-            set { SetByte((int)EUnitFields.PLAYER_BYTES, 0, value); }
-        }
-        public byte Face
-        {
-            get { return _GetByte((int)EUnitFields.PLAYER_BYTES, 1); }
-            set { SetByte((int)EUnitFields.PLAYER_BYTES, 1, value); }
-        }
-        public byte HairStyle
-        {
-            get { return _GetByte((int)EUnitFields.PLAYER_BYTES, 2); }
-            set { SetByte((int)EUnitFields.PLAYER_BYTES, 2, value); }
-        }
-        public byte HairColor
-        {
-            get { return _GetByte((int)EUnitFields.PLAYER_BYTES, 3); }
-            set { SetByte((int)EUnitFields.PLAYER_BYTES, 3, value); }
-        }
-        public byte FacialHair
-        {
-            get { return _GetByte((int)EUnitFields.PLAYER_BYTES_2, 0); }
-            set { SetByte((int)EUnitFields.PLAYER_BYTES_2, 0, value); }
-        }
- 
+        public async Task SetSkin(byte val) { await SetByte(EUnitFields.PLAYER_BYTES, 0, val); }
+        public Task<byte> GetSkin() { return Task.FromResult(_GetSkin()); }
+        protected byte _GetSkin() { return _GetByte(EUnitFields.PLAYER_BYTES, 0); }
+        public async Task SetFace(byte val) { await SetByte(EUnitFields.PLAYER_BYTES, 1, val); }
+        public Task<byte> GetFace() { return Task.FromResult(_GetFace()); }
+        protected byte _GetFace() { return _GetByte(EUnitFields.PLAYER_BYTES, 1); }
+        public async Task SetHairStyle(byte val) { await SetByte(EUnitFields.PLAYER_BYTES, 2, val); }
+        public Task<byte> GetHairStyle() { return Task.FromResult(_GetHairStyle()); }
+        protected byte _GetHairStyle() { return _GetByte(EUnitFields.PLAYER_BYTES, 2); }
+        public async Task SetHairColor(byte val) { await SetByte(EUnitFields.PLAYER_BYTES, 3, val); }
+        public Task<byte> GetHairColor() { return Task.FromResult(_GetHairColor()); }
+        protected byte _GetHairColor() { return _GetByte(EUnitFields.PLAYER_BYTES, 3); }
+        public async Task SetFacialHair(byte val) { await SetByte(EUnitFields.PLAYER_BYTES_2, 0, val); }
+        public Task<byte> GetFacialHair() { return Task.FromResult(_GetFacialHair()); }
+        protected byte _GetFacialHair() { return _GetByte(EUnitFields.PLAYER_BYTES_2, 0); }
 
         #endregion
 
@@ -570,6 +561,34 @@ namespace Server
             }
 
             await Task.WhenAll(tasks);
+        }
+
+        public async Task Logout(bool instant = false)
+        {
+            PacketOut p = new PacketOut(RealmOp.SMSG_LOGOUT_RESPONSE);
+            p.Write((UInt32)0); //logoutReason
+            p.Write(instant? (byte)1 : (byte)0); //hasLogoutTimer
+            await SendPacket(p);
+        }
+
+        public Task OnLogout()
+        {
+            if (_Stream != null)
+                _Stream.CommandStream.OnNextAsync(new SocketCommand(SocketCommands.ClearPlayer));
+            _Stream = null;
+            return TaskDone.Done;
+        }
+
+        public Task<string> GetName()
+        {
+            if (!_IsValid())
+                return Task.FromResult("UNKNOWN - NOT VALID");
+            return Task.FromResult(State.Name);
+        }
+
+        public Task<uint> GetRealmID()
+        {
+            return Task.FromResult(State.RealmID);
         }
     }
 }

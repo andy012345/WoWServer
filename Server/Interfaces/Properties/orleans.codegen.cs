@@ -2654,10 +2654,10 @@ namespace Server
                 return base.InvokeMethodAsync<Shared.PacketOut>(1472154683, null );
             }
             
-            System.Threading.Tasks.Task Server.IPlayerImpl.Kick()
+            System.Threading.Tasks.Task Server.IPlayerImpl.Kick(bool @remove_from_world)
             {
 
-                return base.InvokeMethodAsync<object>(1897172960, null );
+                return base.InvokeMethodAsync<object>(-190511557, new object[] {@remove_from_world} );
             }
             
             System.Threading.Tasks.Task<string> Server.IPlayerImpl.GetAccount()
@@ -2688,6 +2688,48 @@ namespace Server
             {
 
                 return base.InvokeMethodAsync<object>(1583044129, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IPlayerImpl.Logout(bool @instant)
+            {
+
+                return base.InvokeMethodAsync<object>(-640025293, new object[] {@instant} );
+            }
+            
+            System.Threading.Tasks.Task Server.IPlayerImpl.OnLogout()
+            {
+
+                return base.InvokeMethodAsync<object>(1746041143, null );
+            }
+            
+            System.Threading.Tasks.Task<string> Server.IPlayerImpl.GetName()
+            {
+
+                return base.InvokeMethodAsync<System.String>(-1256896228, null );
+            }
+            
+            System.Threading.Tasks.Task<uint> Server.IPlayerImpl.GetRealmID()
+            {
+
+                return base.InvokeMethodAsync<System.UInt32>(-200604686, null );
+            }
+            
+            System.Threading.Tasks.Task<byte> Server.IPlayerImpl.GetRace()
+            {
+
+                return base.InvokeMethodAsync<System.Byte>(-542679141, null );
+            }
+            
+            System.Threading.Tasks.Task<byte> Server.IPlayerImpl.GetGender()
+            {
+
+                return base.InvokeMethodAsync<System.Byte>(-1388702422, null );
+            }
+            
+            System.Threading.Tasks.Task<byte> Server.IPlayerImpl.GetClass()
+            {
+
+                return base.InvokeMethodAsync<System.Byte>(-825606002, null );
             }
             
             System.Threading.Tasks.Task<string> Server.IUnitImpl.UnitCall()
@@ -2992,8 +3034,8 @@ namespace Server
                                 return ((IPlayerImpl)grain).Create((PlayerCreateData)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1472154683: 
                                 return ((IPlayerImpl)grain).BuildEnum().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case 1897172960: 
-                                return ((IPlayerImpl)grain).Kick().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -190511557: 
+                                return ((IPlayerImpl)grain).Kick((Boolean)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 1960002325: 
                                 return ((IPlayerImpl)grain).GetAccount().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 112904302: 
@@ -3004,6 +3046,20 @@ namespace Server
                                 return ((IPlayerImpl)grain).SendPacket((PacketOut)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 1583044129: 
                                 return ((IPlayerImpl)grain).BuildInitialUpdate().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -640025293: 
+                                return ((IPlayerImpl)grain).Logout((Boolean)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1746041143: 
+                                return ((IPlayerImpl)grain).OnLogout().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1256896228: 
+                                return ((IPlayerImpl)grain).GetName().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -200604686: 
+                                return ((IPlayerImpl)grain).GetRealmID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -542679141: 
+                                return ((IPlayerImpl)grain).GetRace().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1388702422: 
+                                return ((IPlayerImpl)grain).GetGender().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -825606002: 
+                                return ((IPlayerImpl)grain).GetClass().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1519937893: 
                                 return ((IPlayerImpl)grain).UnitCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -342467399: 
@@ -3313,7 +3369,7 @@ namespace Server
                             return "Create";
                     case 1472154683:
                             return "BuildEnum";
-                    case 1897172960:
+                    case -190511557:
                             return "Kick";
                     case 1960002325:
                             return "GetAccount";
@@ -3325,6 +3381,20 @@ namespace Server
                             return "SendPacket";
                     case 1583044129:
                             return "BuildInitialUpdate";
+                    case -640025293:
+                            return "Logout";
+                    case 1746041143:
+                            return "OnLogout";
+                    case -1256896228:
+                            return "GetName";
+                    case -200604686:
+                            return "GetRealmID";
+                    case -542679141:
+                            return "GetRace";
+                    case -1388702422:
+                            return "GetGender";
+                    case -825606002:
+                            return "GetClass";
                     case 1519937893:
                             return "UnitCall";
                     case -342467399:
@@ -3737,10 +3807,10 @@ namespace Server
                 return base.InvokeMethodAsync<Shared.PacketOut>(1472154683, null );
             }
             
-            System.Threading.Tasks.Task Server.IPlayerImpl.Kick()
+            System.Threading.Tasks.Task Server.IPlayerImpl.Kick(bool @remove_from_world)
             {
 
-                return base.InvokeMethodAsync<object>(1897172960, null );
+                return base.InvokeMethodAsync<object>(-190511557, new object[] {@remove_from_world} );
             }
             
             System.Threading.Tasks.Task<string> Server.IPlayerImpl.GetAccount()
@@ -3771,6 +3841,48 @@ namespace Server
             {
 
                 return base.InvokeMethodAsync<object>(1583044129, null );
+            }
+            
+            System.Threading.Tasks.Task Server.IPlayerImpl.Logout(bool @instant)
+            {
+
+                return base.InvokeMethodAsync<object>(-640025293, new object[] {@instant} );
+            }
+            
+            System.Threading.Tasks.Task Server.IPlayerImpl.OnLogout()
+            {
+
+                return base.InvokeMethodAsync<object>(1746041143, null );
+            }
+            
+            System.Threading.Tasks.Task<string> Server.IPlayerImpl.GetName()
+            {
+
+                return base.InvokeMethodAsync<System.String>(-1256896228, null );
+            }
+            
+            System.Threading.Tasks.Task<uint> Server.IPlayerImpl.GetRealmID()
+            {
+
+                return base.InvokeMethodAsync<System.UInt32>(-200604686, null );
+            }
+            
+            System.Threading.Tasks.Task<byte> Server.IPlayerImpl.GetRace()
+            {
+
+                return base.InvokeMethodAsync<System.Byte>(-542679141, null );
+            }
+            
+            System.Threading.Tasks.Task<byte> Server.IPlayerImpl.GetGender()
+            {
+
+                return base.InvokeMethodAsync<System.Byte>(-1388702422, null );
+            }
+            
+            System.Threading.Tasks.Task<byte> Server.IPlayerImpl.GetClass()
+            {
+
+                return base.InvokeMethodAsync<System.Byte>(-825606002, null );
             }
             
             System.Threading.Tasks.Task<string> Server.IUnitImpl.UnitCall()
@@ -4075,8 +4187,8 @@ namespace Server
                                 return ((IPlayer)grain).Create((PlayerCreateData)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1472154683: 
                                 return ((IPlayer)grain).BuildEnum().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case 1897172960: 
-                                return ((IPlayer)grain).Kick().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -190511557: 
+                                return ((IPlayer)grain).Kick((Boolean)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 1960002325: 
                                 return ((IPlayer)grain).GetAccount().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 112904302: 
@@ -4087,6 +4199,20 @@ namespace Server
                                 return ((IPlayer)grain).SendPacket((PacketOut)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 1583044129: 
                                 return ((IPlayer)grain).BuildInitialUpdate().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -640025293: 
+                                return ((IPlayer)grain).Logout((Boolean)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1746041143: 
+                                return ((IPlayer)grain).OnLogout().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1256896228: 
+                                return ((IPlayer)grain).GetName().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -200604686: 
+                                return ((IPlayer)grain).GetRealmID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -542679141: 
+                                return ((IPlayer)grain).GetRace().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1388702422: 
+                                return ((IPlayer)grain).GetGender().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -825606002: 
+                                return ((IPlayer)grain).GetClass().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1519937893: 
                                 return ((IPlayer)grain).UnitCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -342467399: 
@@ -4188,8 +4314,8 @@ namespace Server
                                 return ((IPlayerImpl)grain).Create((PlayerCreateData)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1472154683: 
                                 return ((IPlayerImpl)grain).BuildEnum().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            case 1897172960: 
-                                return ((IPlayerImpl)grain).Kick().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -190511557: 
+                                return ((IPlayerImpl)grain).Kick((Boolean)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 1960002325: 
                                 return ((IPlayerImpl)grain).GetAccount().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 112904302: 
@@ -4200,6 +4326,20 @@ namespace Server
                                 return ((IPlayerImpl)grain).SendPacket((PacketOut)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 1583044129: 
                                 return ((IPlayerImpl)grain).BuildInitialUpdate().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -640025293: 
+                                return ((IPlayerImpl)grain).Logout((Boolean)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 1746041143: 
+                                return ((IPlayerImpl)grain).OnLogout().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case -1256896228: 
+                                return ((IPlayerImpl)grain).GetName().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -200604686: 
+                                return ((IPlayerImpl)grain).GetRealmID().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -542679141: 
+                                return ((IPlayerImpl)grain).GetRace().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1388702422: 
+                                return ((IPlayerImpl)grain).GetGender().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -825606002: 
+                                return ((IPlayerImpl)grain).GetClass().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case 1519937893: 
                                 return ((IPlayerImpl)grain).UnitCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -342467399: 
@@ -4509,7 +4649,7 @@ namespace Server
                             return "Create";
                     case 1472154683:
                             return "BuildEnum";
-                    case 1897172960:
+                    case -190511557:
                             return "Kick";
                     case 1960002325:
                             return "GetAccount";
@@ -4521,6 +4661,20 @@ namespace Server
                             return "SendPacket";
                     case 1583044129:
                             return "BuildInitialUpdate";
+                    case -640025293:
+                            return "Logout";
+                    case 1746041143:
+                            return "OnLogout";
+                    case -1256896228:
+                            return "GetName";
+                    case -200604686:
+                            return "GetRealmID";
+                    case -542679141:
+                            return "GetRace";
+                    case -1388702422:
+                            return "GetGender";
+                    case -825606002:
+                            return "GetClass";
                     case 1519937893:
                             return "UnitCall";
                     case -342467399:
@@ -4624,7 +4778,7 @@ namespace Server
                             return "Create";
                     case 1472154683:
                             return "BuildEnum";
-                    case 1897172960:
+                    case -190511557:
                             return "Kick";
                     case 1960002325:
                             return "GetAccount";
@@ -4636,6 +4790,20 @@ namespace Server
                             return "SendPacket";
                     case 1583044129:
                             return "BuildInitialUpdate";
+                    case -640025293:
+                            return "Logout";
+                    case 1746041143:
+                            return "OnLogout";
+                    case -1256896228:
+                            return "GetName";
+                    case -200604686:
+                            return "GetRealmID";
+                    case -542679141:
+                            return "GetRace";
+                    case -1388702422:
+                            return "GetGender";
+                    case -825606002:
+                            return "GetClass";
                     case 1519937893:
                             return "UnitCall";
                     case -342467399:
@@ -8994,6 +9162,12 @@ namespace Server
                 return base.InvokeMethodAsync<Shared.Realm>(-637421897, new object[] {@id} );
             }
             
+            System.Threading.Tasks.Task<string> Server.IRealmManager.GetRealmName(int @id)
+            {
+
+                return base.InvokeMethodAsync<System.String>(-951231375, new object[] {@id} );
+            }
+            
             System.Threading.Tasks.Task Server.IRealmManager.RemoveRealm(int @id)
             {
 
@@ -9064,6 +9238,8 @@ namespace Server
                         {
                             case -637421897: 
                                 return ((IRealmManager)grain).GetRealm((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -951231375: 
+                                return ((IRealmManager)grain).GetRealmName((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -1749235508: 
                                 return ((IRealmManager)grain).RemoveRealm((Int32)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case -130435026: 
@@ -9104,6 +9280,8 @@ namespace Server
                     {
                         case -637421897:
                             return "GetRealm";
+                    case -951231375:
+                            return "GetRealmName";
                     case -1749235508:
                             return "RemoveRealm";
                     case -130435026:
@@ -9118,171 +9296,6 @@ namespace Server
                             return "GetMap";
                     case -1781421754:
                             return "GetMap";
-                    
-                        default: 
-                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
-                    }
-
-                default:
-                    throw new System.InvalidCastException("interfaceId="+interfaceId);
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
-    public class ObjectGetterFactory
-    {
-        
-
-                        [System.Obsolete("This method has been deprecated. Please use GrainFactory.GetGrain<IObjectGetter> instead.")]
-                        public static IObjectGetter GetGrain(long primaryKey)
-                        {
-                            return Cast(global::Orleans.CodeGeneration.GrainFactoryBase.MakeGrainReferenceInternal(typeof(IObjectGetter), primaryKey));
-                        }
-
-                        [System.Obsolete("This method has been deprecated. Please use GrainFactory.GetGrain<IObjectGetter> instead.")]
-                        public static IObjectGetter GetGrain(long primaryKey, string grainClassNamePrefix)
-                        {
-                            return Cast(global::Orleans.CodeGeneration.GrainFactoryBase.MakeGrainReferenceInternal(typeof(IObjectGetter), primaryKey, grainClassNamePrefix));
-                        }
-
-            public static IObjectGetter Cast(global::Orleans.Runtime.IAddressable grainRef)
-            {
-                
-                return ObjectGetterReference.Cast(grainRef);
-            }
-        
-        [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
-        [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
-        [System.SerializableAttribute()]
-        [global::Orleans.CodeGeneration.GrainReferenceAttribute("Server.IObjectGetter")]
-        internal class ObjectGetterReference : global::Orleans.Runtime.GrainReference, global::Orleans.Runtime.IAddressable, Server.IObjectGetter
-        {
-            
-
-            public static IObjectGetter Cast(global::Orleans.Runtime.IAddressable grainRef)
-            {
-                
-                return (IObjectGetter) global::Orleans.Runtime.GrainReference.CastInternal(typeof(IObjectGetter), (global::Orleans.Runtime.GrainReference gr) => { return new ObjectGetterReference(gr);}, grainRef, 1923301731);
-            }
-            
-            protected internal ObjectGetterReference(global::Orleans.Runtime.GrainReference reference) : 
-                    base(reference)
-            {
-            }
-            
-            protected internal ObjectGetterReference(SerializationInfo info, StreamingContext context) : 
-                    base(info, context)
-            {
-            }
-            
-            protected override int InterfaceId
-            {
-                get
-                {
-                    return 1923301731;
-                }
-            }
-            
-            public override string InterfaceName
-            {
-                get
-                {
-                    return "Server.IObjectGetter";
-                }
-            }
-            
-            [global::Orleans.CodeGeneration.CopierMethodAttribute()]
-            public static object _Copier(object original)
-            {
-                ObjectGetterReference input = ((ObjectGetterReference)(original));
-                return ((ObjectGetterReference)(global::Orleans.Runtime.GrainReference.CopyGrainReference(input)));
-            }
-            
-            [global::Orleans.CodeGeneration.SerializerMethodAttribute()]
-            public static void _Serializer(object original, global::Orleans.Serialization.BinaryTokenStreamWriter stream, System.Type expected)
-            {
-                ObjectGetterReference input = ((ObjectGetterReference)(original));
-                global::Orleans.Runtime.GrainReference.SerializeGrainReference(input, stream, expected);
-            }
-            
-            [global::Orleans.CodeGeneration.DeserializerMethodAttribute()]
-            public static object _Deserializer(System.Type expected, global::Orleans.Serialization.BinaryTokenStreamReader stream)
-            {
-                return ObjectGetterReference.Cast(((global::Orleans.Runtime.GrainReference)(global::Orleans.Runtime.GrainReference.DeserializeGrainReference(expected, stream))));
-            }
-            
-            public override bool IsCompatible(int interfaceId)
-            {
-                return (interfaceId == this.InterfaceId);
-            }
-            
-            protected override string GetMethodName(int interfaceId, int methodId)
-            {
-                return ObjectGetterMethodInvoker.GetMethodName(interfaceId, methodId);
-            }
-            
-            System.Threading.Tasks.Task<Server.IObjectImpl> Server.IObjectGetter.GetObject(Shared.ObjectGUID @guid)
-            {
-
-                return base.InvokeMethodAsync<Server.IObjectImpl>(788538833, new object[] {@guid} );
-            }
-        }
-    }
-    
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
-    [global::Orleans.CodeGeneration.MethodInvokerAttribute("Server.IObjectGetter", 1923301731)]
-    internal class ObjectGetterMethodInvoker : global::Orleans.CodeGeneration.IGrainMethodInvoker
-    {
-        
-        int global::Orleans.CodeGeneration.IGrainMethodInvoker.InterfaceId
-        {
-            get
-            {
-                return 1923301731;
-            }
-        }
-        
-        global::System.Threading.Tasks.Task<object> global::Orleans.CodeGeneration.IGrainMethodInvoker.Invoke(global::Orleans.Runtime.IAddressable grain, int interfaceId, int methodId, object[] arguments)
-        {
-
-            try
-            {                    if (grain == null) throw new System.ArgumentNullException("grain");
-                switch (interfaceId)
-                {
-                    case 1923301731:  // IObjectGetter
-                        switch (methodId)
-                        {
-                            case 788538833: 
-                                return ((IObjectGetter)grain).GetObject((ObjectGUID)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
-                            default: 
-                            throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
-                        }
-                    default:
-                        throw new System.InvalidCastException("interfaceId="+interfaceId);
-                }
-            }
-            catch(Exception ex)
-            {
-                var t = new System.Threading.Tasks.TaskCompletionSource<object>();
-                t.SetException(ex);
-                return t.Task;
-            }
-        }
-        
-        public static string GetMethodName(int interfaceId, int methodId)
-        {
-
-            switch (interfaceId)
-            {
-                
-                case 1923301731:  // IObjectGetter
-                    switch (methodId)
-                    {
-                        case 788538833:
-                            return "GetObject";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -10060,6 +10073,12 @@ namespace Server
 
                 return base.InvokeMethodAsync<object>(321629405, new object[] {@pkt} );
             }
+            
+            System.Threading.Tasks.Task Server.ISession.HandleNameQuery(Shared.CMSG_NAME_QUERY @pkt)
+            {
+
+                return base.InvokeMethodAsync<object>(535312199, new object[] {@pkt} );
+            }
         }
     }
     
@@ -10127,6 +10146,8 @@ namespace Server
                                 return ((ISession)grain).HandleCharCreate((CMSG_CHAR_CREATE)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 321629405: 
                                 return ((ISession)grain).HandlePlayerLogin((CMSG_PLAYER_LOGIN)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
+                            case 535312199: 
+                                return ((ISession)grain).HandleNameQuery((CMSG_NAME_QUERY)arguments[0]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
                         }
@@ -10191,6 +10212,8 @@ namespace Server
                             return "HandleCharCreate";
                     case 321629405:
                             return "HandlePlayerLogin";
+                    case 535312199:
+                            return "HandleNameQuery";
                     
                         default: 
                             throw new NotImplementedException("interfaceId="+interfaceId+",methodId="+methodId);
@@ -10945,7 +10968,7 @@ namespace InterfacesSerializers
         public static object DeepCopier(object original)
         {
             Shared.ObjectGUID input = ((Shared.ObjectGUID)(original));
-            Shared.ObjectGUID result = ((Shared.ObjectGUID)(System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(Shared.ObjectGUID))));
+            Shared.ObjectGUID result = new Shared.ObjectGUID();
             Orleans.Serialization.SerializationContext.Current.RecordObject(original, result);
             result._value = input._value;
             return result;
@@ -10959,7 +10982,7 @@ namespace InterfacesSerializers
         
         public static object Deserializer(System.Type expected, global::Orleans.Serialization.BinaryTokenStreamReader stream)
         {
-            Shared.ObjectGUID result = ((Shared.ObjectGUID)(System.Runtime.Serialization.FormatterServices.GetUninitializedObject(typeof(Shared.ObjectGUID))));
+            Shared.ObjectGUID result = new Shared.ObjectGUID();
             result._value = ((ulong)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(ulong), stream)));
             return result;
         }
@@ -11686,6 +11709,45 @@ namespace InterfacesSerializers
         public static void Register()
         {
             global::Orleans.Serialization.SerializationManager.Register(typeof(Shared.CMSG_AUTH_SESSION), DeepCopier, Serializer, Deserializer);
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    [global::Orleans.CodeGeneration.RegisterSerializerAttribute()]
+    internal class Shared_CMSG_NAME_QUERYSerialization
+    {
+        
+        static Shared_CMSG_NAME_QUERYSerialization()
+        {
+            Register();
+        }
+        
+        public static object DeepCopier(object original)
+        {
+            Shared.CMSG_NAME_QUERY input = ((Shared.CMSG_NAME_QUERY)(original));
+            Shared.CMSG_NAME_QUERY result = default(Shared.CMSG_NAME_QUERY);
+            Orleans.Serialization.SerializationContext.Current.RecordObject(original, result);
+            result.guid = ((Shared.ObjectGUID)(Orleans.Serialization.SerializationManager.DeepCopyInner(input.guid)));
+            return result;
+        }
+        
+        public static void Serializer(object untypedInput, Orleans.Serialization.BinaryTokenStreamWriter stream, System.Type expected)
+        {
+            Shared.CMSG_NAME_QUERY input = ((Shared.CMSG_NAME_QUERY)(untypedInput));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.guid, stream, typeof(Shared.ObjectGUID));
+        }
+        
+        public static object Deserializer(System.Type expected, global::Orleans.Serialization.BinaryTokenStreamReader stream)
+        {
+            Shared.CMSG_NAME_QUERY result = default(Shared.CMSG_NAME_QUERY);
+            result.guid = ((Shared.ObjectGUID)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(Shared.ObjectGUID), stream)));
+            return result;
+        }
+        
+        public static void Register()
+        {
+            global::Orleans.Serialization.SerializationManager.Register(typeof(Shared.CMSG_NAME_QUERY), DeepCopier, Serializer, Deserializer);
         }
     }
 }

@@ -72,12 +72,16 @@ namespace Server
                 State.RealmMap = new Dictionary<int, Realm>();
         }
 
+        protected Realm _GetRealm(int id)
+        {
+            Realm realm = null;
+            State.RealmMap.TryGetValue(id, out realm);
+            return realm;
+        }
+
         public Task<Realm> GetRealm(int id)
         {
-            Realm realm;
-            if (State.RealmMap.TryGetValue(id, out realm))
-                return Task.FromResult(realm);
-            return Task.FromResult<Realm>(null);
+            return Task.FromResult<Realm>(_GetRealm(id));
         }
 
         public async Task RemoveRealm(int id)
@@ -210,6 +214,14 @@ namespace Server
 
             realm.SetOffline();
             await WriteStateAsync();
+        }
+
+        public Task<string> GetRealmName(int id)
+        {
+            var realm = _GetRealm(id);
+            if (realm == null)
+                return Task.FromResult("Unknown");
+            return Task.FromResult(realm.RealmSettings.Name);
         }
     }
 }

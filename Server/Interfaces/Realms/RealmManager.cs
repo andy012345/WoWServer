@@ -10,6 +10,7 @@ namespace Server
     public interface IRealmManager : IGrainWithIntegerKey
     {
         Task<Realm> GetRealm(int id);
+        Task<string> GetRealmName(int id);
         Task RemoveRealm(int id);
         Task AddRealm(RealmSettings r);
         Task<Realm[]> GetRealms(int AccountLevel = 0);

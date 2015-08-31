@@ -76,6 +76,7 @@
     <Compile Include="Session\Handlers\AccountDataHandlers.cs" />
     <Compile Include="Session\Handlers\AuthServerHandlers.cs" />
     <Compile Include="Properties\orleans.codegen.cs" />
+    <Compile Include="Session\Handlers\QueryHandlers.cs" />
     <Compile Include="Session\Session.cs" />
     <Compile Include="Storage\Helper\MySQLGenerator.cs" />
     <Compile Include="Storage\OrleansMySQLJSONStorage.cs" />

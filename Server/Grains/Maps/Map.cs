@@ -93,11 +93,9 @@ namespace Server
                 }
             }
 
-            var object_getter = GrainFactory.GetGrain<IObjectGetter>(0);
-
             foreach (var guid in State.ObjectList)
             {
-                var obj = await object_getter.GetObject(guid);
+                var obj = ObjectRetriever.GetObject(GrainFactory, guid);
                 _objectCache.Add(guid, obj);
             }
 

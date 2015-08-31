@@ -7,10 +7,6 @@ using Shared;
 
 namespace Server
 {
-    public interface IObjectGetter : IGrainWithIntegerKey
-    {
-        Task<IObjectImpl> GetObject(ObjectGUID guid);            
-    }
 
     public interface ICreator : IGrainWithIntegerKey
     {

@@ -57,8 +57,6 @@ namespace Server
             if (!_IsValid())
                 return;
 
-            GUID = (UInt64)this.GetPrimaryKeyLong();
-
             State.MyType = TypeID.TYPEID_UNIT;
 
             var datastore = GrainFactory.GetGrain<IDataStoreManager>(0);

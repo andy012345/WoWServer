@@ -162,6 +162,7 @@
     <Compile Include="RealmServer\PacketHandlers\Character.cs" />
     <Compile Include="RealmServer\PacketHandlers\AccountData.cs" />
     <Compile Include="RealmServer\PacketHandlers\AuthSession.cs" />
+    <Compile Include="RealmServer\PacketHandlers\Queries.cs" />
     <Compile Include="RealmServer\RealmPacketHandler.cs" />
     <Compile Include="RealmServer\RealmClientSocket.cs" />
     <Compile Include="RealmServer\RealmClient.cs" />
