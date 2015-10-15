@@ -62,7 +62,6 @@ namespace Shared
             fixed_b[b.Length] = 0;
             return new BigInteger(fixed_b);
         }
- 
     }
 
     public partial class BigInteger : ISerializable
@@ -76,48 +75,49 @@ namespace Shared
         /// <summary>
         /// Primes smaller than 2000 to test the generated prime number.
         /// </summary>
-        public static readonly int[] primesBelow2000 = {
-                                                           2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53,
-                                                           59, 61, 67, 71, 73, 79, 83, 89, 97,
-                                                           101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157,
-                                                           163, 167, 173, 179, 181, 191, 193, 197, 199,
-                                                           211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271,
-                                                           277, 281, 283, 293,
-                                                           307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373,
-                                                           379, 383, 389, 397,
-                                                           401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463,
-                                                           467, 479, 487, 491, 499,
-                                                           503, 509, 521, 523, 541, 547, 557, 563, 569, 571, 577, 587,
-                                                           593, 599,
-                                                           601, 607, 613, 617, 619, 631, 641, 643, 647, 653, 659, 661,
-                                                           673, 677, 683, 691,
-                                                           701, 709, 719, 727, 733, 739, 743, 751, 757, 761, 769, 773,
-                                                           787, 797,
-                                                           809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877,
-                                                           881, 883, 887,
-                                                           907, 911, 919, 929, 937, 941, 947, 953, 967, 971, 977, 983,
-                                                           991, 997,
-                                                           1009, 1013, 1019, 1021, 1031, 1033, 1039, 1049, 1051, 1061,
-                                                           1063, 1069, 1087, 1091, 1093, 1097,
-                                                           1103, 1109, 1117, 1123, 1129, 1151, 1153, 1163, 1171, 1181,
-                                                           1187, 1193,
-                                                           1201, 1213, 1217, 1223, 1229, 1231, 1237, 1249, 1259, 1277,
-                                                           1279, 1283, 1289, 1291, 1297,
-                                                           1301, 1303, 1307, 1319, 1321, 1327, 1361, 1367, 1373, 1381,
-                                                           1399,
-                                                           1409, 1423, 1427, 1429, 1433, 1439, 1447, 1451, 1453, 1459,
-                                                           1471, 1481, 1483, 1487, 1489, 1493, 1499,
-                                                           1511, 1523, 1531, 1543, 1549, 1553, 1559, 1567, 1571, 1579,
-                                                           1583, 1597,
-                                                           1601, 1607, 1609, 1613, 1619, 1621, 1627, 1637, 1657, 1663,
-                                                           1667, 1669, 1693, 1697, 1699,
-                                                           1709, 1721, 1723, 1733, 1741, 1747, 1753, 1759, 1777, 1783,
-                                                           1787, 1789,
-                                                           1801, 1811, 1823, 1831, 1847, 1861, 1867, 1871, 1873, 1877,
-                                                           1879, 1889,
-                                                           1901, 1907, 1913, 1931, 1933, 1949, 1951, 1973, 1979, 1987,
-                                                           1993, 1997, 1999
-                                                       };
+        public static readonly int[] primesBelow2000 =
+        {
+            2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53,
+            59, 61, 67, 71, 73, 79, 83, 89, 97,
+            101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157,
+            163, 167, 173, 179, 181, 191, 193, 197, 199,
+            211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271,
+            277, 281, 283, 293,
+            307, 311, 313, 317, 331, 337, 347, 349, 353, 359, 367, 373,
+            379, 383, 389, 397,
+            401, 409, 419, 421, 431, 433, 439, 443, 449, 457, 461, 463,
+            467, 479, 487, 491, 499,
+            503, 509, 521, 523, 541, 547, 557, 563, 569, 571, 577, 587,
+            593, 599,
+            601, 607, 613, 617, 619, 631, 641, 643, 647, 653, 659, 661,
+            673, 677, 683, 691,
+            701, 709, 719, 727, 733, 739, 743, 751, 757, 761, 769, 773,
+            787, 797,
+            809, 811, 821, 823, 827, 829, 839, 853, 857, 859, 863, 877,
+            881, 883, 887,
+            907, 911, 919, 929, 937, 941, 947, 953, 967, 971, 977, 983,
+            991, 997,
+            1009, 1013, 1019, 1021, 1031, 1033, 1039, 1049, 1051, 1061,
+            1063, 1069, 1087, 1091, 1093, 1097,
+            1103, 1109, 1117, 1123, 1129, 1151, 1153, 1163, 1171, 1181,
+            1187, 1193,
+            1201, 1213, 1217, 1223, 1229, 1231, 1237, 1249, 1259, 1277,
+            1279, 1283, 1289, 1291, 1297,
+            1301, 1303, 1307, 1319, 1321, 1327, 1361, 1367, 1373, 1381,
+            1399,
+            1409, 1423, 1427, 1429, 1433, 1439, 1447, 1451, 1453, 1459,
+            1471, 1481, 1483, 1487, 1489, 1493, 1499,
+            1511, 1523, 1531, 1543, 1549, 1553, 1559, 1567, 1571, 1579,
+            1583, 1597,
+            1601, 1607, 1609, 1613, 1619, 1621, 1627, 1637, 1657, 1663,
+            1667, 1669, 1693, 1697, 1699,
+            1709, 1721, 1723, 1733, 1741, 1747, 1753, 1759, 1777, 1783,
+            1787, 1789,
+            1801, 1811, 1823, 1831, 1847, 1861, 1867, 1871, 1873, 1877,
+            1879, 1889,
+            1901, 1907, 1913, 1931, 1933, 1949, 1951, 1973, 1979, 1987,
+            1993, 1997, 1999
+        };
 
         /// <summary>
         /// Holds bytes from the BigInteger.
@@ -154,7 +154,7 @@ namespace Shared
             dataLength = 0;
             while (value != 0 && dataLength < maxLength)
             {
-                data[dataLength] = (uint)(value & 0xFFFFFFFF);
+                data[dataLength] = (uint) (value & 0xFFFFFFFF);
                 value >>= 32;
                 dataLength++;
             }
@@ -189,7 +189,7 @@ namespace Shared
             dataLength = 0;
             while (value != 0 && dataLength < maxLength)
             {
-                data[dataLength] = (uint)(value & 0xFFFFFFFF);
+                data[dataLength] = (uint) (value & 0xFFFFFFFF);
                 value >>= 32;
                 dataLength++;
             }
@@ -276,10 +276,10 @@ namespace Shared
                     if (value[0] == '-')
                         posVal = -posVal;
 
-                    result = result + (multiplier * posVal);
+                    result = result + (multiplier*posVal);
 
                     if ((i - 1) >= limit)
-                        multiplier = multiplier * radix;
+                        multiplier = multiplier*radix;
                 }
             }
 
@@ -322,7 +322,7 @@ namespace Shared
         public BigInteger(byte[] inData, bool reverse_order = true)
         {
             // copy the array, or people will be confused about why their array is suddenly reversed
-            inData = (byte[])inData.Clone();
+            inData = (byte[]) inData.Clone();
 
             if (reverse_order)
                 Reverse(inData);
@@ -340,7 +340,7 @@ namespace Shared
 
             for (int i = inData.Length - 1, j = 0; i >= 3; i -= 4, j++)
             {
-                data[j] = (uint)((inData[i - 3] << 24) + (inData[i - 2] << 16) +
+                data[j] = (uint) ((inData[i - 3] << 24) + (inData[i - 2] << 16) +
                                   (inData[i - 1] << 8) + inData[i]);
             }
 
@@ -350,10 +350,10 @@ namespace Shared
                     data[dataLength - 1] = inData[0];
                     break;
                 case 2:
-                    data[dataLength - 1] = (uint)((inData[0] << 8) + inData[1]);
+                    data[dataLength - 1] = (uint) ((inData[0] << 8) + inData[1]);
                     break;
                 case 3:
-                    data[dataLength - 1] = (uint)((inData[0] << 16) + (inData[1] << 8) + inData[2]);
+                    data[dataLength - 1] = (uint) ((inData[0] << 16) + (inData[1] << 8) + inData[2]);
                     break;
             }
 
@@ -386,16 +386,16 @@ namespace Shared
 
             for (int i = inLen - 1, j = 0; i >= 3; i -= 4, j++)
             {
-                data[j] = (uint)((inData[i - 3] << 24) + (inData[i - 2] << 16) +
+                data[j] = (uint) ((inData[i - 3] << 24) + (inData[i - 2] << 16) +
                                   (inData[i - 1] << 8) + inData[i]);
             }
 
             if (leftOver == 1)
                 data[dataLength - 1] = inData[0];
             else if (leftOver == 2)
-                data[dataLength - 1] = (uint)((inData[0] << 8) + inData[1]);
+                data[dataLength - 1] = (uint) ((inData[0] << 8) + inData[1]);
             else if (leftOver == 3)
-                data[dataLength - 1] = (uint)((inData[0] << 16) + (inData[1] << 8) + inData[2]);
+                data[dataLength - 1] = (uint) ((inData[0] << 16) + (inData[1] << 8) + inData[2]);
 
 
             if (dataLength == 0)
@@ -462,7 +462,7 @@ namespace Shared
 
         public static explicit operator BigInteger(uint value)
         {
-            return (new BigInteger((ulong)value));
+            return (new BigInteger((ulong) value));
         }
 
         public static implicit operator BigInteger(byte[] value)
@@ -483,14 +483,14 @@ namespace Shared
             long carry = 0;
             for (int i = 0; i < result.dataLength; i++)
             {
-                long sum = (long)bi1.data[i] + (long)bi2.data[i] + carry;
+                long sum = (long) bi1.data[i] + (long) bi2.data[i] + carry;
                 carry = sum >> 32;
-                result.data[i] = (uint)(sum & 0xFFFFFFFF);
+                result.data[i] = (uint) (sum & 0xFFFFFFFF);
             }
 
             if (carry != 0 && result.dataLength < maxLength)
             {
-                result.data[result.dataLength] = (uint)(carry);
+                result.data[result.dataLength] = (uint) (carry);
                 result.dataLength++;
             }
 
@@ -511,22 +511,22 @@ namespace Shared
 
         public static BigInteger operator +(BigInteger bi1, long bi2)
         {
-            return bi1 + (BigInteger)bi2;
+            return bi1 + (BigInteger) bi2;
         }
 
         public static BigInteger operator +(BigInteger bi1, ulong bi2)
         {
-            return bi1 + (BigInteger)bi2;
+            return bi1 + (BigInteger) bi2;
         }
 
         public static BigInteger operator +(BigInteger bi1, int bi2)
         {
-            return bi1 + (BigInteger)bi2;
+            return bi1 + (BigInteger) bi2;
         }
 
         public static BigInteger operator +(BigInteger bi1, uint bi2)
         {
-            return bi1 + (BigInteger)bi2;
+            return bi1 + (BigInteger) bi2;
         }
 
         //***********************************************************************
@@ -546,7 +546,7 @@ namespace Shared
                 val = result.data[index];
                 val++;
 
-                result.data[index] = (uint)(val & 0xFFFFFFFF);
+                result.data[index] = (uint) (val & 0xFFFFFFFF);
                 carry = val >> 32;
 
                 index++;
@@ -603,7 +603,7 @@ namespace Shared
                 val = result.data[index];
                 val++;
 
-                result.data[index] = (uint)(val & 0xFFFFFFFF);
+                result.data[index] = (uint) (val & 0xFFFFFFFF);
                 carry = val >> 32;
 
                 index++;
@@ -635,8 +635,8 @@ namespace Shared
             {
                 long diff;
 
-                diff = (long)bi1.data[i] - (long)bi2.data[i] - carryIn;
-                result.data[i] = (uint)(diff & 0xFFFFFFFF);
+                diff = (long) bi1.data[i] - (long) bi2.data[i] - carryIn;
+                result.data[i] = (uint) (diff & 0xFFFFFFFF);
 
                 if (diff < 0)
                     carryIn = 1;
@@ -670,22 +670,22 @@ namespace Shared
 
         public static BigInteger operator -(BigInteger bi1, long bi2)
         {
-            return bi1 - (BigInteger)bi2;
+            return bi1 - (BigInteger) bi2;
         }
 
         public static BigInteger operator -(BigInteger bi1, ulong bi2)
         {
-            return bi1 - (BigInteger)bi2;
+            return bi1 - (BigInteger) bi2;
         }
 
         public static BigInteger operator -(BigInteger bi1, int bi2)
         {
-            return bi1 - (BigInteger)bi2;
+            return bi1 - (BigInteger) bi2;
         }
 
         public static BigInteger operator -(BigInteger bi1, uint bi2)
         {
-            return bi1 - (BigInteger)bi2;
+            return bi1 - (BigInteger) bi2;
         }
 
         //***********************************************************************
@@ -705,7 +705,7 @@ namespace Shared
                 val = result.data[index];
                 val--;
 
-                result.data[index] = (uint)(val & 0xFFFFFFFF);
+                result.data[index] = (uint) (val & 0xFFFFFFFF);
 
                 if (val >= 0)
                     carryIn = false;
@@ -774,15 +774,15 @@ namespace Shared
                     for (int j = 0, k = i; j < bi2.dataLength; j++, k++)
                     {
                         // k = i + j
-                        ulong val = ((ulong)bi1.data[i] * (ulong)bi2.data[j]) +
+                        ulong val = ((ulong) bi1.data[i]*(ulong) bi2.data[j]) +
                                     result.data[k] + mcarry;
 
-                        result.data[k] = (uint)(val & 0xFFFFFFFF);
+                        result.data[k] = (uint) (val & 0xFFFFFFFF);
                         mcarry = (val >> 32);
                     }
 
                     if (mcarry != 0)
-                        result.data[i + bi2.dataLength] = (uint)mcarry;
+                        result.data[i + bi2.dataLength] = (uint) mcarry;
                 }
             }
             catch (Exception)
@@ -834,22 +834,22 @@ namespace Shared
 
         public static BigInteger operator *(BigInteger bi1, long bi2)
         {
-            return bi1 * (BigInteger)bi2;
+            return bi1*(BigInteger) bi2;
         }
 
         public static BigInteger operator *(BigInteger bi1, ulong bi2)
         {
-            return bi1 * (BigInteger)bi2;
+            return bi1*(BigInteger) bi2;
         }
 
         public static BigInteger operator *(BigInteger bi1, int bi2)
         {
-            return bi1 * (BigInteger)bi2;
+            return bi1*(BigInteger) bi2;
         }
 
         public static BigInteger operator *(BigInteger bi1, uint bi2)
         {
-            return bi1 * (BigInteger)bi2;
+            return bi1*(BigInteger) bi2;
         }
 
         //***********************************************************************
@@ -860,7 +860,7 @@ namespace Shared
         //***********************************************************************
 
         private static void multiByteDivide(BigInteger bi1, BigInteger bi2,
-                                            BigInteger outQuotient, BigInteger outRemainder)
+            BigInteger outQuotient, BigInteger outRemainder)
         {
             uint[] result = new uint[maxLength];
 
@@ -904,11 +904,11 @@ namespace Shared
 
             while (j > 0)
             {
-                ulong dividend = ((ulong)remainder[pos] << 32) + remainder[pos - 1];
+                ulong dividend = ((ulong) remainder[pos] << 32) + remainder[pos - 1];
                 //Console.WriteLine("dividend = {0}", dividend);
 
-                ulong q_hat = dividend / firstDivisorByte;
-                ulong r_hat = dividend % firstDivisorByte;
+                ulong q_hat = dividend/firstDivisorByte;
+                ulong r_hat = dividend%firstDivisorByte;
 
                 //Console.WriteLine("q_hat = {0:X}, r_hat = {1:X}", q_hat, r_hat);
 
@@ -918,7 +918,7 @@ namespace Shared
                     done = true;
 
                     if (q_hat == 0x100000000 ||
-                        (q_hat * secondDivisorByte) > ((r_hat << 32) + remainder[pos - 2]))
+                        (q_hat*secondDivisorByte) > ((r_hat << 32) + remainder[pos - 2]))
                     {
                         q_hat--;
                         r_hat += firstDivisorByte;
@@ -932,7 +932,7 @@ namespace Shared
                     dividendPart[h] = remainder[pos - h];
 
                 BigInteger kk = new BigInteger(dividendPart);
-                BigInteger ss = bi2 * (long)q_hat;
+                BigInteger ss = bi2*(long) q_hat;
 
                 //Console.WriteLine("ss before = " + ss);
                 while (ss > kk)
@@ -957,7 +957,7 @@ namespace Shared
                 Console.WriteLine("\n************ q_hat = {0:X}\n", q_hat);
                 */
 
-                result[resultPos++] = (uint)q_hat;
+                result[resultPos++] = (uint) q_hat;
 
                 pos--;
                 j--;
@@ -991,7 +991,7 @@ namespace Shared
         //***********************************************************************
 
         private static void singleByteDivide(BigInteger bi1, BigInteger bi2,
-                                             BigInteger outQuotient, BigInteger outRemainder)
+            BigInteger outQuotient, BigInteger outRemainder)
         {
             uint[] result = new uint[maxLength];
             int resultPos = 0;
@@ -1013,10 +1013,10 @@ namespace Shared
 
             if (dividend >= divisor)
             {
-                ulong quotient = dividend / divisor;
-                result[resultPos++] = (uint)quotient;
+                ulong quotient = dividend/divisor;
+                result[resultPos++] = (uint) quotient;
 
-                outRemainder.data[pos] = (uint)(dividend % divisor);
+                outRemainder.data[pos] = (uint) (dividend%divisor);
             }
             pos--;
 
@@ -1024,12 +1024,12 @@ namespace Shared
             {
                 //Console.WriteLine(pos);
 
-                dividend = ((ulong)outRemainder.data[pos + 1] << 32) + outRemainder.data[pos];
-                ulong quotient = dividend / divisor;
-                result[resultPos++] = (uint)quotient;
+                dividend = ((ulong) outRemainder.data[pos + 1] << 32) + outRemainder.data[pos];
+                ulong quotient = dividend/divisor;
+                result[resultPos++] = (uint) quotient;
 
                 outRemainder.data[pos + 1] = 0;
-                outRemainder.data[pos--] = (uint)(dividend % divisor);
+                outRemainder.data[pos--] = (uint) (dividend%divisor);
                 //Console.WriteLine(">>>> " + bi1);
             }
 
@@ -1095,22 +1095,22 @@ namespace Shared
 
         public static BigInteger operator /(BigInteger bi1, long bi2)
         {
-            return bi1 / (BigInteger)bi2;
+            return bi1/(BigInteger) bi2;
         }
 
         public static BigInteger operator /(BigInteger bi1, ulong bi2)
         {
-            return bi1 / (BigInteger)bi2;
+            return bi1/(BigInteger) bi2;
         }
 
         public static BigInteger operator /(BigInteger bi1, int bi2)
         {
-            return bi1 / (BigInteger)bi2;
+            return bi1/(BigInteger) bi2;
         }
 
         public static BigInteger operator /(BigInteger bi1, uint bi2)
         {
-            return bi1 / (BigInteger)bi2;
+            return bi1/(BigInteger) bi2;
         }
 
         //***********************************************************************
@@ -1154,42 +1154,42 @@ namespace Shared
 
         public static BigInteger operator %(BigInteger bi1, long bi2)
         {
-            return bi1 % (BigInteger)bi2;
+            return bi1%(BigInteger) bi2;
         }
 
         public static BigInteger operator %(BigInteger bi1, ulong bi2)
         {
-            return bi1 % (BigInteger)bi2;
+            return bi1%(BigInteger) bi2;
         }
 
         public static BigInteger operator %(BigInteger bi1, int bi2)
         {
-            return bi1 % (BigInteger)bi2;
+            return bi1%(BigInteger) bi2;
         }
 
         public static BigInteger operator %(BigInteger bi1, uint bi2)
         {
-            return bi1 % (BigInteger)bi2;
+            return bi1%(BigInteger) bi2;
         }
 
         public static BigInteger operator %(long bi1, BigInteger bi2)
         {
-            return (BigInteger)bi1 % bi2;
+            return (BigInteger) bi1%bi2;
         }
 
         public static BigInteger operator %(ulong bi1, BigInteger bi2)
         {
-            return (BigInteger)bi1 % bi2;
+            return (BigInteger) bi1%bi2;
         }
 
         public static BigInteger operator %(int bi1, BigInteger bi2)
         {
-            return (BigInteger)bi1 % bi2;
+            return (BigInteger) bi1%bi2;
         }
 
         public static BigInteger operator %(uint bi1, BigInteger bi2)
         {
-            return (BigInteger)bi1 % bi2;
+            return (BigInteger) bi1%bi2;
         }
 
         #endregion
@@ -1225,10 +1225,10 @@ namespace Shared
                 ulong carry = 0;
                 for (int i = 0; i < bufLen; i++)
                 {
-                    ulong val = ((ulong)buffer[i]) << shiftAmount;
+                    ulong val = ((ulong) buffer[i]) << shiftAmount;
                     val |= carry;
 
-                    buffer[i] = (uint)(val & 0xFFFFFFFF);
+                    buffer[i] = (uint) (val & 0xFFFFFFFF);
                     carry = val >> 32;
                 }
 
@@ -1236,7 +1236,7 @@ namespace Shared
                 {
                     if (bufLen + 1 <= buffer.Length)
                     {
-                        buffer[bufLen] = (uint)carry;
+                        buffer[bufLen] = (uint) carry;
                         bufLen++;
                     }
                 }
@@ -1301,11 +1301,11 @@ namespace Shared
                 ulong carry = 0;
                 for (int i = bufLen - 1; i >= 0; i--)
                 {
-                    ulong val = ((ulong)buffer[i]) >> shiftAmount;
+                    ulong val = ((ulong) buffer[i]) >> shiftAmount;
                     val |= carry;
 
-                    carry = ((ulong)buffer[i]) << invShift;
-                    buffer[i] = (uint)(val);
+                    carry = ((ulong) buffer[i]) << invShift;
+                    buffer[i] = (uint) (val);
                 }
 
                 count -= shiftAmount;
@@ -1431,29 +1431,29 @@ namespace Shared
 
         public static bool operator ==(BigInteger bi1, uint bi2)
         {
-            return bi1 == (BigInteger)bi2;
+            return bi1 == (BigInteger) bi2;
         }
 
         public static bool operator ==(BigInteger bi1, int bi2)
         {
-            return bi1 == (BigInteger)bi2;
+            return bi1 == (BigInteger) bi2;
         }
 
         public static bool operator ==(BigInteger bi1, long bi2)
         {
-            return bi1 == (BigInteger)bi2;
+            return bi1 == (BigInteger) bi2;
         }
 
         public static bool operator ==(BigInteger bi1, ulong bi2)
         {
-            return bi1 == (BigInteger)bi2;
+            return bi1 == (BigInteger) bi2;
         }
 
         public static bool operator !=(BigInteger bi1, BigInteger bi2)
         {
-            if ((object)bi1 == null && (object)bi2 == null)
+            if ((object) bi1 == null && (object) bi2 == null)
                 return false;
-            else if ((object)bi1 == null || (object)bi2 == null)
+            else if ((object) bi1 == null || (object) bi2 == null)
                 return true;
             else
                 return !(bi1.Equals(bi2));
@@ -1461,28 +1461,28 @@ namespace Shared
 
         public static bool operator !=(BigInteger bi1, uint bi2)
         {
-            return bi1 != (BigInteger)bi2;
+            return bi1 != (BigInteger) bi2;
         }
 
         public static bool operator !=(BigInteger bi1, int bi2)
         {
-            return bi1 != (BigInteger)bi2;
+            return bi1 != (BigInteger) bi2;
         }
 
         public static bool operator !=(BigInteger bi1, long bi2)
         {
-            return bi1 != (BigInteger)bi2;
+            return bi1 != (BigInteger) bi2;
         }
 
         public static bool operator !=(BigInteger bi1, ulong bi2)
         {
-            return bi1 != (BigInteger)bi2;
+            return bi1 != (BigInteger) bi2;
         }
 
 
         public override bool Equals(object o)
         {
-            BigInteger bi = (BigInteger)o;
+            BigInteger bi = (BigInteger) o;
 
             if (dataLength != bi.dataLength)
                 return false;
@@ -1527,22 +1527,22 @@ namespace Shared
 
         public static bool operator >(BigInteger bi1, long bi2)
         {
-            return bi1 > (BigInteger)bi2;
+            return bi1 > (BigInteger) bi2;
         }
 
         public static bool operator >(BigInteger bi1, ulong bi2)
         {
-            return bi1 > (BigInteger)bi2;
+            return bi1 > (BigInteger) bi2;
         }
 
         public static bool operator >(BigInteger bi1, int bi2)
         {
-            return bi1 > (BigInteger)bi2;
+            return bi1 > (BigInteger) bi2;
         }
 
         public static bool operator >(BigInteger bi1, uint bi2)
         {
-            return bi1 > (BigInteger)bi2;
+            return bi1 > (BigInteger) bi2;
         }
 
 
@@ -1573,22 +1573,22 @@ namespace Shared
 
         public static bool operator <(BigInteger bi1, long bi2)
         {
-            return bi1 < (BigInteger)bi2;
+            return bi1 < (BigInteger) bi2;
         }
 
         public static bool operator <(BigInteger bi1, ulong bi2)
         {
-            return bi1 < (BigInteger)bi2;
+            return bi1 < (BigInteger) bi2;
         }
 
         public static bool operator <(BigInteger bi1, int bi2)
         {
-            return bi1 < (BigInteger)bi2;
+            return bi1 < (BigInteger) bi2;
         }
 
         public static bool operator <(BigInteger bi1, uint bi2)
         {
-            return bi1 < (BigInteger)bi2;
+            return bi1 < (BigInteger) bi2;
         }
 
         public static bool operator >=(BigInteger bi1, BigInteger bi2)
@@ -1598,22 +1598,22 @@ namespace Shared
 
         public static bool operator >=(BigInteger bi1, long bi2)
         {
-            return bi1 >= (BigInteger)bi2;
+            return bi1 >= (BigInteger) bi2;
         }
 
         public static bool operator >=(BigInteger bi1, ulong bi2)
         {
-            return bi1 >= (BigInteger)bi2;
+            return bi1 >= (BigInteger) bi2;
         }
 
         public static bool operator >=(BigInteger bi1, int bi2)
         {
-            return bi1 >= (BigInteger)bi2;
+            return bi1 >= (BigInteger) bi2;
         }
 
         public static bool operator >=(BigInteger bi1, uint bi2)
         {
-            return bi1 >= (BigInteger)bi2;
+            return bi1 >= (BigInteger) bi2;
         }
 
 
@@ -1624,22 +1624,22 @@ namespace Shared
 
         public static bool operator <=(BigInteger bi1, long bi2)
         {
-            return bi1 <= (BigInteger)bi2;
+            return bi1 <= (BigInteger) bi2;
         }
 
         public static bool operator <=(BigInteger bi1, ulong bi2)
         {
-            return bi1 <= (BigInteger)bi2;
+            return bi1 <= (BigInteger) bi2;
         }
 
         public static bool operator <=(BigInteger bi1, int bi2)
         {
-            return bi1 <= (BigInteger)bi2;
+            return bi1 <= (BigInteger) bi2;
         }
 
         public static bool operator <=(BigInteger bi1, uint bi2)
         {
-            return bi1 <= (BigInteger)bi2;
+            return bi1 <= (BigInteger) bi2;
         }
 
         #endregion
@@ -1752,7 +1752,7 @@ namespace Shared
                     if (remainder.data[0] < 10)
                         result = remainder.data[0] + result;
                     else
-                        result = charSet[(int)remainder.data[0] - 10] + result;
+                        result = charSet[(int) remainder.data[0] - 10] + result;
 
                     a = quotient;
                 }
@@ -1801,17 +1801,17 @@ namespace Shared
             if ((exp.data[maxLength - 1] & 0x80000000) != 0)
                 throw (new ArithmeticException("Positive exponents only."));
 
-            BigInteger resultNum = (BigInteger)1;
+            BigInteger resultNum = (BigInteger) 1;
             BigInteger tempNum;
             bool thisNegative = false;
 
             if ((data[maxLength - 1] & 0x80000000) != 0) // negative this
             {
-                tempNum = -this % n;
+                tempNum = -this%n;
                 thisNegative = true;
             }
             else
-                tempNum = this % n; // ensures (tempNum * tempNum) < b^(2k)
+                tempNum = this%n; // ensures (tempNum * tempNum) < b^(2k)
 
             if ((n.data[maxLength - 1] & 0x80000000) != 0) // negative n
                 n = -n;
@@ -1823,7 +1823,7 @@ namespace Shared
             constant.data[i] = 0x00000001;
             constant.dataLength = i + 1;
 
-            constant = constant / n;
+            constant = constant/n;
             int totalBits = exp.BitCount();
             int count = 0;
 
@@ -1836,11 +1836,11 @@ namespace Shared
                 for (int index = 0; index < 32; index++)
                 {
                     if ((exp.data[pos] & mask) != 0)
-                        resultNum = BarrettReduction(resultNum * tempNum, n, constant);
+                        resultNum = BarrettReduction(resultNum*tempNum, n, constant);
 
                     mask <<= 1;
 
-                    tempNum = BarrettReduction(tempNum * tempNum, n, constant);
+                    tempNum = BarrettReduction(tempNum*tempNum, n, constant);
 
 
                     if (tempNum.dataLength == 1 && tempNum.data[0] == 1)
@@ -1886,7 +1886,7 @@ namespace Shared
                 q1.dataLength = 1;
 
 
-            BigInteger q2 = q1 * constant;
+            BigInteger q2 = q1*constant;
             BigInteger q3 = new BigInteger();
 
             // q3 = q2 / b^(k+1)
@@ -1919,15 +1919,15 @@ namespace Shared
                 for (int j = 0; j < n.dataLength && t < kPlusOne; j++, t++)
                 {
                     // t = i + j
-                    ulong val = ((ulong)q3.data[i] * (ulong)n.data[j]) +
+                    ulong val = ((ulong) q3.data[i]*(ulong) n.data[j]) +
                                 r2.data[t] + mcarry;
 
-                    r2.data[t] = (uint)(val & 0xFFFFFFFF);
+                    r2.data[t] = (uint) (val & 0xFFFFFFFF);
                     mcarry = (val >> 32);
                 }
 
                 if (t < kPlusOne)
-                    r2.data[t] = (uint)mcarry;
+                    r2.data[t] = (uint) mcarry;
             }
             r2.dataLength = kPlusOne;
             while (r2.dataLength > 1 && r2.data[r2.dataLength - 1] == 0)
@@ -1973,7 +1973,7 @@ namespace Shared
             while (x.dataLength > 1 || (x.dataLength == 1 && x.data[0] != 0))
             {
                 g = x;
-                x = y % x;
+                x = y%x;
                 y = g;
             }
 
@@ -1997,14 +1997,14 @@ namespace Shared
                 throw (new ArithmeticException("Number of required bits > maxLength."));
 
             for (int i = 0; i < dwords; i++)
-                data[i] = (uint)(rand.NextDouble() * 0x100000000);
+                data[i] = (uint) (rand.NextDouble()*0x100000000);
 
             for (int i = dwords; i < maxLength; i++)
                 data[i] = 0;
 
             if (remBits != 0)
             {
-                uint mask = (uint)(0x01 << (remBits - 1));
+                uint mask = (uint) (0x01 << (remBits - 1));
                 data[dwords - 1] |= mask;
 
                 mask = 0xFFFFFFFF >> (32 - remBits);
@@ -2107,7 +2107,7 @@ namespace Shared
 
                     // make sure "a" has at least 2 bits
                     while (testBits < 2)
-                        testBits = (int)(rand.NextDouble() * bits);
+                        testBits = (int) (rand.NextDouble()*bits);
 
                     a.GenerateRandomBits(testBits, rand);
 
@@ -2219,7 +2219,7 @@ namespace Shared
 
                     // make sure "a" has at least 2 bits
                     while (testBits < 2)
-                        testBits = (int)(rand.NextDouble() * bits);
+                        testBits = (int) (rand.NextDouble()*bits);
 
                     a.GenerateRandomBits(testBits, rand);
 
@@ -2257,7 +2257,7 @@ namespace Shared
                         break;
                     }
 
-                    b = (b * b) % thisVal;
+                    b = (b*b)%thisVal;
                 }
 
                 if (result == false)
@@ -2325,7 +2325,7 @@ namespace Shared
 
                     // make sure "a" has at least 2 bits
                     while (testBits < 2)
-                        testBits = (int)(rand.NextDouble() * bits);
+                        testBits = (int) (rand.NextDouble()*bits);
 
                     a.GenerateRandomBits(testBits, rand);
 
@@ -2345,10 +2345,10 @@ namespace Shared
 
                 BigInteger expResult = a.ModPow(p_sub1_shift, thisVal);
                 if (expResult == p_sub1)
-                    expResult = (BigInteger)(-1);
+                    expResult = (BigInteger) (-1);
 
                 // calculate Jacobi symbol
-                BigInteger jacob = (BigInteger)Jacobi((BigInteger)a, (BigInteger)thisVal);
+                BigInteger jacob = (BigInteger) Jacobi((BigInteger) a, (BigInteger) thisVal);
 
                 //Console.WriteLine("a = " + a.ToString(10) + " b = " + thisVal.ToString(10));
                 //Console.WriteLine("expResult = " + expResult.ToString(10) + " Jacob = " + jacob.ToString(10));
@@ -2412,7 +2412,7 @@ namespace Shared
 
             while (!done)
             {
-                int Jresult = Jacobi((BigInteger)D, (BigInteger)thisVal);
+                int Jresult = Jacobi((BigInteger) D, (BigInteger) thisVal);
 
                 if (Jresult == -1)
                     done = true; // J(D, this) = 1
@@ -2425,12 +2425,12 @@ namespace Shared
                     {
                         // check for square
                         BigInteger root = thisVal.Sqrt();
-                        if (root * root == thisVal)
+                        if (root*root == thisVal)
                             return false;
                     }
 
                     //Console.WriteLine(D);
-                    D = (Math.Abs(D) + 2) * sign;
+                    D = (Math.Abs(D) + 2)*sign;
                     sign = -sign;
                 }
                 dCount++;
@@ -2475,11 +2475,11 @@ namespace Shared
             constant.data[nLen] = 0x00000001;
             constant.dataLength = nLen + 1;
 
-            constant = constant / thisVal;
+            constant = constant/thisVal;
 
             BigInteger[] lucas =
-                LucasSequenceHelper((BigInteger)1, (BigInteger)Q, (BigInteger)t, (BigInteger)thisVal,
-                                    (BigInteger)constant, 0);
+                LucasSequenceHelper((BigInteger) 1, (BigInteger) Q, (BigInteger) t, (BigInteger) thisVal,
+                    (BigInteger) constant, 0);
             bool isPrime = false;
 
             if ((lucas[0].dataLength == 1 && lucas[0].data[0] == 0) ||
@@ -2494,8 +2494,8 @@ namespace Shared
                 if (!isPrime)
                 {
                     // doubling of index
-                    lucas[1] = BarrettReduction(lucas[1] * lucas[1], thisVal, constant);
-                    lucas[1] = (lucas[1] - (lucas[2] << 1)) % thisVal;
+                    lucas[1] = BarrettReduction(lucas[1]*lucas[1], thisVal, constant);
+                    lucas[1] = (lucas[1] - (lucas[2] << 1))%thisVal;
 
                     //lucas[1] = ((lucas[1] * lucas[1]) - (lucas[2] << 1)) % thisVal;
 
@@ -2503,7 +2503,7 @@ namespace Shared
                         isPrime = true;
                 }
 
-                lucas[2] = BarrettReduction(lucas[2] * lucas[2], thisVal, constant); //Q^k
+                lucas[2] = BarrettReduction(lucas[2]*lucas[2], thisVal, constant); //Q^k
             }
 
 
@@ -2512,13 +2512,13 @@ namespace Shared
                 // If n is prime and gcd(n, Q) == 1, then
                 // Q^((n+1)/2) = Q * Q^((n-1)/2) is congruent to (Q * J(Q, n)) mod n
 
-                BigInteger g = thisVal.GCD((BigInteger)Q);
+                BigInteger g = thisVal.GCD((BigInteger) Q);
                 if (g.dataLength == 1 && g.data[0] == 1) // gcd(this, Q) == 1
                 {
                     if ((lucas[2].data[maxLength - 1] & 0x80000000) != 0)
                         lucas[2] += thisVal;
 
-                    BigInteger temp = (BigInteger)((Q * Jacobi((BigInteger)Q, thisVal)) % thisVal);
+                    BigInteger temp = (BigInteger) ((Q*Jacobi((BigInteger) Q, thisVal))%thisVal);
                     if ((temp.data[maxLength - 1] & 0x80000000) != 0)
                         temp += thisVal;
 
@@ -2551,12 +2551,12 @@ namespace Shared
             // test for divisibility by primes < 2000
             for (int p = 0; p < primesBelow2000.Length; p++)
             {
-                BigInteger divisor = (BigInteger)primesBelow2000[p];
+                BigInteger divisor = (BigInteger) primesBelow2000[p];
 
                 if (divisor >= thisVal)
                     break;
 
-                BigInteger resultNum = thisVal % divisor;
+                BigInteger resultNum = thisVal%divisor;
                 if (resultNum.IntValue() == 0)
                 {
                     /*
@@ -2623,12 +2623,12 @@ namespace Shared
             // test for divisibility by primes < 2000
             for (int p = 0; p < primesBelow2000.Length; p++)
             {
-                BigInteger divisor = (BigInteger)primesBelow2000[p];
+                BigInteger divisor = (BigInteger) primesBelow2000[p];
 
                 if (divisor >= thisVal)
                     break;
 
-                BigInteger resultNum = thisVal % divisor;
+                BigInteger resultNum = thisVal%divisor;
                 if (resultNum.IntValue() == 0)
                 {
                     //Console.WriteLine("Not prime!  Divisible by {0}\n",
@@ -2662,7 +2662,7 @@ namespace Shared
 
             BigInteger t = p_sub1 >> s;
 
-            BigInteger a = (BigInteger)2;
+            BigInteger a = (BigInteger) 2;
 
             // b = a^t mod p
             BigInteger b = a.ModPow(t, thisVal);
@@ -2679,7 +2679,7 @@ namespace Shared
                     break;
                 }
 
-                b = (b * b) % thisVal;
+                b = (b*b)%thisVal;
             }
 
             // if number is strong pseudoprime to base 2, then do a strong lucas test
@@ -2751,7 +2751,7 @@ namespace Shared
 
         public byte ByteValue()
         {
-            return (byte)data[0];
+            return (byte) data[0];
         }
 
         //***********************************************************************
@@ -2760,7 +2760,7 @@ namespace Shared
 
         public int IntValue()
         {
-            return (int)data[0];
+            return (int) data[0];
         }
 
 
@@ -2776,12 +2776,12 @@ namespace Shared
             try
             {
                 // exception if maxLength = 1
-                val |= (long)data[1] << 32;
+                val |= (long) data[1] << 32;
             }
             catch (Exception)
             {
                 if ((data[0] & 0x80000000) != 0) // negative
-                    val = (int)data[0];
+                    val = (int) data[0];
             }
 
             return val;
@@ -2840,7 +2840,7 @@ namespace Shared
             if (a1.dataLength == 1 && a1.data[0] == 1)
                 return s;
             else
-                return (s * Jacobi(b % a1, a1));
+                return (s*Jacobi(b%a1, a1));
         }
 
 
@@ -2851,9 +2851,9 @@ namespace Shared
 
         public BigInteger ModInverse(BigInteger modulus)
         {
-            BigInteger[] p = { (BigInteger)0, (BigInteger)1 };
+            BigInteger[] p = {(BigInteger) 0, (BigInteger) 1};
             BigInteger[] q = new BigInteger[2]; // quotients
-            BigInteger[] r = { (BigInteger)0, (BigInteger)0 }; // remainders
+            BigInteger[] r = {(BigInteger) 0, (BigInteger) 0}; // remainders
 
             int step = 0;
 
@@ -2867,7 +2867,7 @@ namespace Shared
 
                 if (step > 1)
                 {
-                    BigInteger pval = (p[0] - (p[1] * q[0])) % modulus;
+                    BigInteger pval = (p[0] - (p[1]*q[0]))%modulus;
                     p[0] = p[1];
                     p[1] = pval;
                 }
@@ -2898,7 +2898,7 @@ namespace Shared
             if (r[0].dataLength > 1 || (r[0].dataLength == 1 && r[0].data[0] != 1))
                 throw (new ArithmeticException("No inverse!"));
 
-            BigInteger result = ((p[0] - (p[1] * q[0])) % modulus);
+            BigInteger result = ((p[0] - (p[1]*q[0]))%modulus);
 
             if ((result.data[maxLength - 1] & 0x80000000) != 0)
                 result += modulus; // get the least positive modulus
@@ -2944,9 +2944,9 @@ namespace Shared
             {
                 for (int b = 0; b < 4; b++)
                 {
-                    if (i * 4 + b >= realNumBytes)
+                    if (i*4 + b >= realNumBytes)
                         return result;
-                    result[i * 4 + b] = (byte)(data[i] >> (b * 8) & 0xff);
+                    result[i*4 + b] = (byte) (data[i] >> (b*8) & 0xff);
                 }
             }
 
@@ -2964,7 +2964,7 @@ namespace Shared
 
         protected static void Reverse<T>(T[] buffer, int length)
         {
-            for (int i = 0; i < length / 2; i++)
+            for (int i = 0; i < length/2; i++)
             {
                 T temp = buffer[i];
                 buffer[i] = buffer[length - i - 1];
@@ -2993,13 +2993,13 @@ namespace Shared
         public void SetBit(uint bitNum)
         {
             uint bytePos = bitNum >> 5; // divide by 32
-            byte bitPos = (byte)(bitNum & 0x1F); // get the lowest 5 bits
+            byte bitPos = (byte) (bitNum & 0x1F); // get the lowest 5 bits
 
-            uint mask = (uint)1 << bitPos;
+            uint mask = (uint) 1 << bitPos;
             data[bytePos] |= mask;
 
             if (bytePos >= dataLength)
-                dataLength = (int)bytePos + 1;
+                dataLength = (int) bytePos + 1;
         }
 
 
@@ -3014,9 +3014,9 @@ namespace Shared
 
             if (bytePos < dataLength)
             {
-                byte bitPos = (byte)(bitNum & 0x1F);
+                byte bitPos = (byte) (bitNum & 0x1F);
 
-                uint mask = (uint)1 << bitPos;
+                uint mask = (uint) 1 << bitPos;
                 uint mask2 = 0xFFFFFFFF ^ mask;
 
                 data[bytePos] &= mask2;
@@ -3038,7 +3038,7 @@ namespace Shared
 
         public BigInteger Sqrt()
         {
-            uint numBits = (uint)BitCount();
+            uint numBits = (uint) BitCount();
 
             if ((numBits & 0x1) != 0) // odd number of bits
                 numBits = (numBits >> 1) + 1;
@@ -3046,7 +3046,7 @@ namespace Shared
                 numBits = (numBits >> 1);
 
             uint bytePos = numBits >> 5;
-            byte bitPos = (byte)(numBits & 0x1F);
+            byte bitPos = (byte) (numBits & 0x1F);
 
             uint mask;
 
@@ -3055,12 +3055,12 @@ namespace Shared
                 mask = 0x80000000;
             else
             {
-                mask = (uint)1 << bitPos;
+                mask = (uint) 1 << bitPos;
                 bytePos++;
             }
-            result.dataLength = (int)bytePos;
+            result.dataLength = (int) bytePos;
 
-            for (int i = (int)bytePos - 1; i >= 0; i--)
+            for (int i = (int) bytePos - 1; i >= 0; i--)
             {
                 while (mask != 0)
                 {
@@ -3068,7 +3068,7 @@ namespace Shared
                     result.data[i] ^= mask;
 
                     // undo the guess if its square is larger than this
-                    if ((result * result) > this)
+                    if ((result*result) > this)
                         result.data[i] ^= mask;
 
                     mask >>= 1;
@@ -3112,15 +3112,15 @@ namespace Shared
         //***********************************************************************
 
         public static BigInteger[] LucasSequence(BigInteger P, BigInteger Q,
-                                                 BigInteger k, BigInteger n)
+            BigInteger k, BigInteger n)
         {
             if (k.dataLength == 1 && k.data[0] == 0)
             {
                 BigInteger[] result = new BigInteger[3];
 
-                result[0] = (BigInteger)0;
-                result[1] = 2 % n;
-                result[2] = 1 % n;
+                result[0] = (BigInteger) 0;
+                result[1] = 2%n;
+                result[2] = 1%n;
                 return result;
             }
 
@@ -3132,7 +3132,7 @@ namespace Shared
             constant.data[nLen] = 0x00000001;
             constant.dataLength = nLen + 1;
 
-            constant = constant / n;
+            constant = constant/n;
 
             // calculate values of s and t
             int s = 0;
@@ -3168,8 +3168,8 @@ namespace Shared
         //***********************************************************************
 
         private static BigInteger[] LucasSequenceHelper(BigInteger P, BigInteger Q,
-                                                        BigInteger k, BigInteger n,
-                                                        BigInteger constant, int s)
+            BigInteger k, BigInteger n,
+            BigInteger constant, int s)
         {
             BigInteger[] result = new BigInteger[3];
 
@@ -3177,14 +3177,14 @@ namespace Shared
                 throw (new ArgumentException("Argument k must be odd."));
 
             int numbits = k.BitCount();
-            uint mask = (uint)0x1 << ((numbits & 0x1F) - 1);
+            uint mask = (uint) 0x1 << ((numbits & 0x1F) - 1);
 
             // v = v0, v1 = v1, u1 = u1, Q_k = Q^0
 
-            BigInteger v = 2 % n,
-                       Q_k = 1 % n,
-                       v1 = P % n,
-                       u1 = Q_k;
+            BigInteger v = 2%n,
+                Q_k = 1%n,
+                v1 = P%n,
+                u1 = Q_k;
             bool flag = true;
 
             for (int i = k.dataLength - 1; i >= 0; i--) // iterate on the binary expansion of k
@@ -3199,35 +3199,35 @@ namespace Shared
                     {
                         // index doubling with addition
 
-                        u1 = (u1 * v1) % n;
+                        u1 = (u1*v1)%n;
 
-                        v = ((v * v1) - (P * Q_k)) % n;
-                        v1 = BarrettReduction(v1 * v1, n, constant);
-                        v1 = (v1 - ((Q_k * Q) << 1)) % n;
+                        v = ((v*v1) - (P*Q_k))%n;
+                        v1 = BarrettReduction(v1*v1, n, constant);
+                        v1 = (v1 - ((Q_k*Q) << 1))%n;
 
                         if (flag)
                             flag = false;
                         else
-                            Q_k = BarrettReduction(Q_k * Q_k, n, constant);
+                            Q_k = BarrettReduction(Q_k*Q_k, n, constant);
 
-                        Q_k = (Q_k * Q) % n;
+                        Q_k = (Q_k*Q)%n;
                     }
                     else
                     {
                         // index doubling
-                        u1 = ((u1 * v) - Q_k) % n;
+                        u1 = ((u1*v) - Q_k)%n;
 
-                        v1 = ((v * v1) - (P * Q_k)) % n;
-                        v = BarrettReduction(v * v, n, constant);
-                        v = (v - (Q_k << 1)) % n;
+                        v1 = ((v*v1) - (P*Q_k))%n;
+                        v = BarrettReduction(v*v, n, constant);
+                        v = (v - (Q_k << 1))%n;
 
                         if (flag)
                         {
-                            Q_k = Q % n;
+                            Q_k = Q%n;
                             flag = false;
                         }
                         else
-                            Q_k = BarrettReduction(Q_k * Q_k, n, constant);
+                            Q_k = BarrettReduction(Q_k*Q_k, n, constant);
                     }
 
                     mask >>= 1;
@@ -3238,29 +3238,29 @@ namespace Shared
             // at this point u1 = u(n+1) and v = v(n)
             // since the last bit always 1, we need to transform u1 to u(2n+1) and v to v(2n+1)
 
-            u1 = ((u1 * v) - Q_k) % n;
-            v = ((v * v1) - (P * Q_k)) % n;
+            u1 = ((u1*v) - Q_k)%n;
+            v = ((v*v1) - (P*Q_k))%n;
             if (flag)
                 flag = false;
             else
-                Q_k = BarrettReduction(Q_k * Q_k, n, constant);
+                Q_k = BarrettReduction(Q_k*Q_k, n, constant);
 
-            Q_k = (Q_k * Q) % n;
+            Q_k = (Q_k*Q)%n;
 
 
             for (int i = 0; i < s; i++)
             {
                 // index doubling
-                u1 = (u1 * v) % n;
-                v = ((v * v) - (Q_k << 1)) % n;
+                u1 = (u1*v)%n;
+                v = ((v*v) - (Q_k << 1))%n;
 
                 if (flag)
                 {
-                    Q_k = Q % n;
+                    Q_k = Q%n;
                     flag = false;
                 }
                 else
-                    Q_k = BarrettReduction(Q_k * Q_k, n, constant);
+                    Q_k = BarrettReduction(Q_k*Q_k, n, constant);
             }
 
             result[0] = u1;

@@ -28,15 +28,14 @@ namespace Shared
         public PacketHandlerAttribute(AuthOp op)
         {
             Type = PacketType.AuthPacket;
-            Id = (UInt32)op;
+            Id = (UInt32) op;
         }
 
 
         public PacketHandlerAttribute(RealmOp op)
         {
             Type = PacketType.RealmPacket;
-            Id = (UInt32)op;
+            Id = (UInt32) op;
         }
     }
-
 }

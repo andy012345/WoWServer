@@ -11,22 +11,28 @@ using Server.Networking;
 
 namespace Server.AuthServer
 {
-    class LogonPacketProcessor : PacketProcessor
+    internal class LogonPacketProcessor : PacketProcessor
     {
-        public LogonPacketProcessor() : base() { dataNeeded = DefaultDataNeeded(); } //opcode
+        public LogonPacketProcessor() : base()
+        {
+            dataNeeded = DefaultDataNeeded();
+        } //opcode
 
-        AuthOp opcode;
+        private AuthOp opcode;
 
-        public override int DefaultDataNeeded() { return 1; }
+        public override int DefaultDataNeeded()
+        {
+            return 1;
+        }
 
         public override PacketProcessResult ProcessData()
         {
-            opcode = (AuthOp)currentPacket.ReadByte();
+            opcode = (AuthOp) currentPacket.ReadByte();
 
             return ProcessPacket();
         }
 
-        PacketProcessResult ProcessPacket()
+        private PacketProcessResult ProcessPacket()
         {
             var handler = AuthServer.Main.LogonPacketHandler.GetHandler(opcode);
 
@@ -42,7 +48,8 @@ namespace Server.AuthServer
 
     public partial class LogonPacketHandler
     {
-        Dictionary<UInt32, Func<PacketProcessor, PacketProcessResult>> PacketHandlers = new Dictionary<UInt32, Func<PacketProcessor, PacketProcessResult>>();
+        private Dictionary<UInt32, Func<PacketProcessor, PacketProcessResult>> PacketHandlers =
+            new Dictionary<UInt32, Func<PacketProcessor, PacketProcessResult>>();
 
         public void Init()
         {
@@ -57,7 +64,9 @@ namespace Server.AuthServer
                 if (attrib == null)
                     continue;
 
-                var handlerDelegate = (Func<PacketProcessor, PacketProcessResult>)Delegate.CreateDelegate(typeof(Func<PacketProcessor, PacketProcessResult>), method);
+                var handlerDelegate =
+                    (Func<PacketProcessor, PacketProcessResult>)
+                        Delegate.CreateDelegate(typeof (Func<PacketProcessor, PacketProcessResult>), method);
 
                 if (handlerDelegate == null)
                     continue;
@@ -68,13 +77,11 @@ namespace Server.AuthServer
 
         public Func<PacketProcessor, PacketProcessResult> GetHandler(AuthOp opcode)
         {
-            UInt32 op = (UInt32)opcode;
+            UInt32 op = (UInt32) opcode;
 
             Func<PacketProcessor, PacketProcessResult> retval = null;
             PacketHandlers.TryGetValue(op, out retval);
             return retval;
         }
-
     }
-
 }

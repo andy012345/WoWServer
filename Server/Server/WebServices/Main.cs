@@ -16,7 +16,7 @@ using System.ServiceModel.Channels;
 
 namespace Server
 {
-    class WebService
+    internal class WebService
     {
         public object Json { get; private set; }
 
@@ -36,14 +36,16 @@ namespace Server
                 ServiceEndpoint endpoint;
 
                 //start web server :)
-                host = new WebServiceHost(typeof(Service), new Uri("http://localhost.com:9000/")); //todo: move to config
-                endpoint = host.AddServiceEndpoint(typeof(IService), new WebHttpBinding(), "service");
+                host = new WebServiceHost(typeof (Service), new Uri("http://localhost.com:9000/"));
+                    //todo: move to config
+                endpoint = host.AddServiceEndpoint(typeof (IService), new WebHttpBinding(), "service");
                 host.Open();
                 hosts.Add(host);
                 endpoints.Add(endpoint);
 
-                host = new WebServiceHost(typeof(AccountService), new Uri("http://localhost.com:9000/")); //todo: move to config
-                endpoint = host.AddServiceEndpoint(typeof(IAccountService), new WebHttpBinding(), "account");
+                host = new WebServiceHost(typeof (AccountService), new Uri("http://localhost.com:9000/"));
+                    //todo: move to config
+                endpoint = host.AddServiceEndpoint(typeof (IAccountService), new WebHttpBinding(), "account");
                 host.Open();
                 hosts.Add(host);
                 endpoints.Add(endpoint);
@@ -87,5 +89,5 @@ namespace Server
 
             return WebOperationContext.Current.CreateTextResponse(jsonClient, "text/plain", Encoding.UTF8);
         }
-    }  
+    }
 }

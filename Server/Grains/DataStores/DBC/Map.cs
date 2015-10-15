@@ -8,7 +8,7 @@ namespace Server
 {
     public partial class DataStoreManager
     {
-        MapStore _MapStore = new MapStore();
+        private MapStore _MapStore = new MapStore();
 
         [DataStoreLoader]
         public List<Task> LoadMapDBCs()

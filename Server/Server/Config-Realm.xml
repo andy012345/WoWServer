@@ -1,10 +1,11 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <!-- 
 	Just a few options to get running, for more advanced, see database Server.RealmEntry with the GUID of RealmID
 -->
 
-<Realm Port = "9002" ListenBacklog = "50" RealmID = "1" Name = "First Realm" Address = "127.0.0.1:9002" MaxPlayers= "1000" Category ="1" />
+<Realm Port="9002" ListenBacklog="50" RealmID="1" Name="First Realm" Address="127.0.0.1:9002" MaxPlayers="1000"
+       Category="1" />
 
 <!-- 
   We can run multiple realms on a single instance, but it is not recommended. Useful to keep realms in the event of a hardware failure.

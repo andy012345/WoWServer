@@ -14,7 +14,9 @@ namespace Shared
         public int m_lowestIndex;
         public int m_highestIndex;
 
-        public UpdateMask() { }
+        public UpdateMask()
+        {
+        }
 
         public UpdateMask(int highestField)
         {
@@ -23,15 +25,19 @@ namespace Shared
             Clear();
         }
 
-        public int GetMaxBlockCount() { return m_maxBlockCount; }
-        public uint[] GetBlocks() { return m_blocks; }
+        public int GetMaxBlockCount()
+        {
+            return m_maxBlockCount;
+        }
+
+        public uint[] GetBlocks()
+        {
+            return m_blocks;
+        }
 
         public bool HasBitsSet
         {
-            get
-            {
-                return m_highestIndex >= m_lowestIndex;
-            }
+            get { return m_highestIndex >= m_lowestIndex; }
         }
 
         public void Clear()
@@ -43,7 +49,7 @@ namespace Shared
 
         public void UnsetBit(int index)
         {
-            m_blocks[index >> 5] &= ~(uint)(1 << (index & 31));
+            m_blocks[index >> 5] &= ~(uint) (1 << (index & 31));
         }
 
         public void SetAll()
@@ -56,7 +62,7 @@ namespace Shared
 
         public void SetBit(int index)
         {
-            m_blocks[index >> 5] |= (uint)(1 << (index & 31));
+            m_blocks[index >> 5] |= (uint) (1 << (index & 31));
             if (index > m_highestIndex)
             {
                 m_highestIndex = index;
@@ -69,7 +75,7 @@ namespace Shared
 
         public bool GetBit(int index)
         {
-            return (m_blocks[index >> 5] & (uint)(1 << (index & 31))) != 0;
+            return (m_blocks[index >> 5] & (uint) (1 << (index & 31))) != 0;
         }
     }
 }

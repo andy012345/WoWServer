@@ -16,8 +16,12 @@ namespace Server.Networking
 {
     public class SocketPacketObserver : IAsyncObserver<byte[]>
     {
-        ServerSocket sock;
-        public SocketPacketObserver(ServerSocket s) { sock = s; }
+        private ServerSocket sock;
+
+        public SocketPacketObserver(ServerSocket s)
+        {
+            sock = s;
+        }
 
         public Task OnCompletedAsync()
         {
@@ -36,10 +40,15 @@ namespace Server.Networking
             return TaskDone.Done;
         }
     }
+
     public class SocketCommandObserver : IAsyncObserver<SocketCommand>
     {
-        ServerSocket sock;
-        public SocketCommandObserver(ServerSocket s) { sock = s; }
+        private ServerSocket sock;
+
+        public SocketCommandObserver(ServerSocket s)
+        {
+            sock = s;
+        }
 
         public Task OnCompletedAsync()
         {
@@ -55,19 +64,25 @@ namespace Server.Networking
         {
             switch (item.GetCommand())
             {
-                case SocketCommands.DisconnectClient: sock.Dispose(); break;
+                case SocketCommands.DisconnectClient:
+                    sock.Dispose();
+                    break;
                 case SocketCommands.SetAccount:
-                    {
-                        sock._account = (IAccount)item.GetData(0);
-                    }
+                {
+                    sock._account = (IAccount) item.GetData(0);
+                }
                     break;
                 case SocketCommands.SetPlayer:
-                    {
-                        sock._player = (IPlayer)item.GetData(0);
-                    }
+                {
+                    sock._player = (IPlayer) item.GetData(0);
+                }
                     break;
-                case SocketCommands.ClearAccount: sock._account = null; break;
-                case SocketCommands.ClearPlayer: sock._player = null; break;
+                case SocketCommands.ClearAccount:
+                    sock._account = null;
+                    break;
+                case SocketCommands.ClearPlayer:
+                    sock._player = null;
+                    break;
             }
 
             return TaskDone.Done;
@@ -76,16 +91,16 @@ namespace Server.Networking
 
     public class ServerSocket : IDisposable
     {
-        Socket sock = null;
-        SocketPermission permissions = null;
+        private Socket sock = null;
+        private SocketPermission permissions = null;
 
-        PacketProcessor processor = null;
+        private PacketProcessor processor = null;
         public ISession session = null;
-        SocketPacketObserver packetObserver = null;
-        StreamSubscriptionHandle<byte[]> packetObserverHandle = null;
-        
-        SocketCommandObserver commandObserver = null;
-        StreamSubscriptionHandle<SocketCommand> commandObserverHandle = null;
+        private SocketPacketObserver packetObserver = null;
+        private StreamSubscriptionHandle<byte[]> packetObserverHandle = null;
+
+        private SocketCommandObserver commandObserver = null;
+        private StreamSubscriptionHandle<SocketCommand> commandObserverHandle = null;
 
         public ARC4 Decrypt = null;
         public ARC4 Encrypt = null;
@@ -94,7 +109,10 @@ namespace Server.Networking
         public IAccount _account = null;
         public IPlayer _player = null;
 
-        public ServerSocket() { }
+        public ServerSocket()
+        {
+        }
+
         public ServerSocket(AddressFamily addressFamily, SocketType sockType, ProtocolType protoType)
         {
             /*
@@ -114,9 +132,11 @@ namespace Server.Networking
             sock = s;
             sock.NoDelay = true;
         }
+
         public void CreateSession()
         {
-            session = Orleans.GrainClient.GrainFactory.GetGrain<ISession>(Guid.NewGuid()); //create a unique session for this socket
+            session = Orleans.GrainClient.GrainFactory.GetGrain<ISession>(Guid.NewGuid());
+                //create a unique session for this socket
 
             if (session == null)
                 throw new Exception("Socket failed to create orleans session");
@@ -149,7 +169,11 @@ namespace Server.Networking
         }
 
 
-        public void Send(byte[] buffer) { Send(buffer, buffer.Length); }
+        public void Send(byte[] buffer)
+        {
+            Send(buffer, buffer.Length);
+        }
+
         public void Send(byte[] buffer, int bufferSize)
         {
             //TODO: Move so not generic code but realm only code
@@ -164,12 +188,12 @@ namespace Server.Networking
                 OnSend(ev);
         }
 
-        void AsyncSendEvent(object sender, SocketAsyncEventArgs e)
+        private void AsyncSendEvent(object sender, SocketAsyncEventArgs e)
         {
             OnSend(e);
         }
 
-        void OnSend(SocketAsyncEventArgs e)
+        private void OnSend(SocketAsyncEventArgs e)
         {
             if (e.SocketError != SocketError.Success)
                 Console.WriteLine("Socket Error {0}", e.SocketError.ToString());
@@ -188,12 +212,12 @@ namespace Server.Networking
                 OnReceive(ev);
         }
 
-        void AsyncReadEvent(object sender, SocketAsyncEventArgs e)
+        private void AsyncReadEvent(object sender, SocketAsyncEventArgs e)
         {
             OnReceive(e);
         }
 
-        void OnReceive(SocketAsyncEventArgs e)
+        private void OnReceive(SocketAsyncEventArgs e)
         {
             if (e.BytesTransferred == 0 || e.SocketError != SocketError.Success) //disconnected
             {
@@ -253,12 +277,12 @@ namespace Server.Networking
                 OnAccept(ev);
         }
 
-        void AcceptAsyncEvent(object sender, SocketAsyncEventArgs e)
+        private void AcceptAsyncEvent(object sender, SocketAsyncEventArgs e)
         {
             OnAccept(e);
         }
 
-        void OnAccept(SocketAsyncEventArgs e)
+        private void OnAccept(SocketAsyncEventArgs e)
         {
             if (e.SocketError != SocketError.Success)
                 return;
@@ -269,7 +293,7 @@ namespace Server.Networking
             {
                 ServerSocket sck = new ServerSocket(newsocket);
                 //inherit my packet processor
-                sck.SetProcessor((PacketProcessor)Activator.CreateInstance(processor.GetType()));
+                sck.SetProcessor((PacketProcessor) Activator.CreateInstance(processor.GetType()));
                 sck.processor.sock = sck;
                 sck.CreateSession();
 
@@ -283,12 +307,16 @@ namespace Server.Networking
         public void SetupPermissions()
         {
             permissions = new SocketPermission(NetworkAccess.Accept,
-                   TransportType.Tcp, "", SocketPermission.AllPorts);
+                TransportType.Tcp, "", SocketPermission.AllPorts);
         }
 
-        public void SetProcessor(PacketProcessor p) { processor = p; p.SetSocket(this); }
+        public void SetProcessor(PacketProcessor p)
+        {
+            processor = p;
+            p.SetSocket(this);
+        }
 
-        void OnConnect(ServerSocket parent = null)
+        private void OnConnect(ServerSocket parent = null)
         {
             if (processor != null)
                 processor.OnConnect(parent);

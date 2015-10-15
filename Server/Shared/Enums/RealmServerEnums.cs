@@ -58,6 +58,7 @@ namespace Shared
         SMSG_DEBUG_AISTATE = 47,
         CMSG_DISABLE_PVP_CHEAT = 48,
         CMSG_ADVANCE_SPAWN_TIME = 49,
+
         /// <summary>
         /// pguid
         /// pguid
@@ -344,6 +345,7 @@ namespace Shared
         /// pguid
         /// </summary>
         CMSG_DELETE_EQUIPMENT_SET = 318,
+
         /// <summary>
         /// Added 3.1.0.9658
         /// bool unk
@@ -366,6 +368,7 @@ namespace Shared
         /// </summary>
         SMSG_BATTLEFIELD_PORT_DENIED = 331,
         SMSG_DAMAGE_DONE_OBSOLETE = 332,
+
         /// <summary>
         /// SMSG_DAMAGE_TAKEN_OBSOLETE before 3.3.x
         /// </summary>
@@ -385,11 +388,13 @@ namespace Shared
         CMSG_REPOP_REQUEST = 346,
         SMSG_RESURRECT_REQUEST = 347,
         CMSG_RESURRECT_RESPONSE = 348,
+
         /// <summary>
         /// 349 / 0x15D
         /// </summary>
         CMSG_LOOT = 349,
         CMSG_LOOT_MONEY = 350,
+
         /// <summary>
         /// 351
         /// </summary>
@@ -484,6 +489,7 @@ namespace Shared
         CMSG_BANKER_ACTIVATE = 439,
         SMSG_SHOW_BANK = 440,
         CMSG_BUY_BANK_SLOT = 441,
+
         /// <summary>
         /// uint32 errCode
         /// </summary>
@@ -587,6 +593,7 @@ namespace Shared
         SMSG_GMTICKET_SYSTEMSTATUS = 539,
         CMSG_SPIRIT_HEALER_ACTIVATE = 540,
         CMSG_SET_STAT_CHEAT = 541,
+
         /// <summary>
         /// Force-remove quest, uint32 questId
         /// </summary>
@@ -828,6 +835,7 @@ namespace Shared
         SMSG_PET_UNLEARN_CONFIRM = 753,
         SMSG_PARTY_MEMBER_STATS_FULL = 754,
         CMSG_PET_SPELL_AUTOCAST = 755,
+
         /// <summary>
         /// Implement this...
         /// </summary>
@@ -939,7 +947,7 @@ namespace Shared
         CMSG_LFG_LEAVE = 861,
         CMSG_LFG_SEARCH_JOIN = 862,
         CMSG_LFG_SEARCH_LEAVE = 863,
-        SMSG_LFG_SEARCH_RESULTS = 864,  // SMSG_UPDATE_LFG_LIST
+        SMSG_LFG_SEARCH_RESULTS = 864, // SMSG_UPDATE_LFG_LIST
         SMSG_LFG_PROPOSAL_UPDATE = 865,
         CMSG_LFG_PROPOSAL_RESPONSE = 866,
         SMSG_LFG_ROLE_CHECK_UPDATE = 867,
@@ -1027,6 +1035,7 @@ namespace Shared
         SMSG_VOICE_SESSION_ENABLE = 944,
         SMSG_VOICE_PARENTAL_CONTROLS = 945,
         CMSG_GM_WHISPER = 946,
+
         /// <summary>
         /// byte chatType
         /// int
@@ -1230,10 +1239,12 @@ namespace Shared
         /// Empty
         /// </summary>
         CMSG_CALENDAR_GET_CALENDAR = 1065,
+
         /// <summary>
         /// ulong guid? or some kind of id
         /// </summary>
         CMSG_CALENDAR_GET_EVENT = 1066,
+
         /// <summary>
         /// Might be a bad name, as its
         /// called from lua_CalendarMassInviteGuild
@@ -1242,10 +1253,12 @@ namespace Shared
         /// int minRank
         /// </summary>
         CMSG_CALENDAR_GUILD_FILTER = 1067,
+
         /// <summary>
         /// int arenaId?
         /// </summary>
         CMSG_CALENDAR_ARENA_TEAM = 1068,
+
         /// <summary>
         /// cstring Title
         /// cstring Description
@@ -1268,6 +1281,7 @@ namespace Shared
         /// }
         /// </summary>
         CMSG_CALENDAR_ADD_EVENT = 1069,
+
         /// <summary>
         /// ulong eventId?
         /// ulong creator?
@@ -1282,18 +1296,21 @@ namespace Shared
         /// int eventFlags
         /// </summary>
         CMSG_CALENDAR_UPDATE_EVENT = 1070,
+
         /// <summary>
         /// ulong
         /// ulong
         /// int
         /// </summary>
         CMSG_CALENDAR_REMOVE_EVENT = 1071,
+
         /// <summary>
         /// ulong
         /// ulong
         /// packedDate
         /// </summary>
         CMSG_CALENDAR_COPY_EVENT = 1072,
+
         /// <summary>
         /// ulong eventId
         /// ulong creatorGuid
@@ -1302,12 +1319,14 @@ namespace Shared
         /// byte isGuildEvent
         /// </summary>
         CMSG_CALENDAR_EVENT_INVITE = 1073,
+
         /// <summary>
         /// ulong
         /// ulong
         /// int
         /// </summary>
         CMSG_CALENDAR_EVENT_RSVP = 1074,
+
         /// <summary>
         /// pguid
         /// ulong
@@ -1316,6 +1335,7 @@ namespace Shared
         /// 
         /// </summary>
         CMSG_CALENDAR_EVENT_REMOVE_INVITE = 1075,
+
         /// <summary>
         /// pguid
         /// ulong
@@ -1324,6 +1344,7 @@ namespace Shared
         /// int
         /// </summary>
         CMSG_CALENDAR_EVENT_STATUS = 1076,
+
         /// <summary>
         /// pguid
         /// ulong
@@ -1332,6 +1353,7 @@ namespace Shared
         /// int
         /// </summary>
         CMSG_CALENDAR_EVENT_MODERATOR_STATUS = 1077,
+
         /// <summary>
         /// int inviteCount
         /// for (inviteCount)
@@ -1400,6 +1422,7 @@ namespace Shared
         /// }
         /// </summary>
         SMSG_CALENDAR_SEND_CALENDAR = 1078,
+
         /// <summary>
         /// byte type?
         /// 
@@ -1429,6 +1452,7 @@ namespace Shared
         /// 
         /// </summary>
         SMSG_CALENDAR_SEND_EVENT = 1079,
+
         /// <summary>
         /// int count
         /// for (count)
@@ -1438,6 +1462,7 @@ namespace Shared
         /// }
         /// </summary>
         SMSG_CALENDAR_FILTER_GUILD = 1080,
+
         /// <summary>
         /// Exact same handler as 1080
         /// int count
@@ -1448,6 +1473,7 @@ namespace Shared
         /// }
         /// </summary>
         SMSG_CALENDAR_ARENA_TEAM = 1081,
+
         /// <summary>
         /// pguid
         /// ulong eventId
@@ -1462,12 +1488,14 @@ namespace Shared
         /// byte
         /// </summary>
         SMSG_CALENDAR_EVENT_INVITE = 1082,
+
         /// <summary>
         /// pguid playerGuid
         /// ulong eventId
         /// byte
         /// </summary>
         SMSG_CALENDAR_EVENT_INVITE_REMOVED = 1083,
+
         /// <summary>
         /// pguid
         /// ulong
@@ -1478,6 +1506,7 @@ namespace Shared
         /// int
         /// </summary>
         SMSG_CALENDAR_EVENT_STATUS = 1084,
+
         /// <summary>
         /// int (seems to be ignored)
         /// cstring
@@ -1518,6 +1547,7 @@ namespace Shared
         /// "CALENDAR_ERROR_NO_MODERATOR" = 40,
         /// </summary>
         SMSG_CALENDAR_COMMAND_RESULT = 1085,
+
         /// <summary>
         /// packedDate lockoutTime?
         /// int
@@ -1526,6 +1556,7 @@ namespace Shared
         /// ulong
         /// </summary>
         SMSG_CALENDAR_RAID_LOCKOUT_ADDED = 1086,
+
         /// <summary>
         /// int i1
         /// if (i1 < 0)
@@ -1537,6 +1568,7 @@ namespace Shared
         /// ulong
         /// </summary>
         SMSG_CALENDAR_RAID_LOCKOUT_REMOVED = 1087,
+
         /// <summary>
         /// ulong
         /// cstring
@@ -1551,12 +1583,14 @@ namespace Shared
         /// pguid
         /// </summary>
         SMSG_CALENDAR_EVENT_INVITE_ALERT = 1088,
+
         /// <summary>
         /// ulong eventId
         /// packedDate date
         /// int eventFlags
         /// </summary>
         SMSG_CALENDAR_EVENT_INVITE_REMOVED_ALERT = 1089,
+
         /// <summary>
         /// ulong eventId
         /// packedDate date
@@ -1564,12 +1598,14 @@ namespace Shared
         /// byte
         /// </summary>
         SMSG_CALENDAR_EVENT_INVITE_STATUS_ALERT = 1090,
+
         /// <summary>
         /// byte
         /// ulong
         /// packedDate date
         /// </summary>
         SMSG_CALENDAR_EVENT_REMOVED_ALERT = 1091,
+
         /// <summary>
         /// byte
         /// ulong
@@ -1581,6 +1617,7 @@ namespace Shared
         /// cstring
         /// </summary>
         SMSG_CALENDAR_EVENT_UPDATED_ALERT = 1092,
+
         /// <summary>
         /// pguid
         /// ulong
@@ -1590,11 +1627,13 @@ namespace Shared
         SMSG_CALENDAR_EVENT_MODERATOR_STATUS_ALERT = 1093,
         CMSG_CALENDAR_COMPLAIN = 1094,
         CMSG_CALENDAR_GET_NUM_PENDING = 1095,
+
         /// <summary>
         /// int numPending
         /// </summary>
         SMSG_CALENDAR_SEND_NUM_PENDING = 1096,
         CMSG_SAVE_DANCE = 1097,
+
         /// <summary>
         /// int flag
         /// if (flag & 0x8)
@@ -1609,6 +1648,7 @@ namespace Shared
         /// </summary>
         SMSG_NOTIFY_DANCE = 1098,
         CMSG_PLAY_DANCE = 1099,
+
         /// <summary>
         /// ulong guid, 
         /// int danceId (used to lookup in cache),
@@ -1619,12 +1659,14 @@ namespace Shared
         SMSG_PLAY_DANCE = 1100,
         CMSG_LOAD_DANCES = 1101,
         CMSG_STOP_DANCE = 1102,
+
         /// <summary>
         /// ulong player guid
         /// </summary>
         SMSG_STOP_DANCE = 1103,
         CMSG_SYNC_DANCE = 1104,
         CMSG_DANCE_QUERY = 1105,
+
         /// <summary>
         /// dance query response
         /// int id [ if (id & 0x80000000) do nothing]
@@ -1637,6 +1679,7 @@ namespace Shared
         SMSG_DANCE_QUERY_RESPONSE = 1106,
         SMSG_INVALIDATE_DANCE = 1107,
         CMSG_DELETE_DANCE = 1108,
+
         /// <summary>
         /// learn dance move?
         /// ulong mask
@@ -1647,6 +1690,7 @@ namespace Shared
         CMSG_SET_RUNE_COUNT = 1112,
         CMSG_SET_RUNE_COOLDOWN = 1113,
         MSG_MOVE_SET_PITCH_RATE_CHEAT = 1114,
+
         /// <summary>
         /// pguid unitGuid
         /// float
@@ -1654,6 +1698,7 @@ namespace Shared
         MSG_MOVE_SET_PITCH_RATE = 1115,
         SMSG_FORCE_PITCH_RATE_CHANGE = 1116,
         CMSG_FORCE_PITCH_RATE_CHANGE_ACK = 1117,
+
         /// <summary>
         /// pguid unitGuid
         /// float
@@ -1663,12 +1708,14 @@ namespace Shared
         MSG_MOVE_ABANDON_TRANSPORT = 1120,
         CMSG_MOVE_ABANDON_TRANSPORT_ACK = 1121,
         CMSG_UPDATE_MISSILE_TRAJECTORY = 1122,
+
         /// <summary>
         /// int
         /// int. 
         /// client does nothing with values
         /// </summary>
         SMSG_UPDATE_ACCOUNT_DATA_COMPLETE = 1123,
+
         /// <summary>
         /// int
         /// </summary>
@@ -1676,6 +1723,7 @@ namespace Shared
         CMSG_COMPLETE_MOVIE = 1125,
         CMSG_SET_GLYPH_SLOT = 1126,
         CMSG_SET_GLYPH = 1127,
+
         /// <summary>
         /// pguid recipient
         /// int achievementId (Achievement.dbc)
@@ -1683,6 +1731,7 @@ namespace Shared
         /// </summary>
         SMSG_ACHIEVEMENT_EARNED = 1128,
         SMSG_DYNAMIC_DROP_ROLL_RESULT = 1129,
+
         /// <summary>
         /// int criteriaId (AchievementCriteria.dbc)
         /// pguid
@@ -1693,6 +1742,7 @@ namespace Shared
         /// int time2 (client calculates time(NULL) - this for something)
         /// </summary>
         SMSG_CRITERIA_UPDATE = 1130,
+
         /// <summary>
         /// pguid of comparison player
         /// </summary>
@@ -1700,6 +1750,7 @@ namespace Shared
         SMSG_RESPOND_INSPECT_ACHIEVEMENTS = 1132,
         CMSG_DISMISS_CONTROLLED_VEHICLE = 1133,
         CMSG_COMPLETE_ACHIEVEMENT_CHEAT = 1134,
+
         /// <summary>
         /// int questId
         /// int
@@ -1709,6 +1760,7 @@ namespace Shared
         SMSG_GROUP_SWAP_FAILED = 1137,
         CMSG_UNITANIMTIER_CHEAT = 1138,
         CMSG_CHAR_CUSTOMIZE = 1139,
+
         /// <summary>
         /// Char customize
         /// byte
@@ -1725,6 +1777,7 @@ namespace Shared
         /// }
         /// </summary>
         SMSG_CHAR_CUSTOMIZE = 1140,
+
         /// <summary>
         /// Empty
         /// </summary>
@@ -1733,23 +1786,27 @@ namespace Shared
         CMSG_REQUEST_VEHICLE_PREV_SEAT = 1143,
         CMSG_REQUEST_VEHICLE_NEXT_SEAT = 1144,
         CMSG_REQUEST_VEHICLE_SWITCH_SEAT = 1145,
+
         /// <summary>
         /// guid, int, int
         /// </summary>
         CMSG_PET_LEARN_TALENT = 1146,
         CMSG_PET_UNLEARN_TALENTS = 1147,
+
         /// <summary>
         /// int
         /// </summary>
         SMSG_SET_PHASE_SHIFT = 1148,
         SMSG_ALL_ACHIEVEMENT_DATA = 1149,
         CMSG_FORCE_SAY_CHEAT = 1150,
+
         /// <summary>
         /// Used if cvar "predictedHealth" is true
         /// pguid
         /// uint newValue
         /// </summary>
         SMSG_HEALTH_UPDATE = 1151,
+
         /// <summary>
         /// Used if cvar "predictedPower" is true
         /// pguid
@@ -1757,10 +1814,12 @@ namespace Shared
         /// uint newValue
         /// </summary>
         SMSG_POWER_UPDATE = 1152,
+
         /// <summary>
         /// ulong guid
         /// </summary>
         CMSG_GAMEOBJ_REPORT_USE = 1153,
+
         /// <summary>
         /// pguid
         /// pguid newPrimaryTarget
@@ -1769,19 +1828,23 @@ namespace Shared
         /// { pguid, int }
         /// </summary>
         SMSG_HIGHEST_THREAT_UPDATE = 1154,
+
         /// <summary>
         /// pguid, int count, for(count) { pguid, int }
         /// </summary>
         SMSG_THREAT_UPDATE = 1155,
+
         /// <summary>
         /// pguid, pguid
         /// </summary>
         SMSG_THREAT_REMOVE = 1156,
+
         /// <summary>
         /// pguid
         /// </summary>
         SMSG_THREAT_CLEAR = 1157,
         SMSG_CONVERT_RUNE = 1158,
+
         /// <summary>
         /// int count, stored in dword_1175648
         /// for (count) 
@@ -1791,27 +1854,33 @@ namespace Shared
         /// }
         /// </summary>
         SMSG_RESYNC_RUNES = 1159,
+
         /// <summary>
         /// int mask
         /// </summary>
         SMSG_ADD_RUNE_POWER = 1160,
         CMSG_START_QUEST = 1161,
+
         /// <summary>
         /// int index
         /// </summary>
         CMSG_REMOVE_GLYPH = 1162,
+
         /// <summary>
         /// Debug Client only
         /// </summary>
         CMSG_DUMP_OBJECTS = 1163,
+
         /// <summary>
         /// Debug Client only
         /// </summary>
         SMSG_DUMP_OBJECTS_DATA = 1164,
+
         /// <summary>
         /// ulong guid
         /// </summary>
         CMSG_DISMISS_CRITTER = 1165,
+
         /// <summary>
         /// read as byte[56], but actually has a struct
         /// ulong guid
@@ -1830,10 +1899,12 @@ namespace Shared
         SMSG_NOTIFY_DEST_LOC_SPELL_CAST = 1166,
         CMSG_AUCTION_LIST_PENDING_SALES = 1167,
         SMSG_AUCTION_LIST_PENDING_SALES = 1168,
+
         /// <summary>
         /// int a1, ulong guid, int a2. If a1 > 0, call sub_768A20
         /// </summary>
         SMSG_MODIFY_COOLDOWN = 1169,
+
         /// <summary>
         /// pguid petGuid
         /// pguid targetGuid
@@ -1841,10 +1912,12 @@ namespace Shared
         /// </summary>
         SMSG_PET_UPDATE_COMBO_POINTS = 1170,
         CMSG_ENABLETAXI = 1171,
+
         /// <summary>
         /// pguid
         /// </summary>
         SMSG_PRE_RESURRECT = 1172,
+
         /// <summary>
         /// pguid unit
         /// 
@@ -1891,55 +1964,65 @@ namespace Shared
         SMSG_AURA_UPDATE_ALL = 1173,
         SMSG_AURA_UPDATE = 1174,
         CMSG_FLOOD_GRACE_CHEAT = 1175,
+
         /// <summary>
         /// guid, int achievementId, int type. if type > 0, "PLAYER_SERVER_FIRST_ACHIEVEMENT", else "SERVER_FIRST_ACHIEVEMENT"
         /// </summary>
         SMSG_SERVER_FIRST_ACHIEVEMENT = 1176,
+
         /// <summary>
         /// ushort spellId
         /// </summary>
         SMSG_PET_LEARNED_SPELL = 1177,
+
         /// <summary>
         /// 1178
         /// ushort spellId
         /// </summary>
         SMSG_PET_REMOVED_SPELL = 1178,
         CMSG_CHANGE_SEATS_ON_CONTROLLED_VEHICLE = 1179,
+
         /// <summary>
         /// Called when leaving Wintergrasp PVP zone
         /// </summary>
         CMSG_HEARTH_AND_RESURRECT = 1180,
         SMSG_ON_CANCEL_EXPECTED_RIDE_VEHICLE_AURA = 1181,
+
         /// <summary>
         /// int criteriaId
         /// </summary>
         SMSG_CRITERIA_DELETED = 1182,
+
         /// <summary>
         /// int achievementId
         /// </summary>
         SMSG_ACHIEVEMENT_DELETED = 1183,
         CMSG_SERVER_INFO_QUERY = 1184, // not used
-        SMSG_SERVER_INFO_RESPONSE = 1185,// not used
-        CMSG_CHECK_LOGIN_CRITERIA = 1186,// not used
+        SMSG_SERVER_INFO_RESPONSE = 1185, // not used
+        CMSG_CHECK_LOGIN_CRITERIA = 1186, // not used
         SMSG_SERVER_BUCK_DATA_START = 1187,
-        CMSG_QUERY_VEHICLE_STATUS = 1188,// not used
-                                         // no 1189
+        CMSG_QUERY_VEHICLE_STATUS = 1188, // not used
+        // no 1189
         SMSG_1190 = 1190,
+
         /// <summary>
         /// Vehicle related
         /// pguid unitGuid
         /// int vehicleId (Vehicle.dbc)
         /// </summary>
         SMSG_PLAYER_VEHICLE_DATA = 1191,
+
         /// <summary>
         /// Activates a service? called from the same method that sends out other NPCFlag related "hello" opcodes
         /// guid
         /// </summary>
         CMSG_PLAYER_VEHICLE_ENTER = 1192,
+
         /// <summary>
         /// guid passengerId
         /// </summary>
         CMSG_EJECT_PASSENGER = 1193,
+
         /// <summary>
         /// int count
         /// for (count)
@@ -1957,62 +2040,68 @@ namespace Shared
         /// TODO: Use this!
         /// </summary>
         SMSG_CLIENTCACHE_VERSION = 1195, // 1190 in 3.0.9
-                                         // no 1196
-                                         // no 1197
-                                         // no 1198
-                                         // no 1199
-                                         // no 1200
-                                         // no 1201
-                                         /// <summary>
-                                         /// int64 itemGuid
-                                         /// int
-                                         /// int honorPoints
-                                         /// int arenaPoints
-                                         /// for (5)
-                                         /// {
-                                         ///     int tokenItemId
-                                         ///     int tokenCount
-                                         /// }
-                                         /// int
-                                         /// int
-                                         /// </summary>
+        // no 1196
+        // no 1197
+        // no 1198
+        // no 1199
+        // no 1200
+        // no 1201
+        /// <summary>
+        /// int64 itemGuid
+        /// int
+        /// int honorPoints
+        /// int arenaPoints
+        /// for (5)
+        /// {
+        ///     int tokenItemId
+        ///     int tokenCount
+        /// }
+        /// int
+        /// int
+        /// </summary>
         SMSG_ITEM_REFUND_INFO_RESPONSE = 1202,
+
         /// <summary>
         /// refund request?
         /// int64 guid
         /// </summary>
         CMSG_ITEM_REFUND_INFO_REQUEST = 1203,
+
         /// <summary>
         /// lua_ContainerRefundItemPurchase
         /// int64 itemGuid
         /// </summary>
         CMSG_ITEM_REFUND = 1204, // prolly info request, somesort
-                                 /// <summary>
-                                 /// int64 itemGuid
-                                 /// int response
-                                 /// if (response)
-                                 /// {
-                                 ///     "UNABLE_TO_REFUND_ITEM"
-                                 ///     packet ends
-                                 /// }
-                                 /// int
-                                 /// int honorPoints
-                                 /// int arenaPoints
-                                 /// for (5)
-                                 /// {
-                                 ///     int tokenItemId
-                                 ///     int tokenCount
-                                 /// }
-                                 /// </summary>
+
+        /// <summary>
+        /// int64 itemGuid
+        /// int response
+        /// if (response)
+        /// {
+        ///     "UNABLE_TO_REFUND_ITEM"
+        ///     packet ends
+        /// }
+        /// int
+        /// int honorPoints
+        /// int arenaPoints
+        /// for (5)
+        /// {
+        ///     int tokenItemId
+        ///     int tokenCount
+        /// }
+        /// </summary>
         SMSG_ITEM_REFUND_RESULT = 1205,
+
         /// <summary>
         /// int - same as new last int sent in MSG_CORPSE_QUERY (corpse low guid)
         /// </summary>
         CMSG_CORPSE_MAP_POSITION_QUERY = 1206,
+
         /// <summary>
         /// 4*float
         /// </summary>
         SMSG_CORPSE_MAP_POSITION_QUERY_RESPONSE = 1207,
+
         /// <summary>
         /// Not used anymore
         /// lua_SetLFGRoles
@@ -2023,16 +2112,19 @@ namespace Shared
         /// 0x8 - damage
         /// </summary>
         _UNUSED_1208 = 1208,
+
         /// <summary>
         /// Not in client as of 9733
         /// </summary>
         _UNUSED_1209 = 1209,
+
         /// <summary>
         /// lua_CalendarContextEventSignUp
         /// int64
         /// </summary>
         CMSG_CALENDAR_CONTEXT_EVENT_SIGNUP = 1210,
         SMSG_CALENDAR_ACTION_PENDING = 1211,
+
         /// <summary>
         /// For equipment manager.
         /// int setCount
@@ -2049,6 +2141,7 @@ namespace Shared
         /// }
         /// </summary>
         SMSG_EQUIPMENT_SET_LIST = 1212,
+
         /// <summary>
         /// lua_SaveEquipmentSet
         /// Set equipment set
@@ -2062,6 +2155,7 @@ namespace Shared
         /// } 
         /// </summary>
         CMSG_SET_EQUIPMENT_SET = 1213,
+
         /// <summary>
         /// called from CMissile::CalcPosition
         /// int64 guid
@@ -2070,6 +2164,7 @@ namespace Shared
         /// byte[12] (read as 12 bytes, could be vector3?)
         /// </summary>
         CMSG_UPDATE_MISSILE_POSITION = 1214,
+
         /// <summary>
         /// int64
         /// byte
@@ -2078,6 +2173,7 @@ namespace Shared
         /// float
         /// </summary>
         SMSG_SET_PROJECTILE_POSITION = 1215,
+
         /// <summary>
         /// byte type - branches to 2 diff structs depending on this
         /// if (type == 1) // pet
@@ -2115,6 +2211,7 @@ namespace Shared
         /// }
         /// </summary>
         SMSG_TALENTS_INFO = 1216,
+
         /// <summary>
         /// lua_LearnPreviewTalents
         /// int count
@@ -2125,6 +2222,7 @@ namespace Shared
         /// }
         /// </summary>
         CMSG_LEARN_PREVIEWED_TALENTS = 1217,
+
         /// <summary>
         /// lua_LearnPreviewTalents
         /// int64 petGuid
@@ -2140,11 +2238,13 @@ namespace Shared
         UMSG_UNKNOWN_1220 = 1220, // not found
         UMSG_UNKNOWN_1221 = 1221, // not found
         UMSG_UNKNOWN_1222 = 1222, // not found
-                                  /// <summary>
-                                  /// battleground pet related
-                                  /// only useful if the player is currently in an arena
-                                  /// </summary>
+
+        /// <summary>
+        /// battleground pet related
+        /// only useful if the player is currently in an arena
+        /// </summary>
         SMSG_ARENA_OPPONENT_UPDATE = 1223,
+
         /// <summary>
         /// if != 0, broadcasts ERR_ARENA_TEAM_CHANGE_FAILED_QUEUED
         /// </summary>
@@ -2175,9 +2275,10 @@ namespace Shared
         /// }
         /// </summary>
         CMSG_USE_EQUIPMENT_SET = 1237, // moved in 3.2.2, prev. 1227
-                                       /// <summary>
-                                       /// byte result (0 = ok, 4 = bags full, > 0 = error)
-                                       /// </summary>
+
+        /// <summary>
+        /// byte result (0 = ok, 4 = bags full, > 0 = error)
+        /// </summary>
         SMSG_USE_EQUIPMENT_SET_RESULT = 1238, // moved in 3.2.2, prev. 1228
 
         // manu unks...
@@ -2237,7 +2338,8 @@ namespace Shared
         CMSG_UNKNOWN_1298 = 1297, // something with networking
         UMSG_UNKNOWN_1299 = 1298, // not found
         SMSG_COMBAT_LOG_MULTIPLE = 1299, // SMSG, multi combatlog
-        SMSG_LFG_OPEN_FROM_GOSSIP = 1300, // event EVENT_LFG_OPEN_FROM_GOSSIP (opens dungeon finder, probably for outdoor bosses)
+        SMSG_LFG_OPEN_FROM_GOSSIP = 1300,
+        // event EVENT_LFG_OPEN_FROM_GOSSIP (opens dungeon finder, probably for outdoor bosses)
         SMSG_UNKNOWN_1302 = 1301, // something with player movement (move event 58?)
         CMSG_UNKNOWN_1303 = 1302, // something with player movement (move event 58?)
         SMSG_UNKNOWN_1304 = 1303, // something with player movement (move event 58?), speed packet
@@ -2250,5 +2352,4 @@ namespace Shared
         Maximum,
         Unknown,
     }
-
 }

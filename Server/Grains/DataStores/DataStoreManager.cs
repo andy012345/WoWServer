@@ -19,17 +19,20 @@ namespace Server
     [Reentrant]
     public partial class DataStoreManager : Grain, IDataStoreManager
     {
-        bool Loaded = false;
-        string ConnectionString = null;
+        private bool Loaded = false;
+        private string ConnectionString = null;
 
-        public Task<string> GetConnectionString() { return Task.FromResult(ConnectionString); }
+        public Task<string> GetConnectionString()
+        {
+            return Task.FromResult(ConnectionString);
+        }
 
         public override async Task OnActivateAsync()
         {
             await Load();
             await base.OnActivateAsync();
         }
-        
+
         public async Task LoadConnectionDetails()
         {
             if (System.IO.File.Exists("Config-Server.xml") == false)

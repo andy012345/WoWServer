@@ -10,7 +10,6 @@ namespace Server
 {
     public partial class DataStoreManager
     {
-
         public async Task Load()
         {
             if (Loaded)
@@ -36,7 +35,7 @@ namespace Server
                 if (m.GetCustomAttribute<DataStoreLoaderAttribute>() == null)
                     continue;
 
-                var ret = m.Invoke(this, new object[] { });
+                var ret = m.Invoke(this, new object[] {});
                 var retlist = ret as List<Task>;
                 if (retlist == null)
                     throw new Exception("DBC loader returned unexpected type (should be List<Task>)");

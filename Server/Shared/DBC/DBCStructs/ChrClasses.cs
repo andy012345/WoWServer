@@ -15,7 +15,7 @@ namespace Server
     {
         public ChrClasses Get(UInt32 Class)
         {
-            return Get((int)Class);
+            return Get((int) Class);
         }
     }
 
@@ -49,7 +49,7 @@ namespace Server
             ExpansionRequired = GetUInt32(59);
 
 
-          return (int)Class;
+            return (int) Class;
         }
     }
 }

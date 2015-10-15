@@ -11,6 +11,5 @@ namespace Shared
 {
     public class PacketBase
     {
-
     }
 }

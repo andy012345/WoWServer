@@ -7,7 +7,9 @@ using Shared;
 
 namespace Server
 {
-    public interface IObject : IObjectImpl { }
+    public interface IObject : IObjectImpl
+    {
+    }
 
     public interface IObjectImpl : IBaseObjectImpl
     {
@@ -69,6 +71,5 @@ namespace Server
 
     public interface IBaseObjectImpl : IGrainWithIntegerKey
     {
-
     }
 }

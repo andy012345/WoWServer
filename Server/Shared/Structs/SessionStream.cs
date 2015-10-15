@@ -15,5 +15,4 @@ namespace Shared
         public IAsyncStream<byte[]> PacketStream = null;
         public IAsyncStream<SocketCommand> CommandStream = null;
     }
-
 }

@@ -13,11 +13,11 @@ namespace Server
 {
     public class DBCStore<T> where T : DBCRecordBase, new()
     {
-        UInt32 NumRecords = 0;
-        UInt32 NumFields = 0;
-        UInt32 RecordSize = 0;
-        UInt32 StringDataSize = 0;
-        byte[] StringData = null;
+        private UInt32 NumRecords = 0;
+        private UInt32 NumFields = 0;
+        private UInt32 RecordSize = 0;
+        private UInt32 StringDataSize = 0;
+        private byte[] StringData = null;
 
         public Dictionary<int, T> RecordDataIndexed = null;
 
@@ -27,7 +27,7 @@ namespace Server
             ServerLog.Debug("Loaded {0} entries from {1}", NumRecords, path);
         }
 
-        void LoadImpl(string path)
+        private void LoadImpl(string path)
         {
             using (var fileStream = new FileStream("dbc\\" + path, FileMode.Open, FileAccess.Read))
             {
@@ -46,14 +46,14 @@ namespace Server
                     StringDataSize = reader.ReadUInt32();
 
                     fileStream.Position = fileStream.Length - StringDataSize;
-                    StringData = reader.ReadBytes((int)StringDataSize);
+                    StringData = reader.ReadBytes((int) StringDataSize);
                     fileStream.Position = 20;
 
                     for (int i = 0; i < NumRecords; ++i)
                     {
                         var rec = new T();
 
-                        rec.SetRecordData(reader.ReadBytes((int)RecordSize));
+                        rec.SetRecordData(reader.ReadBytes((int) RecordSize));
                         rec.SetStringData(StringData);
 
                         int index = rec.Read();
@@ -80,37 +80,50 @@ namespace Server
             RecordDataIndexed.TryGetValue(index, out ret);
             return ret;
         }
-
-
     }
 
     public class DBCRecordBase
     {
-        public DBCRecordBase() { }
+        public DBCRecordBase()
+        {
+        }
 
-        byte[] RecordData = null;
-        byte[] StringData = null;
+        private byte[] RecordData = null;
+        private byte[] StringData = null;
 
-        public virtual int Read() { return -1; }
+        public virtual int Read()
+        {
+            return -1;
+        }
 
-        public void SetRecordData(byte[] data) { RecordData = data; }
-        public void SetStringData(byte[] data) { StringData = data; }
+        public void SetRecordData(byte[] data)
+        {
+            RecordData = data;
+        }
+
+        public void SetStringData(byte[] data)
+        {
+            StringData = data;
+        }
 
         protected UInt32 GetUInt32(int field)
         {
-            return BitConverter.ToUInt32(RecordData, field * 4);
+            return BitConverter.ToUInt32(RecordData, field*4);
         }
+
         protected Int32 GetInt32(int field)
         {
-            return BitConverter.ToInt32(RecordData, field * 4);
+            return BitConverter.ToInt32(RecordData, field*4);
         }
+
         protected float GetFloat(int field)
         {
-            return BitConverter.ToSingle(RecordData, field * 4);
+            return BitConverter.ToSingle(RecordData, field*4);
         }
+
         protected UInt64 GetUInt64(int field)
         {
-            return BitConverter.ToUInt64(RecordData, field * 4);
+            return BitConverter.ToUInt64(RecordData, field*4);
         }
 
         protected string GetString(int field)
@@ -127,6 +140,5 @@ namespace Server
 
     public partial class DataStoreManager
     {
-
     }
 }

@@ -28,8 +28,8 @@ namespace Server
     {
         TYPEMASK_OBJECT = 0x0001,
         TYPEMASK_ITEM = 0x0002,
-        TYPEMASK_CONTAINER = 0x0006,                       // TYPEMASK_ITEM | 0x0004
-        TYPEMASK_UNIT = 0x0008,                       // creature
+        TYPEMASK_CONTAINER = 0x0006, // TYPEMASK_ITEM | 0x0004
+        TYPEMASK_UNIT = 0x0008, // creature
         TYPEMASK_PLAYER = 0x0010,
         TYPEMASK_GAMEOBJECT = 0x0020,
         TYPEMASK_DYNAMICOBJECT = 0x0040,
@@ -76,19 +76,19 @@ namespace Server
         protected Dictionary<ObjectGUID, IObjectImpl> _inrangePlayers = new Dictionary<ObjectGUID, IObjectImpl>();
         protected Dictionary<ObjectGUID, IObjectImpl> _inrangeObjectTracker = null;
 
-        public async override Task OnActivateAsync()
+        public override async Task OnActivateAsync()
         {
             await base.OnActivateAsync();
         }
 
-        public async virtual Task OnConstruct()
+        public virtual async Task OnConstruct()
         {
             if (_IsValid())
             {
                 await SetGUID(new ObjectGUID(this.GetPrimaryKeyLong()));
 
                 List<Task> tasks = new List<Task>();
-                tasks.Add(SetFloat((int)EObjectFields.OBJECT_FIELD_SCALE_X, 1.0f)); //default scale
+                tasks.Add(SetFloat((int) EObjectFields.OBJECT_FIELD_SCALE_X, 1.0f)); //default scale
 
                 if (State.UpdateFieldsMask == null)
                     State.UpdateFieldsMask = new UpdateMask(State.UpdateFields.Length);
@@ -112,18 +112,45 @@ namespace Server
             await base.OnDeactivateAsync();
         }
 
-        public Task<bool> IsValid() { return Task.FromResult(State.Exists); }
-        public bool _IsValid() { return State.Exists; }
+        public Task<bool> IsValid()
+        {
+            return Task.FromResult(State.Exists);
+        }
 
-        public virtual IObjectImpl ToRef() { return this.AsReference<IObjectImpl>(); }
+        public bool _IsValid()
+        {
+            return State.Exists;
+        }
 
-        public virtual Task<string> VirtualCall() { return Task.FromResult("Virtual call from object"); }
-        public Task<string> ObjectCall() { return Task.FromResult("Call from object"); }
+        public virtual IObjectImpl ToRef()
+        {
+            return this.AsReference<IObjectImpl>();
+        }
 
-        public async Task Save() { if (State.Exists) await WriteStateAsync(); }
+        public virtual Task<string> VirtualCall()
+        {
+            return Task.FromResult("Virtual call from object");
+        }
 
-        public Task<ObjectGUID> GetGUID() { return Task.FromResult(oGUID); }
-        public Task<PackedGUID> GetPackedGUID() { return Task.FromResult(pGUID); }
+        public Task<string> ObjectCall()
+        {
+            return Task.FromResult("Call from object");
+        }
+
+        public async Task Save()
+        {
+            if (State.Exists) await WriteStateAsync();
+        }
+
+        public Task<ObjectGUID> GetGUID()
+        {
+            return Task.FromResult(oGUID);
+        }
+
+        public Task<PackedGUID> GetPackedGUID()
+        {
+            return Task.FromResult(pGUID);
+        }
 
         public Task CreateUpdateFields(int sz)
         {
@@ -143,63 +170,129 @@ namespace Server
             switch (type)
             {
                 case ObjectType.Player:
-                    {
-                        await CreateUpdateFields((int)EUnitFields.PLAYER_END);
-                        await SetType((UInt32)(TypeMask.TYPEMASK_PLAYER | TypeMask.TYPEMASK_UNIT | TypeMask.TYPEMASK_OBJECT));
-                    }
+                {
+                    await CreateUpdateFields((int) EUnitFields.PLAYER_END);
+                    await
+                        SetType((UInt32) (TypeMask.TYPEMASK_PLAYER | TypeMask.TYPEMASK_UNIT | TypeMask.TYPEMASK_OBJECT));
+                }
                     break;
                 case ObjectType.Creature:
-                    {
-                        await CreateUpdateFields((int)EUnitFields.UNIT_END);
-                        await SetType((UInt32)(TypeMask.TYPEMASK_UNIT | TypeMask.TYPEMASK_OBJECT));
-                    }
+                {
+                    await CreateUpdateFields((int) EUnitFields.UNIT_END);
+                    await SetType((UInt32) (TypeMask.TYPEMASK_UNIT | TypeMask.TYPEMASK_OBJECT));
+                }
                     break;
 
-                default: throw new Exception("Cannot to create Update Fields by unknown object type");
+                default:
+                    throw new Exception("Cannot to create Update Fields by unknown object type");
             }
         }
 
         #region UpdateFields
 
-        public byte _GetByte(object field, int index) { return State.UpdateFields[(int)field].GetByte(index); }
-        public UInt32 _GetUInt32(object field) { return State.UpdateFields[(int)field].GetUInt32(); }
-        public Int32 _GetInt32(object field) { return State.UpdateFields[(int)field].GetInt32(); }
+        public byte _GetByte(object field, int index)
+        {
+            return State.UpdateFields[(int) field].GetByte(index);
+        }
+
+        public UInt32 _GetUInt32(object field)
+        {
+            return State.UpdateFields[(int) field].GetUInt32();
+        }
+
+        public Int32 _GetInt32(object field)
+        {
+            return State.UpdateFields[(int) field].GetInt32();
+        }
+
         public UInt64 _GetUInt64(object field)
         {
             var low = _GetUInt32(field);
-            var high = _GetUInt32((int)field + 1);
+            var high = _GetUInt32((int) field + 1);
 
-            var ret = (UInt64)low;
-            ret |= (UInt64)high << 32;
+            var ret = (UInt64) low;
+            ret |= (UInt64) high << 32;
             return ret;
         }
-        public float _GetFloat(object field) { return State.UpdateFields[(int)field].GetFloat(); }
-        public async Task SetByte(object field, int index, byte val) { State.UpdateFields[(int)field].Set(index, val); await OnFieldChange(field); }
-        public async Task SetUInt32(object field, UInt32 val) { State.UpdateFields[(int)field].Set(val); await OnFieldChange(field); }
-        public async Task SetInt32(object field, int val) { State.UpdateFields[(int)field].Set(val); await OnFieldChange(field); }
-        public async Task SetFloat(object field, float val) { State.UpdateFields[(int)field].Set(val); await OnFieldChange(field); }
 
-        public async Task SetGUID(object field, ObjectGUID val) { await SetUInt64(field, val.ToUInt64()); await OnFieldChange(field); }
+        public float _GetFloat(object field)
+        {
+            return State.UpdateFields[(int) field].GetFloat();
+        }
+
+        public async Task SetByte(object field, int index, byte val)
+        {
+            State.UpdateFields[(int) field].Set(index, val);
+            await OnFieldChange(field);
+        }
+
+        public async Task SetUInt32(object field, UInt32 val)
+        {
+            State.UpdateFields[(int) field].Set(val);
+            await OnFieldChange(field);
+        }
+
+        public async Task SetInt32(object field, int val)
+        {
+            State.UpdateFields[(int) field].Set(val);
+            await OnFieldChange(field);
+        }
+
+        public async Task SetFloat(object field, float val)
+        {
+            State.UpdateFields[(int) field].Set(val);
+            await OnFieldChange(field);
+        }
+
+        public async Task SetGUID(object field, ObjectGUID val)
+        {
+            await SetUInt64(field, val.ToUInt64());
+            await OnFieldChange(field);
+        }
+
         public async Task SetUInt64(object field, UInt64 val)
         {
-            UInt32 high = (UInt32)(val >> 32);
-            UInt32 low = (UInt32)val;
+            UInt32 high = (UInt32) (val >> 32);
+            UInt32 low = (UInt32) val;
             await SetUInt32(field, low);
-            await SetUInt32((int)field + 1, high);
+            await SetUInt32((int) field + 1, high);
             await OnFieldChange(field);
         }
 
         //Tasks for external people
-        public Task<byte> GetByte(object field, int index) { return Task.FromResult(_GetByte(field, index)); }
-        public Task<UInt32> GetUInt32(object field) { return Task.FromResult(_GetUInt32(field)); }
-        public Task<float> GetFloat(object field) { return Task.FromResult(_GetFloat(field)); }
+        public Task<byte> GetByte(object field, int index)
+        {
+            return Task.FromResult(_GetByte(field, index));
+        }
+
+        public Task<UInt32> GetUInt32(object field)
+        {
+            return Task.FromResult(_GetUInt32(field));
+        }
+
+        public Task<float> GetFloat(object field)
+        {
+            return Task.FromResult(_GetFloat(field));
+        }
 
         #endregion
 
         #region Updatefield Getters and Setters
-        public async Task SetType(UInt32 val) { await SetUInt32(EObjectFields.OBJECT_FIELD_TYPE, val); }
-        public Task<UInt32> GetObjectType() { return Task.FromResult(_GetObjectType()); }
-        public UInt32 _GetObjectType() { return _GetUInt32(EObjectFields.OBJECT_FIELD_TYPE); }
+
+        public async Task SetType(UInt32 val)
+        {
+            await SetUInt32(EObjectFields.OBJECT_FIELD_TYPE, val);
+        }
+
+        public Task<UInt32> GetObjectType()
+        {
+            return Task.FromResult(_GetObjectType());
+        }
+
+        public UInt32 _GetObjectType()
+        {
+            return _GetUInt32(EObjectFields.OBJECT_FIELD_TYPE);
+        }
 
         public async Task SetGUID(ObjectGUID guid)
         {
@@ -253,10 +346,21 @@ namespace Server
             return TaskDone.Done;
         }
 
-        public Task SetCell(UInt64 cellkey) { State.CurrentCellID = cellkey; return TaskDone.Done; }
-        public Task<UInt64> GetCell() { return Task.FromResult(State.CurrentCellID); }
+        public Task SetCell(UInt64 cellkey)
+        {
+            State.CurrentCellID = cellkey;
+            return TaskDone.Done;
+        }
 
-        public virtual Task<bool> IsCellActivator() { return Task.FromResult(false); }
+        public Task<UInt64> GetCell()
+        {
+            return Task.FromResult(State.CurrentCellID);
+        }
+
+        public virtual Task<bool> IsCellActivator()
+        {
+            return Task.FromResult(false);
+        }
 
         public async Task UpdateInRangeSet()
         {
@@ -281,7 +385,8 @@ namespace Server
             //Remove old
             foreach (var obj in _inrangeObjects)
             {
-                if (_inrangeObjectTracker.ContainsKey(obj.Key)) //we have just added this object, there's no reason to run this code as he's already proven to be seen
+                if (_inrangeObjectTracker.ContainsKey(obj.Key))
+                    //we have just added this object, there's no reason to run this code as he's already proven to be seen
                     continue;
 
                 var cansee = await CanSee(obj.Value);
@@ -335,7 +440,10 @@ namespace Server
                 _inrangePlayers.Remove(guid);
         }
 
-        public virtual Task OnAddInRangeObject(ObjectGUID guid, IObjectImpl obj) { return TaskDone.Done; }
+        public virtual Task OnAddInRangeObject(ObjectGUID guid, IObjectImpl obj)
+        {
+            return TaskDone.Done;
+        }
 
         public async Task RemoveInRangeObject(ObjectGUID guid, IObjectImpl obj, bool remove_other = true)
         {
@@ -358,13 +466,13 @@ namespace Server
 
             float dist = _GetDistance2DSq(otherposx, otherposy);
 
-            if (dist > (100 * 100)) //todo: implement, 100 yds for now
+            if (dist > (100*100)) //todo: implement, 100 yds for now
                 return false;
 
             return true;
         }
 
-        float _GetDistance2DSq(float x, float y)
+        private float _GetDistance2DSq(float x, float y)
         {
             float myx = State.PositionX;
             float myy = State.PositionY;
@@ -372,7 +480,7 @@ namespace Server
             float deltax = myx - x;
             float deltay = myy - y;
 
-            return (deltax * deltax) + (deltay * deltay);
+            return (deltax*deltax) + (deltay*deltay);
         }
 
         public Task<PacketOut> BuildCreateUpdateFor(IPlayer plr)
@@ -392,9 +500,9 @@ namespace Server
 
             PacketOut p = new PacketOut();
 
-            p.Write((byte)updateType);
+            p.Write((byte) updateType);
             p.Write(pGUID);
-            p.Write((byte)State.MyType);
+            p.Write((byte) State.MyType);
             _BuildMovementUpdate(updateType, updateFlags, ref p);
             _BuildValuesUpdate(updateType, updateFlags, ref p, plr);
             return Task.FromResult(p);
@@ -411,9 +519,9 @@ namespace Server
 
             PacketOut p = new PacketOut();
 
-            p.Write((byte)updateType);
+            p.Write((byte) updateType);
             p.Write(pGUID);
-            p.Write((byte)State.MyType);
+            p.Write((byte) State.MyType);
             _BuildMovementUpdate(updateType, updateFlags, ref p);
             _BuildValuesUpdate(updateType, updateFlags, ref p, plr);
             return Task.FromResult(p);
@@ -427,11 +535,11 @@ namespace Server
                 await map.OnObjectUpdated(oGUID);
         }
 
-        void _BuildMovementUpdate(ObjectUpdateType type, ObjectUpdateFlags flags, ref PacketOut pkt)
+        private void _BuildMovementUpdate(ObjectUpdateType type, ObjectUpdateFlags flags, ref PacketOut pkt)
         {
             var asUnit = ToRef() as IUnitImpl;
 
-            pkt.Write((UInt16)flags);
+            pkt.Write((UInt16) flags);
 
             if ((flags & ObjectUpdateFlags.UPDATEFLAG_LIVING) != 0)
             {
@@ -446,30 +554,30 @@ namespace Server
                 pkt.Write(State.PositionZ);
                 pkt.Write(State.Orientation);
 
-                pkt.Write((UInt32)0); //fall time
+                pkt.Write((UInt32) 0); //fall time
 
-                pkt.Write((float)1.0); //walk speed
-                pkt.Write((float)1.0); //run speed
-                pkt.Write((float)1.0); //runback speed
-                pkt.Write((float)1.0); //swim speed
-                pkt.Write((float)1.0); //swimback speed
-                pkt.Write((float)1.0); //flight speed
-                pkt.Write((float)1.0); //flightback speed
-                pkt.Write((float)1.0); //turn rate
-                pkt.Write((float)1.0); //pitch rate
+                pkt.Write((float) 1.0); //walk speed
+                pkt.Write((float) 1.0); //run speed
+                pkt.Write((float) 1.0); //runback speed
+                pkt.Write((float) 1.0); //swim speed
+                pkt.Write((float) 1.0); //swimback speed
+                pkt.Write((float) 1.0); //flight speed
+                pkt.Write((float) 1.0); //flightback speed
+                pkt.Write((float) 1.0); //turn rate
+                pkt.Write((float) 1.0); //pitch rate
             }
             else
             {
                 if ((flags & ObjectUpdateFlags.UPDATEFLAG_POSITION) != 0)
                 {
-                    pkt.Write((byte)0); //packed guid of transport
+                    pkt.Write((byte) 0); //packed guid of transport
                     pkt.Write(State.PositionX);
                     pkt.Write(State.PositionY);
                     pkt.Write(State.PositionZ);
 
-                    pkt.Write((float)0); //transport offset x
-                    pkt.Write((float)0); //transport offset y
-                    pkt.Write((float)0); //transport offset z
+                    pkt.Write((float) 0); //transport offset x
+                    pkt.Write((float) 0); //transport offset y
+                    pkt.Write((float) 0); //transport offset z
 
                     pkt.Write(State.Orientation);
                 }
@@ -487,7 +595,7 @@ namespace Server
 
             if ((flags & ObjectUpdateFlags.UPDATEFLAG_UNKNOWN) != 0)
             {
-                pkt.Write((UInt32)0);
+                pkt.Write((UInt32) 0);
             }
 
             if ((flags & ObjectUpdateFlags.UPDATEFLAG_LOWGUID) != 0)
@@ -503,26 +611,30 @@ namespace Server
                     case TypeID.TYPEID_GAMEOBJECT:
                     case TypeID.TYPEID_DYNAMICOBJECT:
                     case TypeID.TYPEID_CORPSE:
-                        {
-                            pkt.Write((UInt32)_GetUInt64(EObjectFields.OBJECT_FIELD_GUID));
-                        }
+                    {
+                        pkt.Write((UInt32) _GetUInt64(EObjectFields.OBJECT_FIELD_GUID));
+                    }
                         break;
-                    case TypeID.TYPEID_UNIT: pkt.Write((UInt32)0xB); break;
+                    case TypeID.TYPEID_UNIT:
+                        pkt.Write((UInt32) 0xB);
+                        break;
                     case TypeID.TYPEID_PLAYER:
-                        {
-                            if ((flags & ObjectUpdateFlags.UPDATEFLAG_SELF) != 0)
-                                pkt.Write((UInt32)0x2F);
-                            else
-                                pkt.Write((UInt32)0x8);
-                        }
+                    {
+                        if ((flags & ObjectUpdateFlags.UPDATEFLAG_SELF) != 0)
+                            pkt.Write((UInt32) 0x2F);
+                        else
+                            pkt.Write((UInt32) 0x8);
+                    }
                         break;
-                    default: pkt.Write((UInt32)0); break;
+                    default:
+                        pkt.Write((UInt32) 0);
+                        break;
                 }
             }
 
             if ((flags & ObjectUpdateFlags.UPDATEFLAG_HAS_TARGET) != 0)
             {
-                pkt.Write((byte)0); //packed guid of target
+                pkt.Write((byte) 0); //packed guid of target
             }
 
             if ((flags & ObjectUpdateFlags.UPDATEFLAG_TRANSPORT) != 0)
@@ -530,18 +642,18 @@ namespace Server
 
             if ((flags & ObjectUpdateFlags.UPDATEFLAG_VEHICLE) != 0)
             {
-                pkt.Write((UInt32)0); //vehicle id
-                pkt.Write((float)0); //orientation
+                pkt.Write((UInt32) 0); //vehicle id
+                pkt.Write((float) 0); //orientation
             }
 
             if ((flags & ObjectUpdateFlags.UPDATEFLAG_ROTATION) != 0)
             {
                 //this is the packed quart :(
-                pkt.Write((UInt64)0);
+                pkt.Write((UInt64) 0);
             }
         }
 
-        void _BuildValuesUpdate(ObjectUpdateType type, ObjectUpdateFlags flags, ref PacketOut pkt, IPlayer plr)
+        private void _BuildValuesUpdate(ObjectUpdateType type, ObjectUpdateFlags flags, ref PacketOut pkt, IPlayer plr)
         {
             UpdateMask mask = new UpdateMask(State.UpdateFields.Length);
             PacketOut tmp = new PacketOut();
@@ -561,63 +673,140 @@ namespace Server
                 mask.SetBit(i);
             }
 
-            pkt.Write((byte)mask.GetMaxBlockCount());
+            pkt.Write((byte) mask.GetMaxBlockCount());
             for (var i = 0; i < mask.GetMaxBlockCount(); ++i)
                 pkt.Write(mask.m_blocks[i]);
 
             pkt.Write(tmp);
         }
 
-        UpdatefieldFlags[] GetFlagVisibility()
+        private UpdatefieldFlags[] GetFlagVisibility()
         {
             TypeID myType = State.MyType;
 
             switch (myType)
             {
-                case TypeID.TYPEID_CORPSE: return UpdateVisibility.CorpseUpdateFieldFlags;
-                case TypeID.TYPEID_DYNAMICOBJECT: return UpdateVisibility.DynamicObjectUpdateFieldFlags;
+                case TypeID.TYPEID_CORPSE:
+                    return UpdateVisibility.CorpseUpdateFieldFlags;
+                case TypeID.TYPEID_DYNAMICOBJECT:
+                    return UpdateVisibility.DynamicObjectUpdateFieldFlags;
                 case TypeID.TYPEID_CONTAINER:
-                case TypeID.TYPEID_ITEM: return UpdateVisibility.ItemUpdateFieldFlags;
-                case TypeID.TYPEID_UNIT: return UpdateVisibility.UnitUpdateFieldFlags;
-                case TypeID.TYPEID_PLAYER: return UpdateVisibility.UnitUpdateFieldFlags;
-                default: return null;
+                case TypeID.TYPEID_ITEM:
+                    return UpdateVisibility.ItemUpdateFieldFlags;
+                case TypeID.TYPEID_UNIT:
+                    return UpdateVisibility.UnitUpdateFieldFlags;
+                case TypeID.TYPEID_PLAYER:
+                    return UpdateVisibility.UnitUpdateFieldFlags;
+                default:
+                    return null;
             }
         }
 
-        public Task<float> GetPositionX() { return Task.FromResult(State.PositionX); }
-        public Task<float> GetPositionY() { return Task.FromResult(State.PositionY); }
-        public Task<float> GetPositionZ() { return Task.FromResult(State.PositionZ); }
-        public Task<float> GetOrientation() { return Task.FromResult(State.Orientation); }
+        public Task<float> GetPositionX()
+        {
+            return Task.FromResult(State.PositionX);
+        }
+
+        public Task<float> GetPositionY()
+        {
+            return Task.FromResult(State.PositionY);
+        }
+
+        public Task<float> GetPositionZ()
+        {
+            return Task.FromResult(State.PositionZ);
+        }
+
+        public Task<float> GetOrientation()
+        {
+            return Task.FromResult(State.Orientation);
+        }
 
         #region Type virtuals
-        public virtual bool _IsPlayer() { return false; }
-        public virtual bool _IsUnit() { return false; }
-        public virtual bool _IsCreature() { return false; }
-        public virtual bool _IsPet() { return false; }
-        public virtual bool _IsVehicle() { return false; }
-        public virtual bool _IsTransport() { return false; }
-        public virtual bool _IsGameObject() { return false; }
+
+        public virtual bool _IsPlayer()
+        {
+            return false;
+        }
+
+        public virtual bool _IsUnit()
+        {
+            return false;
+        }
+
+        public virtual bool _IsCreature()
+        {
+            return false;
+        }
+
+        public virtual bool _IsPet()
+        {
+            return false;
+        }
+
+        public virtual bool _IsVehicle()
+        {
+            return false;
+        }
+
+        public virtual bool _IsTransport()
+        {
+            return false;
+        }
+
+        public virtual bool _IsGameObject()
+        {
+            return false;
+        }
 
 
-        public Task<bool> IsPlayer() { return Task.FromResult(_IsPlayer()); }
-        public Task<bool> IsUnit() { return Task.FromResult(_IsUnit()); }
-        public Task<bool> IsCreature() { return Task.FromResult(_IsCreature()); }
-        public Task<bool> IsPet() { return Task.FromResult(_IsPet()); }
-        public Task<bool> IsVehicle() { return Task.FromResult(_IsVehicle()); }
-        public Task<bool> IsTransport() { return Task.FromResult(_IsTransport()); }
-        public Task<bool> IsGameObject() { return Task.FromResult(_IsGameObject()); }
+        public Task<bool> IsPlayer()
+        {
+            return Task.FromResult(_IsPlayer());
+        }
+
+        public Task<bool> IsUnit()
+        {
+            return Task.FromResult(_IsUnit());
+        }
+
+        public Task<bool> IsCreature()
+        {
+            return Task.FromResult(_IsCreature());
+        }
+
+        public Task<bool> IsPet()
+        {
+            return Task.FromResult(_IsPet());
+        }
+
+        public Task<bool> IsVehicle()
+        {
+            return Task.FromResult(_IsVehicle());
+        }
+
+        public Task<bool> IsTransport()
+        {
+            return Task.FromResult(_IsTransport());
+        }
+
+        public Task<bool> IsGameObject()
+        {
+            return Task.FromResult(_IsGameObject());
+        }
+
         #endregion
 
-        public virtual Task Update() { return TaskDone.Done; }
-
+        public virtual Task Update()
+        {
+            return TaskDone.Done;
+        }
     }
 
     [Reentrant]
     [StorageProvider(ProviderName = "Default")]
     public class BaseObject<T> : Grain<T>, IBaseObjectImpl
-    where T : class, IGrainState
+        where T : class, IGrainState
     {
-
     }
-
 }

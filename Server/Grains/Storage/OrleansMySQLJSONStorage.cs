@@ -32,11 +32,11 @@ namespace Orleans.Storage.MySQLDB
     /// </remarks>
     public class MySQLJSONDBStorageProvider : IStorageProvider
     {
-        ConcurrentQueue<MySqlConnection> freeConnectionPool = new ConcurrentQueue<MySqlConnection>();
-        string ConnectString;
-        string Table = "OrleansGrainStorage";
-        bool CustomTable = false;
-        bool Closed = false;
+        private ConcurrentQueue<MySqlConnection> freeConnectionPool = new ConcurrentQueue<MySqlConnection>();
+        private string ConnectString;
+        private string Table = "OrleansGrainStorage";
+        private bool CustomTable = false;
+        private bool Closed = false;
 
         public Task Init(string name, IProviderRuntime providerRuntime, IProviderConfiguration config)
         {
@@ -116,9 +116,11 @@ namespace Orleans.Storage.MySQLDB
             string query;
 
             if (CustomTable)
-                query = string.Format("select * from `{0}` where `guid` = \"{1}\";", table, MySqlHelper.EscapeString(keyAsString));
+                query = string.Format("select * from `{0}` where `guid` = \"{1}\";", table,
+                    MySqlHelper.EscapeString(keyAsString));
             else
-                query = string.Format("select * from `{0}` where `guid` = \"{1}\" AND `type` = \"{2}\";", table, MySqlHelper.EscapeString(keyAsString), MySqlHelper.EscapeString(grainType));
+                query = string.Format("select * from `{0}` where `guid` = \"{1}\" AND `type` = \"{2}\";", table,
+                    MySqlHelper.EscapeString(keyAsString), MySqlHelper.EscapeString(grainType));
 
             using (var cmd = new MySqlCommand(query, con))
             {
@@ -135,10 +137,16 @@ namespace Orleans.Storage.MySQLDB
                         {
                             try
                             {
-                                var data = (IGrainState)Newtonsoft.Json.JsonConvert.DeserializeObject(dict["data"].ToString(), grainState.GetType());
+                                var data =
+                                    (IGrainState)
+                                        Newtonsoft.Json.JsonConvert.DeserializeObject(dict["data"].ToString(),
+                                            grainState.GetType());
                                 grainState.SetAll(data.AsDictionary());
                             }
-                            catch { grainState.SetAll(null); /* corruption? */ }
+                            catch
+                            {
+                                grainState.SetAll(null); /* corruption? */
+                            }
                         }
                         else
                             grainState.SetAll(null);
@@ -165,10 +173,24 @@ namespace Orleans.Storage.MySQLDB
 
             bool success = false;
 
-            try { keyAsString = grainReference.GetPrimaryKeyLong().ToString(); success = true; }
-            catch { success = false; }
-            try { keyAsString = grainReference.GetPrimaryKey().ToString(); success = true; }
-            catch { success = false; }
+            try
+            {
+                keyAsString = grainReference.GetPrimaryKeyLong().ToString();
+                success = true;
+            }
+            catch
+            {
+                success = false;
+            }
+            try
+            {
+                keyAsString = grainReference.GetPrimaryKey().ToString();
+                success = true;
+            }
+            catch
+            {
+                success = false;
+            }
             if (!success)
             {
                 keyAsString = grainReference.GetPrimaryKey(out keyExt).ToString();
@@ -178,7 +200,8 @@ namespace Orleans.Storage.MySQLDB
             }
 
             if (keyAsString == null || keyAsString.Length == 0)
-                throw new Exception(string.Format("MySQLStorage could not deduce key for grain reference {0}", grainReference.ToString()));
+                throw new Exception(string.Format("MySQLStorage could not deduce key for grain reference {0}",
+                    grainReference.ToString()));
             return keyAsString;
         }
 
@@ -193,12 +216,16 @@ namespace Orleans.Storage.MySQLDB
             List<string> queries = new List<string>();
             if (CustomTable)
             {
-                queries.Add(string.Format("replace into `{0}` (`guid`, `data`) VALUE (\"{1}\", \"{2}\");", table, key, MySqlHelper.EscapeString(data)));
+                queries.Add(string.Format("replace into `{0}` (`guid`, `data`) VALUE (\"{1}\", \"{2}\");", table, key,
+                    MySqlHelper.EscapeString(data)));
             }
             else
             {
-                queries.Add(string.Format("delete from `{0}` where `guid` =\"{1}\" and `type` = \"{2}\";", table, key, MySqlHelper.EscapeString(grainType)));
-                queries.Add(string.Format("insert into `{0}` (`guid`, `type`, `data`) VALUE (\"{1}\", \"{2}\", \"{3}\");", table, key, MySqlHelper.EscapeString(grainType), MySqlHelper.EscapeString(data)));
+                queries.Add(string.Format("delete from `{0}` where `guid` =\"{1}\" and `type` = \"{2}\";", table, key,
+                    MySqlHelper.EscapeString(grainType)));
+                queries.Add(
+                    string.Format("insert into `{0}` (`guid`, `type`, `data`) VALUE (\"{1}\", \"{2}\", \"{3}\");", table,
+                        key, MySqlHelper.EscapeString(grainType), MySqlHelper.EscapeString(data)));
             }
 
             foreach (var q in queries)
@@ -219,11 +246,12 @@ namespace Orleans.Storage.MySQLDB
             var key = GetKey(grainReference);
 
             string query;
-               
+
             if (CustomTable)
                 query = string.Format("delete from `{0}` where `guid` = \"{1}\";", table, MySqlHelper.EscapeString(key));
             else
-                query = string.Format("delete from `{0}` where `guid` = \"{1}\" AND `type` = \"{2}\";", table, MySqlHelper.EscapeString(key), MySqlHelper.EscapeString(grainType));
+                query = string.Format("delete from `{0}` where `guid` = \"{1}\" AND `type` = \"{2}\";", table,
+                    MySqlHelper.EscapeString(key), MySqlHelper.EscapeString(grainType));
 
             MySqlCommand com = new MySqlCommand(query, con);
             Log.Verbose(query);
@@ -231,6 +259,5 @@ namespace Orleans.Storage.MySQLDB
             com.Dispose();
             await AddFreeConnection(con);
         }
-
     }
 }

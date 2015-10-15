@@ -15,10 +15,13 @@ namespace Server.RealmServer
 {
     public class RealmClient : IDisposable
     {
-        RealmSettings settings = null;
-        RealmClientSocket sock = null;
+        private RealmSettings settings = null;
+        private RealmClientSocket sock = null;
 
-        public RealmClient(RealmSettings realmsettings) { settings = realmsettings; }
+        public RealmClient(RealmSettings realmsettings)
+        {
+            settings = realmsettings;
+        }
 
         public void Run()
         {

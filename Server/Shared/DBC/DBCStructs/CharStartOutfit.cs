@@ -15,7 +15,10 @@ namespace Server
     {
         public CharStartOutfit Get(UInt32 Class, UInt32 Race, UInt32 Gender)
         {
-            return RecordDataIndexed.Values.ToArray().Where(c => c.Class == Class && c.Race == Race && c.Gender == Gender).FirstOrDefault();
+            return
+                RecordDataIndexed.Values.ToArray()
+                    .Where(c => c.Class == Class && c.Race == Race && c.Gender == Gender)
+                    .FirstOrDefault();
         }
     }
 
@@ -39,7 +42,7 @@ namespace Server
             for (int i = 0; i < Items.Length; ++i)
                 Items[i] = GetUInt32(2 + i);
 
-            return (int)ID;
+            return (int) ID;
         }
     }
 }

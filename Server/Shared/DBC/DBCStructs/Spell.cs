@@ -16,7 +16,7 @@ namespace Server
     {
         public SpellEntry Get(UInt32 SpellID)
         {
-            return Get((int)SpellID);
+            return Get((int) SpellID);
         }
     }
 
@@ -28,56 +28,56 @@ namespace Server
 
     public class SpellEntry : DBCRecordBase
     {
-        UInt32 Id = 0;
-        UInt32 Category;
-        UInt32 Dispel;
-        UInt32 Mechanic;
-        UInt32 Attributes;
-        UInt32 AttributesEx;
-        UInt32 AttributesEx2;
-        UInt32 AttributesEx3;
-        UInt32 AttributesEx4;
-        UInt32 AttributesEx5;
-        UInt32 AttributesEx6;
-        UInt32 AttributesEx7;
-        UInt32 Stances;
-        UInt32 StancesNot;
-        UInt32 Targets;
+        private UInt32 Id = 0;
+        private UInt32 Category;
+        private UInt32 Dispel;
+        private UInt32 Mechanic;
+        private UInt32 Attributes;
+        private UInt32 AttributesEx;
+        private UInt32 AttributesEx2;
+        private UInt32 AttributesEx3;
+        private UInt32 AttributesEx4;
+        private UInt32 AttributesEx5;
+        private UInt32 AttributesEx6;
+        private UInt32 AttributesEx7;
+        private UInt32 Stances;
+        private UInt32 StancesNot;
+        private UInt32 Targets;
 
-        UInt32 TargetCreatureType;
-        UInt32 RequiresSpellFocus;
-        UInt32 FacingCasterFlags;
-        UInt32 CasterAuraState;
-        UInt32 TargetAuraState;
-        UInt32 CasterAuraStateNot;
-        UInt32 TargetAuraStateNot;
-        UInt32 CasterAuraSpell;
-        UInt32 TargetAuraSpell;
-        UInt32 ExcludeCasterAuraSpell;
-        UInt32 ExcludeTargetAuraSpell;
-        UInt32 CastingTimeIndex;
-        UInt32 RecoveryTime;
-        UInt32 CategoryRecoveryTime;
-        UInt32 InterruptFlags;
-        UInt32 AuraInterruptFlags;
-        UInt32 ChannelInterruptFlags;
-        UInt32 ProcFlags;
-        UInt32 ProcChance;
-        UInt32 ProcCharges;
-        UInt32 MaxLevel;
-        UInt32 BaseLevel;
-        UInt32 SpellLevel;
-        UInt32 DurationIndex;
-        UInt32 PowerType;
-        UInt32 ManaCost;
-        UInt32 ManaCostPerLevel;
-        UInt32 ManaPerSecond;
-        UInt32 ManaPerSecondPerLevel;
-        UInt32 RangeIndex;
-        float Speed;
-        UInt32 ModalNextSpell;
-        UInt32 StackAmount;
-        UInt32[] Totem = new UInt32[2];
+        private UInt32 TargetCreatureType;
+        private UInt32 RequiresSpellFocus;
+        private UInt32 FacingCasterFlags;
+        private UInt32 CasterAuraState;
+        private UInt32 TargetAuraState;
+        private UInt32 CasterAuraStateNot;
+        private UInt32 TargetAuraStateNot;
+        private UInt32 CasterAuraSpell;
+        private UInt32 TargetAuraSpell;
+        private UInt32 ExcludeCasterAuraSpell;
+        private UInt32 ExcludeTargetAuraSpell;
+        private UInt32 CastingTimeIndex;
+        private UInt32 RecoveryTime;
+        private UInt32 CategoryRecoveryTime;
+        private UInt32 InterruptFlags;
+        private UInt32 AuraInterruptFlags;
+        private UInt32 ChannelInterruptFlags;
+        private UInt32 ProcFlags;
+        private UInt32 ProcChance;
+        private UInt32 ProcCharges;
+        private UInt32 MaxLevel;
+        private UInt32 BaseLevel;
+        private UInt32 SpellLevel;
+        private UInt32 DurationIndex;
+        private UInt32 PowerType;
+        private UInt32 ManaCost;
+        private UInt32 ManaCostPerLevel;
+        private UInt32 ManaPerSecond;
+        private UInt32 ManaPerSecondPerLevel;
+        private UInt32 RangeIndex;
+        private float Speed;
+        private UInt32 ModalNextSpell;
+        private UInt32 StackAmount;
+        private UInt32[] Totem = new UInt32[2];
         //Int32[] Reagent = new Int32[SpellEnums.MaxSpellReagents];
 
 
@@ -120,9 +120,7 @@ namespace Server
             InterruptFlags = GetUInt32(i++);
 
 
-
-            return (int)Id;
+            return (int) Id;
         }
-
     }
 }

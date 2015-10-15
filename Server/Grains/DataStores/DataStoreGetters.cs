@@ -9,6 +9,5 @@ namespace Server
 {
     public partial class DataStoreManager
     {
-
     }
 }

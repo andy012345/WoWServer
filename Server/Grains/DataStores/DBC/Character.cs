@@ -8,9 +8,9 @@ namespace Server
 {
     public partial class DataStoreManager
     {
-        CharStartOutfitStore _CharacterOutfitStore = new CharStartOutfitStore();
-        ChrClassesStore _ChrClassesStore = new ChrClassesStore();
-        ChrRacesStore _ChrRacesStore = new ChrRacesStore();
+        private CharStartOutfitStore _CharacterOutfitStore = new CharStartOutfitStore();
+        private ChrClassesStore _ChrClassesStore = new ChrClassesStore();
+        private ChrRacesStore _ChrRacesStore = new ChrRacesStore();
 
         [DataStoreLoader]
         public List<Task> LoadCharacterDBCs()

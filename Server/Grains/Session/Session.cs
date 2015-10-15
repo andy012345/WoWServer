@@ -25,23 +25,23 @@ namespace Server
     [StorageProvider(ProviderName = "Default")]
     public partial class Session : Grain<SessionData>, ISession
     {
-        Shared.BigInteger N;
-        Shared.BigInteger g;
-        Shared.BigInteger s;
-        Shared.BigInteger v;
-        Shared.BigInteger b;
-        Shared.BigInteger B;
-       // Shared.BigInteger rs;
+        private Shared.BigInteger N;
+        private Shared.BigInteger g;
+        private Shared.BigInteger s;
+        private Shared.BigInteger v;
+        private Shared.BigInteger b;
+        private Shared.BigInteger B;
+        // Shared.BigInteger rs;
 
-        Shared.BigInteger SessionKey;
-        bool Authed = false;
-        
-        IAccount Account = null;
+        private Shared.BigInteger SessionKey;
+        private bool Authed = false;
 
-        SessionStream _stream = null;
+        private IAccount Account = null;
 
-        SessionType SessionType = SessionType.Unknown;
-        int RealmID = 0;
+        private SessionStream _stream = null;
+
+        private SessionType SessionType = SessionType.Unknown;
+        private int RealmID = 0;
 
         public object Assert { get; private set; }
 
@@ -70,11 +70,22 @@ namespace Server
             return TaskDone.Done;
         }
 
-        public Task<BigInteger> GetSessionKey() { return Task.FromResult(SessionKey); }
-        public Task<SessionStream> GetSessionStream() { return Task.FromResult(_stream); }
+        public Task<BigInteger> GetSessionKey()
+        {
+            return Task.FromResult(SessionKey);
+        }
 
-        bool IsAuthedRealmSession() { if (Authed && SessionType == SessionType.RealmSession) return true; return false; }
-        
+        public Task<SessionStream> GetSessionStream()
+        {
+            return Task.FromResult(_stream);
+        }
+
+        private bool IsAuthedRealmSession()
+        {
+            if (Authed && SessionType == SessionType.RealmSession) return true;
+            return false;
+        }
+
         public Task OnSocketDisconnect()
         {
             //DeactivateOnIdle();
@@ -87,6 +98,7 @@ namespace Server
             p.Finalise();
             await _stream.PacketStream.OnNextAsync(p.strm.ToArray());
         }
+
         public Task SendPacket(PacketOut p)
         {
             p.Finalise();
@@ -94,8 +106,16 @@ namespace Server
             return TaskDone.Done;
         }
 
-        public Task SetSessionType(SessionType type) { SessionType = type; return TaskDone.Done; }
-        public Task<SessionType> GetSessionType() { return Task.FromResult(SessionType); }
+        public Task SetSessionType(SessionType type)
+        {
+            SessionType = type;
+            return TaskDone.Done;
+        }
+
+        public Task<SessionType> GetSessionType()
+        {
+            return Task.FromResult(SessionType);
+        }
 
         public Task Disconnect()
         {
@@ -141,11 +161,11 @@ namespace Server
             //TODO: add queues
             PacketOut p = new PacketOut(RealmOp.SMSG_AUTH_RESPONSE);
 
-            p.Write((byte)LoginErrorCode.AUTH_OK);
-            p.Write((int)0);
-            p.Write((byte)0);
+            p.Write((byte) LoginErrorCode.AUTH_OK);
+            p.Write((int) 0);
+            p.Write((byte) 0);
             p.Write(0);
-            p.Write((byte)0); //expansionLevel
+            p.Write((byte) 0); //expansionLevel
 
             await SendPacket(p);
         }
@@ -153,7 +173,7 @@ namespace Server
         public Task SendAuthResponse(LoginErrorCode code)
         {
             PacketOut p = new PacketOut(RealmOp.SMSG_AUTH_RESPONSE);
-            p.Write((byte)code);
+            p.Write((byte) code);
             SendPacket(p);
             return TaskDone.Done;
         }
@@ -181,6 +201,9 @@ namespace Server
             return TaskDone.Done;
         }
 
-        public Task<int> GetRealmID() { return Task.FromResult(RealmID); }
+        public Task<int> GetRealmID()
+        {
+            return Task.FromResult(RealmID);
+        }
     }
 }

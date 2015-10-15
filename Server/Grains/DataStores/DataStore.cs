@@ -18,17 +18,34 @@ namespace Server
 {
     public class DataStore<DataType>
     {
-        UInt32 NumRecords = 0;
+        private UInt32 NumRecords = 0;
 
-        string TableName = null;
-        List<string> TableIndexes = new List<string>();
-        List<DataType> TableDataIndex0 = null; //used if 0 index
-        Dictionary<UInt32, List<DataType>> TableDataIndex1 = null; //used if 1 index
-        Dictionary<UInt32, Dictionary<UInt32, List<DataType>>> TableDataIndex2 = null; //used if 2 indexes
+        private string TableName = null;
+        private List<string> TableIndexes = new List<string>();
+        private List<DataType> TableDataIndex0 = null; //used if 0 index
+        private Dictionary<UInt32, List<DataType>> TableDataIndex1 = null; //used if 1 index
+        private Dictionary<UInt32, Dictionary<UInt32, List<DataType>>> TableDataIndex2 = null; //used if 2 indexes
 
-        public DataStore(string table) { TableName = table; TableDataIndex0 = new List<DataType>(); }
-        public DataStore(string table, string index) { TableName = table; TableDataIndex1 = new Dictionary<uint, List<DataType>>(); TableIndexes.Add(index); }
-        public DataStore(string table, string index, string index2) { TableName = table; TableDataIndex2 = new Dictionary<uint, Dictionary<uint, List<DataType>>>(); TableIndexes.Add(index); TableIndexes.Add(index2); }
+        public DataStore(string table)
+        {
+            TableName = table;
+            TableDataIndex0 = new List<DataType>();
+        }
+
+        public DataStore(string table, string index)
+        {
+            TableName = table;
+            TableDataIndex1 = new Dictionary<uint, List<DataType>>();
+            TableIndexes.Add(index);
+        }
+
+        public DataStore(string table, string index, string index2)
+        {
+            TableName = table;
+            TableDataIndex2 = new Dictionary<uint, Dictionary<uint, List<DataType>>>();
+            TableIndexes.Add(index);
+            TableIndexes.Add(index2);
+        }
 
         public async Task Load(string constring)
         {
@@ -36,7 +53,7 @@ namespace Server
             ServerLog.Debug("Loaded {0} entries from {1}", NumRecords, TableName);
         }
 
-        async Task LoadImpl(MySqlConnection connection)
+        private async Task LoadImpl(MySqlConnection connection)
         {
             string query = string.Format("select * from `{0}`;", MySqlHelper.EscapeString(TableName));
 
@@ -75,7 +92,7 @@ namespace Server
             connection.Dispose();
         }
 
-        async Task<MySqlConnection> CreateConnection(string ConnectionString)
+        private async Task<MySqlConnection> CreateConnection(string ConnectionString)
         {
             var DatabaseConnection = new MySqlConnection(ConnectionString);
             await DatabaseConnection.OpenAsync();
@@ -86,12 +103,12 @@ namespace Server
             return DatabaseConnection;
         }
 
-        void Add(DataType data)
+        private void Add(DataType data)
         {
             TableDataIndex0.Add(data);
         }
 
-        void Add(UInt32 index, DataType data)
+        private void Add(UInt32 index, DataType data)
         {
             if (TableDataIndex1.ContainsKey(index))
                 TableDataIndex1[index].Add(data);
@@ -102,7 +119,8 @@ namespace Server
                 TableDataIndex1.Add(index, l);
             }
         }
-        void Add(UInt32 index, UInt32 index2, DataType data)
+
+        private void Add(UInt32 index, UInt32 index2, DataType data)
         {
             if (TableDataIndex2.ContainsKey(index))
             {
@@ -148,14 +166,16 @@ namespace Server
 
         public DataType Get(UInt32 index, UInt32 index2)
         {
-            if (TableDataIndex2 == null || !TableDataIndex2.ContainsKey(index) || !TableDataIndex2[index].ContainsKey(index2) || TableDataIndex2[index][index2].Count == 0)
+            if (TableDataIndex2 == null || !TableDataIndex2.ContainsKey(index) ||
+                !TableDataIndex2[index].ContainsKey(index2) || TableDataIndex2[index][index2].Count == 0)
                 return default(DataType);
             return TableDataIndex2[index][index2][0];
         }
 
         public DataType[] GetArray(UInt32 index, UInt32 index2)
         {
-            if (TableDataIndex2 == null || !TableDataIndex2.ContainsKey(index) || TableDataIndex2[index].ContainsKey(index2) || TableDataIndex2[index][index2].Count == 0)
+            if (TableDataIndex2 == null || !TableDataIndex2.ContainsKey(index) ||
+                TableDataIndex2[index].ContainsKey(index2) || TableDataIndex2[index][index2].Count == 0)
                 return null;
             return TableDataIndex2[index][index2].ToArray();
         }

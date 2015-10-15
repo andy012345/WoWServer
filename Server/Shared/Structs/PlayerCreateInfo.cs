@@ -12,6 +12,4 @@ namespace Shared
         public int RealmID = 0;
         public string AccountName = "";
     }
-
 }
-

@@ -24,6 +24,5 @@ namespace Server.RealmServer
 
             return PacketProcessResult.Processed;
         }
-
     }
 }

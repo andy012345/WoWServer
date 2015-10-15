@@ -7,11 +7,12 @@ using Shared;
 
 namespace Server
 {
-    public interface ICreature : ICreatureImpl { }
-  
+    public interface ICreature : ICreatureImpl
+    {
+    }
+
     public interface ICreatureImpl : IUnitImpl
     {
         Task Create(CreatureEntry entry);
     }
-
 }

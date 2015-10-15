@@ -20,8 +20,19 @@ namespace Shared
         public bool Errored = true;
         public BigInteger SessionKey;
 
-        public AuthSessionResponse() { }
-        public AuthSessionResponse(bool error) { Errored = error; }
-        public AuthSessionResponse(bool error, BigInteger key) { Errored = error; SessionKey = key; }
+        public AuthSessionResponse()
+        {
+        }
+
+        public AuthSessionResponse(bool error)
+        {
+            Errored = error;
+        }
+
+        public AuthSessionResponse(bool error, BigInteger key)
+        {
+            Errored = error;
+            SessionKey = key;
+        }
     }
 }

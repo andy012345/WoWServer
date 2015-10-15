@@ -17,7 +17,6 @@ namespace Server.RealmServer
         [PacketHandler(RealmOp.CMSG_AUTH_SESSION)]
         public static PacketProcessResult HandleAuthSession(PacketProcessor p)
         {
-
             CMSG_AUTH_SESSION auth = new CMSG_AUTH_SESSION();
             UInt32 unk, unk2, unk3, unk4, unk5;
             UInt64 unk6;
@@ -35,7 +34,8 @@ namespace Server.RealmServer
             auth.Digest = p.currentPacket.ReadBigInteger(20);
 
             var decompressedDataSize = p.currentPacket.ReadInt32();
-            var compressedData = p.currentPacket.ReadBytes((int)(p.currentPacket.Length - p.currentPacket.Position)); //read remaining array
+            var compressedData = p.currentPacket.ReadBytes((int) (p.currentPacket.Length - p.currentPacket.Position));
+                //read remaining array
             auth.AddonData = Shared.ZLib.Decompress(compressedData);
 
             var realmprocessor = p as RealmPacketProcessor;

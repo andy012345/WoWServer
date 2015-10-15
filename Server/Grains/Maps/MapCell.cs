@@ -26,7 +26,7 @@ namespace Server
     {
         protected Dictionary<ObjectGUID, IObjectImpl> _objectCache = new Dictionary<ObjectGUID, IObjectImpl>();
 
-        public async override Task OnActivateAsync()
+        public override async Task OnActivateAsync()
         {
             if (State.Objects == null)
                 State.Objects = new List<ObjectGUID>();
@@ -40,7 +40,7 @@ namespace Server
             await base.OnActivateAsync();
         }
 
-        public async override Task OnDeactivateAsync()
+        public override async Task OnDeactivateAsync()
         {
             await Save();
             await base.OnDeactivateAsync();
@@ -59,8 +59,15 @@ namespace Server
             State.InstanceID = await parent.GetInstanceID();
         }
 
-        public Task<bool> IsValid() { return Task.FromResult(_IsValid()); }
-        protected bool _IsValid() { return State.Exists; }
+        public Task<bool> IsValid()
+        {
+            return Task.FromResult(_IsValid());
+        }
+
+        protected bool _IsValid()
+        {
+            return State.Exists;
+        }
 
         public Task Create(UInt32 InstanceID, UInt32 cellx, UInt32 celly)
         {
@@ -76,14 +83,14 @@ namespace Server
         {
             if (!_IsValid())
                 return null;
-            return GrainFactory.GetGrain<IMap>((Int64)State.InstanceID);
+            return GrainFactory.GetGrain<IMap>((Int64) State.InstanceID);
         }
 
         public async Task AddObject(ObjectGUID guid, IObjectImpl obj)
         {
             State.Objects.Add(guid);
             _objectCache.Add(guid, obj);
-            await obj.SetCell((UInt64)this.GetPrimaryKeyLong());
+            await obj.SetCell((UInt64) this.GetPrimaryKeyLong());
         }
 
         public async Task RemoveObject(ObjectGUID guid, IObjectImpl obj)
@@ -93,10 +100,19 @@ namespace Server
             await obj.SetCell(0);
         }
 
-        public async Task AddRef() { State.Refs += 1; if (State.Refs == 1) await Activate(); }
-        public async Task DecRef() { State.Refs -= 1; if (State.Refs == 0) await Deactivate(); }
+        public async Task AddRef()
+        {
+            State.Refs += 1;
+            if (State.Refs == 1) await Activate();
+        }
 
-        async Task Activate()
+        public async Task DecRef()
+        {
+            State.Refs -= 1;
+            if (State.Refs == 0) await Deactivate();
+        }
+
+        private async Task Activate()
         {
             var map = _GetMap();
 

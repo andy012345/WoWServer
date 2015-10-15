@@ -1,4 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+
 <OrleansConfiguration xmlns="urn:orleans">
   <Globals>
     <StorageProviders>
@@ -7,10 +8,12 @@
       <!--<Provider Type="Orleans.Storage.AzureTableStorage" Name="AzureStore" DataConnectionString="UseDevelopmentStorage=true" />-->
       <!--<Provider Type="Orleans.Storage.AzureTableStorage" Name="AzureStore" DataConnectionString="DefaultEndpointsProtocol=https;AccountName=MYACCOUNTNAME;AccountKey=MYACCOUNTKEY" />-->
       <Provider Type="Orleans.Storage.MemoryStorage" Name="PubSubStore" />
-      <Provider Type="Orleans.Storage.MySQLDB.MySQLJSONDBStorageProvider" Name="Default" DataConnectionString="server=127.0.0.1;userid=USER;password=PASSWORD;database=DATABASE;" />
+      <Provider Type="Orleans.Storage.MySQLDB.MySQLJSONDBStorageProvider" Name="Default"
+                DataConnectionString="server=127.0.0.1;userid=USER;password=PASSWORD;database=DATABASE;" />
     </StorageProviders>
     <StreamProviders>
-      <Provider Type="Orleans.Providers.Streams.SimpleMessageStream.SimpleMessageStreamProvider" Name="PacketStream" FireAndForgetDelivery="false"/>
+      <Provider Type="Orleans.Providers.Streams.SimpleMessageStream.SimpleMessageStreamProvider" Name="PacketStream"
+                FireAndForgetDelivery="false" />
       <!--<Provider Type="Orleans.Providers.Streams.AzureQueue.AzureQueueStreamProvider" Name="AzureQueueProvider"/>-->
     </StreamProviders>
     <SeedNode Address="localhost" Port="11111" />
@@ -21,13 +24,13 @@
     <Tracing DefaultTraceLevel="Info" TraceToConsole="false" TraceToFile="{0}-{1}.log">
       <TraceLevelOverride LogPrefix="Application" TraceLevel="Info" />
     </Tracing>
-    <Statistics MetricsTableWriteInterval="30s" PerfCounterWriteInterval="30s" LogWriteInterval="300s" WriteLogStatisticsToTable="true"/>
+    <Statistics MetricsTableWriteInterval="30s" PerfCounterWriteInterval="30s" LogWriteInterval="300s"
+                WriteLogStatisticsToTable="true" />
   </Defaults>
   <Override Node="Primary">
     <Networking Address="localhost" Port="11111" />
     <ProxyingGateway Address="localhost" Port="30000" />
   </Override>
 
-<DataStore DataConnectionString="server=127.0.0.1;userid=USER;password=PASSWORD;database=DATABASE;" />
+  <DataStore DataConnectionString="server=127.0.0.1;userid=USER;password=PASSWORD;database=DATABASE;" />
 </OrleansConfiguration>
-

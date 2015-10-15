@@ -7,7 +7,6 @@ using Shared;
 
 namespace Server
 {
-
     public interface ICreator : IGrainWithIntegerKey
     {
         Task<UInt32> GenerateInstanceID();

@@ -19,11 +19,11 @@ namespace Server
         public List<ObjectGUID> ActiveObjects { get; set; }
         public List<UInt64> ActiveCells { get; set; }
         public List<UInt64> CreatedCells { get; set; }
-        public List<ObjectGUID> UpdatedObjects { get; set; } //objects which have a values update to push out from SMSG_UPDATE_OBJECT
+        public List<ObjectGUID> UpdatedObjects { get; set; }
+        //objects which have a values update to push out from SMSG_UPDATE_OBJECT
 
         public bool Exists { get; set; }
     }
-
 
 
     [Reentrant]
@@ -33,9 +33,11 @@ namespace Server
         public const UInt32 MapUpdateInterval = 100; //100ms
         public const UInt32 MapSaveInterval = 300000; //5m
 
-        IDisposable UpdateTask = null;
-        IDisposable SaveTask = null;
-        Dictionary<UInt64, List<CreatureEntry>> CreatureEntryByCellKey = new Dictionary<ulong, List<CreatureEntry>>();
+        private IDisposable UpdateTask = null;
+        private IDisposable SaveTask = null;
+
+        private Dictionary<UInt64, List<CreatureEntry>> CreatureEntryByCellKey =
+            new Dictionary<ulong, List<CreatureEntry>>();
 
         protected Dictionary<ObjectGUID, IObjectImpl> _objectCache = new Dictionary<ObjectGUID, IObjectImpl>();
 
@@ -116,9 +118,21 @@ namespace Server
             await Save();
         }
 
-        public bool _IsValid() { return State.Exists; }
-        public Task<bool> IsValid() { return Task.FromResult(_IsValid()); }
-        public async Task Save() { if (!_IsValid()) return; await WriteStateAsync(); }
+        public bool _IsValid()
+        {
+            return State.Exists;
+        }
+
+        public Task<bool> IsValid()
+        {
+            return Task.FromResult(_IsValid());
+        }
+
+        public async Task Save()
+        {
+            if (!_IsValid()) return;
+            await WriteStateAsync();
+        }
 
         public IObjectImpl GetObjectByGUID(ObjectGUID guid)
         {
@@ -127,11 +141,18 @@ namespace Server
 
         public IObjectImpl GetObjectByGUID(UInt64 guid)
         {
-            return GrainFactory.GetGrain<IObjectImpl>((Int64)guid);
+            return GrainFactory.GetGrain<IObjectImpl>((Int64) guid);
         }
 
-        public Task<UInt32> GetMapID() { return Task.FromResult(State.MapID); }
-        public Task<UInt32> GetInstanceID() { return Task.FromResult(State.InstanceID); }
+        public Task<UInt32> GetMapID()
+        {
+            return Task.FromResult(State.MapID);
+        }
+
+        public Task<UInt32> GetInstanceID()
+        {
+            return Task.FromResult(State.InstanceID);
+        }
 
         public async Task<MapAddResult> AddObject(IObjectImpl obj)
         {
@@ -160,7 +181,8 @@ namespace Server
             var cellkey = GetCellKey(posx, posy);
             var cell = await GetCell(cellkey, true);
 
-            ServerLog.Debug("Adding {0} to map {1} instance {2} at {3}, {4}", guid.ToUInt64(), State.MapID, State.InstanceID, posx, posy);
+            ServerLog.Debug("Adding {0} to map {1} instance {2} at {3}, {4}", guid.ToUInt64(), State.MapID,
+                State.InstanceID, posx, posy);
 
             if (cell == null)
                 return MapAddResult.InvalidPosition;
@@ -197,7 +219,6 @@ namespace Server
 
                 await DecRefCells(posx, posy);
             }
-
         }
 
         public Task<IObjectImpl> GetObject(ObjectGUID guid)
@@ -229,7 +250,7 @@ namespace Server
         {
             //this activates and deactivates cells
             var is_activator = await obj.IsCellActivator();
-            
+
             if (is_activator)
                 await OnActivatorMove(obj, oldx, oldy, newx, newy);
         }
@@ -339,10 +360,10 @@ namespace Server
             if (player)
                 ServerLog.Debug("Updating inrange for player");
 
-             for (var x = cellx - 1; x <= cellx + 1; ++x)
-             {
-                 for (var y = celly - 1; y <= celly + 1; ++y)
-                 {
+            for (var x = cellx - 1; x <= cellx + 1; ++x)
+            {
+                for (var y = celly - 1; y <= celly + 1; ++y)
+                {
                     var cell = await GetCellDirect(x, y);
 
                     if (cell != null)
@@ -361,12 +382,13 @@ namespace Server
 
         public Task OnCellActivate(IMapCell cell)
         {
-            State.ActiveCells.Add((UInt64)cell.GetPrimaryKeyLong());
+            State.ActiveCells.Add((UInt64) cell.GetPrimaryKeyLong());
             return TaskDone.Done;
         }
+
         public Task OnCellDeactivate(IMapCell cell)
         {
-            State.ActiveCells.Remove((UInt64)cell.GetPrimaryKeyLong());
+            State.ActiveCells.Remove((UInt64) cell.GetPrimaryKeyLong());
             return TaskDone.Done;
         }
 
@@ -378,9 +400,8 @@ namespace Server
 
             foreach (var key in State.ActiveCells)
             {
-                var cell = GrainFactory.GetGrain<IMapCell>((Int64)key);
+                var cell = GrainFactory.GetGrain<IMapCell>((Int64) key);
                 tasks.Add(cell.Update());
-
             }
 
             await Task.WhenAll(tasks);
@@ -397,10 +418,8 @@ namespace Server
 
         protected void SetupSaveTask()
         {
-            SaveTask = RegisterTimer(o =>
-            {
-                return Save();
-            }, null, TimeSpan.FromMilliseconds(MapSaveInterval), TimeSpan.FromSeconds(MapSaveInterval));
+            SaveTask = RegisterTimer(o => { return Save(); }, null, TimeSpan.FromMilliseconds(MapSaveInterval),
+                TimeSpan.FromSeconds(MapSaveInterval));
         }
     }
 }

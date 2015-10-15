@@ -23,13 +23,26 @@ namespace Server.Networking
 
         public int dataNeeded = 0;
 
-        public PacketProcessor() { Reset(); }
+        public PacketProcessor()
+        {
+            Reset();
+        }
 
-        void Reset() { currentPacket = new PacketIn(); dataNeeded = DefaultDataNeeded(); }
+        private void Reset()
+        {
+            currentPacket = new PacketIn();
+            dataNeeded = DefaultDataNeeded();
+        }
 
-        public virtual int DefaultDataNeeded() { return 0; }
+        public virtual int DefaultDataNeeded()
+        {
+            return 0;
+        }
 
-        public void SetSocket(ServerSocket s) { sock = s; }
+        public void SetSocket(ServerSocket s)
+        {
+            sock = s;
+        }
 
         public void ReadHandler(byte[] data, int dataIndex, int dataSize)
         {
@@ -61,10 +74,10 @@ namespace Server.Networking
             }
         }
 
-        PacketProcessResult OnReceive(byte[] data, int dataIndex, int dataSize, out int copyAmount)
+        private PacketProcessResult OnReceive(byte[] data, int dataIndex, int dataSize, out int copyAmount)
         {
             copyAmount = 0;
-            int dataLeft = dataNeeded - (int)currentPacket.Length;
+            int dataLeft = dataNeeded - (int) currentPacket.Length;
 
             if (dataLeft >= 1)
             {
@@ -86,10 +99,16 @@ namespace Server.Networking
             return HandleProcess();
         }
 
-        public virtual PacketProcessResult ProcessData() { return PacketProcessResult.Processed; }
-        public virtual void OnConnect(ServerSocket parent = null) { }
+        public virtual PacketProcessResult ProcessData()
+        {
+            return PacketProcessResult.Processed;
+        }
 
-        PacketProcessResult HandleProcess()
+        public virtual void OnConnect(ServerSocket parent = null)
+        {
+        }
+
+        private PacketProcessResult HandleProcess()
         {
             var oldPosition = currentPacket.Position;
             currentPacket.Position = 0;

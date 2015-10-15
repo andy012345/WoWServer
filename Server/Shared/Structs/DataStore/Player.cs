@@ -50,7 +50,6 @@ namespace Shared
         public UInt32 classmask = 0;
         public UInt32 Spell = 0;
         public string Note = "";
-
     }
 
     public class PlayerClassLevelStats
@@ -77,6 +76,5 @@ namespace Shared
         public UInt32 sta = 0;
         public UInt32 inte = 0;
         public UInt32 spi = 0;
-
     }
 }

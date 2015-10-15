@@ -15,7 +15,7 @@ namespace Server
     {
         public ChrRaces Get(UInt32 Race)
         {
-            return Get((int)Race);
+            return Get((int) Race);
         }
     }
 
@@ -30,7 +30,7 @@ namespace Server
         public UInt32 Team = 0;
         public UInt32 CinematicSequence = 0;
         public UInt32 ExpensionRequired = 0;
-        public string[] Name = new string [16];
+        public string[] Name = new string[16];
         public string[] FemaleName = new string[16];
         public string[] NeutralName = new string[16];
         public string ShortName = "";
@@ -57,7 +57,7 @@ namespace Server
             ExpensionRequired = GetUInt32(68);
 
 
-            return (int)Race;
+            return (int) Race;
         }
     }
 }

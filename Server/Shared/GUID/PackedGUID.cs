@@ -12,9 +12,19 @@ namespace Shared
         public byte mask = 0;
         public byte[] guidbytes = null;
 
-        public PackedGUID() { }
-        public PackedGUID(ObjectGUID guid) { Create(guid.ToUInt64()); }
-        public PackedGUID(UInt64 guid) { Create(guid); }
+        public PackedGUID()
+        {
+        }
+
+        public PackedGUID(ObjectGUID guid)
+        {
+            Create(guid.ToUInt64());
+        }
+
+        public PackedGUID(UInt64 guid)
+        {
+            Create(guid);
+        }
 
         public void Create(UInt64 guid)
         {
@@ -26,12 +36,12 @@ namespace Shared
             {
                 if (bytes[i] != 0)
                 {
-                    mask |= (byte)(1 << i);
+                    mask |= (byte) (1 << i);
                     packedbytes.Add(bytes[i]);
                 }
             }
 
             guidbytes = packedbytes.ToArray();
         }
-    }    
+    }
 }

@@ -13,10 +13,10 @@ namespace Shared
         public static void Debug(string format, params object[] arg)
         {
             DateTime now = DateTime.Now;
-            string formatted = string.Format("[{0}:{1}:{2}] DEBUG: ", now.Hour, now.Minute, now.Second) + string.Format(format, arg);
+            string formatted = string.Format("[{0}:{1}:{2}] DEBUG: ", now.Hour, now.Minute, now.Second) +
+                               string.Format(format, arg);
             Console.WriteLine(formatted);
-           // await Task.Factory.StartNew(() => { Console.WriteLine(formatted); });
+            // await Task.Factory.StartNew(() => { Console.WriteLine(formatted); });
         }
     }
-
 }

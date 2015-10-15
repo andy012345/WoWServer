@@ -42,6 +42,5 @@ namespace Shared
         {
             GUID = p.ReadGUID();
         }
-
     }
 }

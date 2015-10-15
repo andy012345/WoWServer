@@ -11,7 +11,7 @@ using Shared;
 
 namespace Server
 {
-    enum GTable
+    internal enum GTable
     {
         RecordsPerLevel = 100,
         Ratings = 32,
@@ -21,8 +21,8 @@ namespace Server
     {
         public GameTableEntry Get(UInt32 Class, UInt32 Level)
         {
-            if (Level >= (UInt32)GTable.RecordsPerLevel) Level = (UInt32)GTable.RecordsPerLevel;
-            return Get((int)((Class - 1) * (Level - 1)));
+            if (Level >= (UInt32) GTable.RecordsPerLevel) Level = (UInt32) GTable.RecordsPerLevel;
+            return Get((int) ((Class - 1)*(Level - 1)));
         }
     }
 
@@ -32,7 +32,8 @@ namespace Server
 
         public override int Read()
         {
-            value = GetFloat(0); return -1;
+            value = GetFloat(0);
+            return -1;
         }
     }
 }

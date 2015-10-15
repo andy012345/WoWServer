@@ -15,7 +15,7 @@ namespace Server
     {
         public MapEntry Get(UInt32 MapID)
         {
-            return Get((int)MapID);
+            return Get((int) MapID);
         }
     }
 
@@ -43,13 +43,13 @@ namespace Server
         {
             MapID = GetUInt32(0);
             InternalName = GetString(1);
-            Type = (MapType)GetUInt32(2);
+            Type = (MapType) GetUInt32(2);
 
             EntranceMapID = GetUInt32(59);
             EntranceMapX = GetFloat(60);
             EntranceMapY = GetFloat(61);
-            
-            return (int)MapID;
+
+            return (int) MapID;
         }
 
         public bool IsInstance()

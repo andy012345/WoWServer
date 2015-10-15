@@ -35,7 +35,7 @@ namespace Shared
         {
             var ret = new byte[b.Length];
 
-            for (int i = 0; i < b.Length;  ++i)
+            for (int i = 0; i < b.Length; ++i)
                 ret[b.Length - 1 - i] = b[i];
 
             return ret;

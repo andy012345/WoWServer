@@ -11,8 +11,8 @@ namespace Shared
     {
         TYPEMASK_OBJECT = 0x0001,
         TYPEMASK_ITEM = 0x0002,
-        TYPEMASK_CONTAINER = 0x0006,                       // TYPEMASK_ITEM | 0x0004
-        TYPEMASK_UNIT = 0x0008,                       // creature
+        TYPEMASK_CONTAINER = 0x0006, // TYPEMASK_ITEM | 0x0004
+        TYPEMASK_UNIT = 0x0008, // creature
         TYPEMASK_PLAYER = 0x0010,
         TYPEMASK_GAMEOBJECT = 0x0020,
         TYPEMASK_DYNAMICOBJECT = 0x0040,
@@ -24,18 +24,18 @@ namespace Shared
     [Flags]
     public enum HighGuid
     {
-        HIGHGUID_ITEM = 0x4000,                      // blizz 4000
-        HIGHGUID_CONTAINER = 0x4000,                      // blizz 4000
-        HIGHGUID_PLAYER = 0x0000,                      // blizz 0000
-        HIGHGUID_GAMEOBJECT = 0xF110,                      // blizz F110
-        HIGHGUID_TRANSPORT = 0xF120,                      // blizz F120 (for GAMEOBJECT_TYPE_TRANSPORT)
-        HIGHGUID_UNIT = 0xF130,                      // blizz F130
-        HIGHGUID_PET = 0xF140,                      // blizz F140
-        HIGHGUID_VEHICLE = 0xF150,                      // blizz F550
-        HIGHGUID_DYNAMICOBJECT = 0xF100,                      // blizz F100
-        HIGHGUID_CORPSE = 0xF101,                      // blizz F100
-        HIGHGUID_MO_TRANSPORT = 0x1FC0,                      // blizz 1FC0 (for GAMEOBJECT_TYPE_MO_TRANSPORT)
-        HIGHGUID_INSTANCE = 0x1F40,                      // blizz 1F40
+        HIGHGUID_ITEM = 0x4000, // blizz 4000
+        HIGHGUID_CONTAINER = 0x4000, // blizz 4000
+        HIGHGUID_PLAYER = 0x0000, // blizz 0000
+        HIGHGUID_GAMEOBJECT = 0xF110, // blizz F110
+        HIGHGUID_TRANSPORT = 0xF120, // blizz F120 (for GAMEOBJECT_TYPE_TRANSPORT)
+        HIGHGUID_UNIT = 0xF130, // blizz F130
+        HIGHGUID_PET = 0xF140, // blizz F140
+        HIGHGUID_VEHICLE = 0xF150, // blizz F550
+        HIGHGUID_DYNAMICOBJECT = 0xF100, // blizz F100
+        HIGHGUID_CORPSE = 0xF101, // blizz F100
+        HIGHGUID_MO_TRANSPORT = 0x1FC0, // blizz 1FC0 (for GAMEOBJECT_TYPE_MO_TRANSPORT)
+        HIGHGUID_INSTANCE = 0x1F40, // blizz 1F40
         HIGHGUID_GROUP = 0x1F50
     };
 
@@ -43,9 +43,19 @@ namespace Shared
     {
         public UInt64 _value = 0;
 
-        public ObjectGUID() {}
-        public ObjectGUID(UInt64 g) { _value = g; }
-        public ObjectGUID(Int64 g) { _value = (UInt64)g; }
+        public ObjectGUID()
+        {
+        }
+
+        public ObjectGUID(UInt64 g)
+        {
+            _value = g;
+        }
+
+        public ObjectGUID(Int64 g)
+        {
+            _value = (UInt64) g;
+        }
 
         public override bool Equals(object obj)
         {
@@ -62,16 +72,26 @@ namespace Shared
             return _value.ToString();
         }
 
-        public UInt64 ToUInt64() { return _value; }
-        public Int64 ToInt64() { return (Int64)_value; }
+        public UInt64 ToUInt64()
+        {
+            return _value;
+        }
 
-        public HighGuid ToHighGUID() { return (HighGuid)(_value >> 48); }
+        public Int64 ToInt64()
+        {
+            return (Int64) _value;
+        }
+
+        public HighGuid ToHighGUID()
+        {
+            return (HighGuid) (_value >> 48);
+        }
 
         public byte[] ToPackedBytes()
         {
             MemoryStream strm = new MemoryStream();
             BinaryWriter w = new BinaryWriter(strm);
-            w.Write((byte)0); //to fill later, mask
+            w.Write((byte) 0); //to fill later, mask
 
             var bytes = BitConverter.GetBytes(_value);
 
@@ -81,7 +101,7 @@ namespace Shared
             {
                 if (bytes[i] == 0)
                     continue;
-                mask |= (byte)(1 << i);
+                mask |= (byte) (1 << i);
                 w.Write(bytes[i]);
             }
 
@@ -95,6 +115,7 @@ namespace Shared
         {
             return x._value == y;
         }
+
         public static bool operator !=(ObjectGUID x, UInt64 y)
         {
             return x._value != y;
@@ -102,20 +123,22 @@ namespace Shared
 
         public static bool operator ==(ObjectGUID x, Int64 y)
         {
-            return x._value == (UInt64)y;
+            return x._value == (UInt64) y;
         }
+
         public static bool operator !=(ObjectGUID x, Int64 y)
         {
-            return x._value != (UInt64)y;
+            return x._value != (UInt64) y;
         }
 
         public static bool operator ==(ObjectGUID x, int y)
         {
-            return x._value == (UInt64)y;
+            return x._value == (UInt64) y;
         }
+
         public static bool operator !=(ObjectGUID x, int y)
         {
-            return x._value != (UInt64)y;
+            return x._value != (UInt64) y;
         }
 
         public static bool operator ==(ObjectGUID x, ObjectGUID y)
@@ -128,6 +151,7 @@ namespace Shared
             }
             return x._value == y._value;
         }
+
         public static bool operator !=(ObjectGUID x, ObjectGUID y)
         {
             return x._value != y._value;
@@ -173,8 +197,19 @@ namespace Shared
             return x._value <= y;
         }
 
-        public static implicit operator ObjectGUID(UInt64 val) { return new ObjectGUID(val); }
-        public static implicit operator ObjectGUID(Int64 val) { return new ObjectGUID((UInt64)val); }
-        public static implicit operator ObjectGUID(int val) { return new ObjectGUID((UInt64)val); }
+        public static implicit operator ObjectGUID(UInt64 val)
+        {
+            return new ObjectGUID(val);
+        }
+
+        public static implicit operator ObjectGUID(Int64 val)
+        {
+            return new ObjectGUID((UInt64) val);
+        }
+
+        public static implicit operator ObjectGUID(int val)
+        {
+            return new ObjectGUID((UInt64) val);
+        }
     }
 }

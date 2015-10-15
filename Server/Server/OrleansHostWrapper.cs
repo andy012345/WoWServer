@@ -24,7 +24,6 @@ TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR TH
 using System;
 using System.Net;
 using System.Threading.Tasks;
-
 using Orleans.Runtime.Host;
 
 namespace Server
@@ -57,11 +56,13 @@ namespace Server
 
                 if (ok)
                 {
-                    Console.WriteLine(string.Format("Successfully started Orleans silo '{0}' as a {1} node.", siloHost.Name, siloHost.Type));
+                    Console.WriteLine(string.Format("Successfully started Orleans silo '{0}' as a {1} node.",
+                        siloHost.Name, siloHost.Type));
                 }
                 else
                 {
-                    throw new SystemException(string.Format("Failed to start Orleans silo '{0}' as a {1} node.", siloHost.Name, siloHost.Type));
+                    throw new SystemException(string.Format("Failed to start Orleans silo '{0}' as a {1} node.",
+                        siloHost.Name, siloHost.Type));
                 }
             }
             catch (Exception exc)
@@ -177,7 +178,7 @@ namespace Server
         public void PrintUsage()
         {
             Console.WriteLine(
-@"USAGE: 
+                @"USAGE: 
     orleans host [<siloName> [<configFile>]] [DeploymentId=<idString>] [/debug]
 Where:
     <siloName>      - Name of this silo in the Config file list (optional)

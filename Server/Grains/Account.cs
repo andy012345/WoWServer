@@ -27,7 +27,7 @@ namespace Server
         public int RealmID = 0;
     }
 
-    public class  AccountState : GrainState
+    public class AccountState : GrainState
     {
         public AccountFlags Flags { get; set; }
 
@@ -35,13 +35,28 @@ namespace Server
         public string PasswordPlain { get; set; }
 
         //Account Data, I think this is for the UI config or something. Whatever.
-        AccountData _Data = new AccountData();
-        List<PlayerCharacterListEntry> _CharacterList = new List<PlayerCharacterListEntry>();
-        public AccountData Data { get { return _Data; } set { _Data = value; } }
-        public List<PlayerCharacterListEntry> CharacterList { get { return _CharacterList; } set { _CharacterList = value; } }
+        private AccountData _Data = new AccountData();
+        private List<PlayerCharacterListEntry> _CharacterList = new List<PlayerCharacterListEntry>();
 
-        ObjectGUID _activePlayer = new ObjectGUID(0);
-        public ObjectGUID ActivePlayer { get { return _activePlayer; } set { _activePlayer = value; } }
+        public AccountData Data
+        {
+            get { return _Data; }
+            set { _Data = value; }
+        }
+
+        public List<PlayerCharacterListEntry> CharacterList
+        {
+            get { return _CharacterList; }
+            set { _CharacterList = value; }
+        }
+
+        private ObjectGUID _activePlayer = new ObjectGUID(0);
+
+        public ObjectGUID ActivePlayer
+        {
+            get { return _activePlayer; }
+            set { _activePlayer = value; }
+        }
     }
 
     public enum AccountFlags
@@ -54,12 +69,12 @@ namespace Server
     [StorageProvider(ProviderName = "Default")]
     public class AccountGrain : Grain<AccountState>, IAccount
     {
-        List<ISession> ActiveSessions = new List<ISession>();
-        ISession AuthSession;
-        ISession RealmSession;
-        SessionStream AuthSessionStream = null;
-        SessionStream RealmSessionStream = null;
-        int RealmSessionRealmID = 0;
+        private List<ISession> ActiveSessions = new List<ISession>();
+        private ISession AuthSession;
+        private ISession RealmSession;
+        private SessionStream AuthSessionStream = null;
+        private SessionStream RealmSessionStream = null;
+        private int RealmSessionRealmID = 0;
 
         public override async Task OnActivateAsync()
         {
@@ -72,14 +87,14 @@ namespace Server
                 State.Data = new AccountData();
         }
 
-        void Save()
+        private void Save()
         {
             if ((State.Flags & AccountFlags.AccountNotValid) == AccountFlags.AccountNotValid)
                 return;
             WriteStateAsync();
         }
 
-        bool IntIsValid()
+        private bool IntIsValid()
         {
             if ((State.Flags & AccountFlags.AccountNotValid) == AccountFlags.AccountNotValid)
                 return false;
@@ -91,7 +106,11 @@ namespace Server
             return Task.FromResult(IntIsValid());
         }
 
-        public Task Destroy() { DeactivateOnIdle(); return TaskDone.Done; }
+        public Task Destroy()
+        {
+            DeactivateOnIdle();
+            return TaskDone.Done;
+        }
 
         public Task<AccountCreateResponse> CreateAccount(string password)
         {
@@ -122,8 +141,15 @@ namespace Server
             return TaskDone.Done;
         }
 
-        public Task<string> GetPassword() { return Task.FromResult(State.Password); }
-        public Task<string> GetPasswordPlain() { return Task.FromResult(State.PasswordPlain); }
+        public Task<string> GetPassword()
+        {
+            return Task.FromResult(State.Password);
+        }
+
+        public Task<string> GetPasswordPlain()
+        {
+            return Task.FromResult(State.PasswordPlain);
+        }
 
         public Task<AccountAuthResponse> Authenticate(string password)
         {
@@ -150,34 +176,37 @@ namespace Server
 
             var stream = await s.GetSessionStream();
             if (stream != null && stream.CommandStream != null)
-                await stream.CommandStream.OnNextAsync(new SocketCommand(SocketCommands.SetAccount, new object[] { this.AsReference<IAccount>() }));
+                await
+                    stream.CommandStream.OnNextAsync(new SocketCommand(SocketCommands.SetAccount,
+                        new object[] {this.AsReference<IAccount>()}));
 
             switch (type)
             {
                 case SessionType.AuthSession:
+                {
+                    if (AuthSession != s)
                     {
-                        if (AuthSession != s)
-                        {
-                            if (AuthSession != null)
-                                await RemoveSession(AuthSession, true);
-                            if (RealmSession != null)
-                                await RemoveSession(RealmSession, true);
-                        }
-                        AuthSession = s;
                         if (AuthSession != null)
-                            AuthSessionStream = await AuthSession.GetSessionStream();
-                    } break;
-                case SessionType.RealmSession:
-                    {
-                        if (RealmSession != null && s != RealmSession)
-                            await RemoveSession(RealmSession, true);
-                        RealmSession = s;
+                            await RemoveSession(AuthSession, true);
                         if (RealmSession != null)
-                        {
-                            RealmSessionStream = await RealmSession.GetSessionStream();
-                            RealmSessionRealmID = await RealmSession.GetRealmID();
-                        }
+                            await RemoveSession(RealmSession, true);
                     }
+                    AuthSession = s;
+                    if (AuthSession != null)
+                        AuthSessionStream = await AuthSession.GetSessionStream();
+                }
+                    break;
+                case SessionType.RealmSession:
+                {
+                    if (RealmSession != null && s != RealmSession)
+                        await RemoveSession(RealmSession, true);
+                    RealmSession = s;
+                    if (RealmSession != null)
+                    {
+                        RealmSessionStream = await RealmSession.GetSessionStream();
+                        RealmSessionRealmID = await RealmSession.GetRealmID();
+                    }
+                }
                     break;
             }
 
@@ -190,16 +219,16 @@ namespace Server
             switch (type)
             {
                 case SessionType.AuthSession:
-                    {
-                        AuthSession = null;
-                        AuthSessionStream = null;
-                    }
+                {
+                    AuthSession = null;
+                    AuthSessionStream = null;
+                }
                     break;
                 case SessionType.RealmSession:
-                    {
-                        RealmSession = null;
-                        RealmSessionStream = null;
-                    }
+                {
+                    RealmSession = null;
+                    RealmSessionStream = null;
+                }
                     break;
             }
 
@@ -209,8 +238,15 @@ namespace Server
                 await s.Disconnect();
         }
 
-        public Task<ISession> GetAuthSession() { return Task.FromResult(AuthSession); }
-        public Task<ISession> GetRealmSession() { return Task.FromResult(RealmSession); }
+        public Task<ISession> GetAuthSession()
+        {
+            return Task.FromResult(AuthSession);
+        }
+
+        public Task<ISession> GetRealmSession()
+        {
+            return Task.FromResult(RealmSession);
+        }
 
         public async Task SendPacketRealm(PacketOut p)
         {
@@ -219,6 +255,7 @@ namespace Server
             p.Finalise();
             await RealmSessionStream.PacketStream.OnNextAsync(p.strm.ToArray());
         }
+
         public async Task SendPacketAuth(PacketOut p)
         {
             if (AuthSessionStream == null)
@@ -244,15 +281,15 @@ namespace Server
                 throw new ArgumentException("SendAccountData attempted to use out of range index");
 
             PacketOut p = new PacketOut(RealmOp.SMSG_UPDATE_ACCOUNT_DATA);
-            var guid = (UInt64)0; //TODO: replace with active character if they are there!
+            var guid = (UInt64) 0; //TODO: replace with active character if they are there!
 
             p.Write(guid);
             p.Write(id);
 
             if (State.Data == null || State.Data.TimeStamp == null || State.Data.Size == null || State.Data.Data == null)
             {
-                p.Write((int)0); //time
-                p.Write((int)0); //size
+                p.Write((int) 0); //time
+                p.Write((int) 0); //size
             }
             else
             {
@@ -268,7 +305,7 @@ namespace Server
         {
             PacketOut p = new PacketOut(RealmOp.SMSG_ACCOUNT_DATA_TIMES);
             p.Write(Time.GetUnixTime());
-            p.Write((byte)1);
+            p.Write((byte) 1);
             p.Write(mask);
 
             for (int i = 0; i < 8; ++i)
@@ -276,7 +313,7 @@ namespace Server
                 if ((mask & (1 << i)) != 0)
                 {
                     if (State.Data == null || State.Data.TimeStamp == null)
-                        p.Write((int)0);
+                        p.Write((int) 0);
                     else
                         p.Write(State.Data.TimeStamp[i]);
                 }
@@ -292,10 +329,10 @@ namespace Server
             PacketOut p = new PacketOut(RealmOp.SMSG_CHAR_ENUM);
 
             if (chars == null)
-                p.Write((byte)0); //nothing to see here
+                p.Write((byte) 0); //nothing to see here
             else
             {
-                p.Write((byte)chars.Length);
+                p.Write((byte) chars.Length);
                 foreach (var c in chars)
                 {
                     var plr = GrainFactory.GetGrain<IPlayer>(c.Player.ToInt64());
@@ -307,14 +344,14 @@ namespace Server
             await SendPacketRealm(p);
         }
 
-        PlayerCharacterListEntry[] GetCharacters(int realm)
+        private PlayerCharacterListEntry[] GetCharacters(int realm)
         {
             if (State.CharacterList == null)
                 return null;
             return State.CharacterList.Where(chr => chr.RealmID == realm).ToArray();
         }
 
-        PlayerCharacterListEntry GetCharListEntryForPlayer(IPlayer player)
+        private PlayerCharacterListEntry GetCharListEntryForPlayer(IPlayer player)
         {
             if (State.CharacterList == null)
                 return null;
@@ -371,7 +408,6 @@ namespace Server
             {
                 await SendCharCreateReply(create_response.Item1);
                 return;
-
             }
             await plrnameindex.SetPlayer(create_response.Item2);
 
@@ -383,7 +419,7 @@ namespace Server
         public async Task SendCharCreateReply(LoginErrorCode code)
         {
             PacketOut p = new PacketOut(RealmOp.SMSG_CHAR_CREATE);
-            p.Write((byte)code);
+            p.Write((byte) code);
             await SendPacketRealm(p);
         }
 
@@ -393,7 +429,7 @@ namespace Server
                 State.CharacterList = new List<PlayerCharacterListEntry>();
 
             var chars = GetCharacters(info.RealmID);
-            
+
 
             PlayerCharacterListEntry entry = new PlayerCharacterListEntry();
             entry.Player = await plr.GetGUID();
@@ -404,7 +440,7 @@ namespace Server
 
             State.CharacterList.Add(entry);
 
-            Save();            
+            Save();
         }
 
         public async Task KickActivePlayer()

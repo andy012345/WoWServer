@@ -20,6 +20,5 @@ namespace Server
         Task<CreatureEntry[]> GetCreatureEntriesByMap(UInt32 MapID);
         Task<CreatureEntry> GetCreatureEntry(UInt32 guid);
         Task<CreatureTemplate> GetCreatureTemplate(UInt32 Entry);
-
     }
 }

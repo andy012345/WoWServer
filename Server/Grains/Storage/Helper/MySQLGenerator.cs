@@ -11,8 +11,17 @@ namespace Server
 {
     public class MySQLGenerator
     {
-        public static string GenerateInsert(string table_name, IDictionary<string, object> dict, List<string> ignored_fields) { return GenerateInsertOrReplace("insert", table_name, dict, ignored_fields); }
-        public static string GenerateReplace(string table_name, IDictionary<string, object> dict, List<string> ignored_fields) { return GenerateInsertOrReplace("replace", table_name, dict, ignored_fields); }
+        public static string GenerateInsert(string table_name, IDictionary<string, object> dict,
+            List<string> ignored_fields)
+        {
+            return GenerateInsertOrReplace("insert", table_name, dict, ignored_fields);
+        }
+
+        public static string GenerateReplace(string table_name, IDictionary<string, object> dict,
+            List<string> ignored_fields)
+        {
+            return GenerateInsertOrReplace("replace", table_name, dict, ignored_fields);
+        }
 
         public static string GenerateInsert(string table_name, IDictionary<string, object> dict, string ignored_field)
         {
@@ -20,6 +29,7 @@ namespace Server
             ignored_fields.Add(ignored_field);
             return GenerateInsertOrReplace("insert", table_name, dict, ignored_fields);
         }
+
         public static string GenerateReplace(string table_name, IDictionary<string, object> dict, string ignored_field)
         {
             List<string> ignored_fields = new List<string>();
@@ -27,7 +37,8 @@ namespace Server
             return GenerateInsertOrReplace("replace", table_name, dict, ignored_fields);
         }
 
-        public static string GenerateInsertOrReplace(string insert_or_replace, string table_name, IDictionary<string, object> dict, List<string> ignored_fields)
+        public static string GenerateInsertOrReplace(string insert_or_replace, string table_name,
+            IDictionary<string, object> dict, List<string> ignored_fields)
         {
             if (dict.Count == 0)
                 return "";
@@ -63,8 +74,8 @@ namespace Server
 
         public static T ToObject<T>(Dictionary<string, object> dict)
         {
-            object obj = Activator.CreateInstance(typeof(T));
-            var type = typeof(T);
+            object obj = Activator.CreateInstance(typeof (T));
+            var type = typeof (T);
 
             var tests = type.GetFields(BindingFlags.Instance | BindingFlags.Public);
 
@@ -80,20 +91,22 @@ namespace Server
                     var objFieldType = objField.FieldType;
                     try
                     {
-	                    objField.SetValue(obj, Convert.ChangeType(tmp.Value, objFieldType));
+                        objField.SetValue(obj, Convert.ChangeType(tmp.Value, objFieldType));
                     }
                     catch (Exception e)
                     {
-                        ServerLog.Debug("Exception setting {0} to {1} in {2}, details:\n{3}", tmp.Key, tmp.Value, type.ToString(), e.ToString());
+                        ServerLog.Debug("Exception setting {0} to {1} in {2}, details:\n{3}", tmp.Key, tmp.Value,
+                            type.ToString(), e.ToString());
                     }
                 }
                 else
                 {
-                    ServerLog.Debug("Cannot set {0} to {1} in type {2} as field does not exist", tmp.Key, tmp.Value, type.ToString());
+                    ServerLog.Debug("Cannot set {0} to {1} in type {2} as field does not exist", tmp.Key, tmp.Value,
+                        type.ToString());
                 }
             }
 
-            return (T)obj;
+            return (T) obj;
         }
 
         public static Dictionary<string, object> ToDictionary<T>(T obj)
@@ -109,6 +122,5 @@ namespace Server
 
             return rtn;
         }
-
     }
 }

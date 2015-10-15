@@ -28,17 +28,17 @@ namespace Server
         public Message Auth(string account, string password)
         {
             if (Orleans.GrainClient.IsInitialized == false)
-                return WebService.JSONMessage(new { error = "Client not initialised" });
+                return WebService.JSONMessage(new {error = "Client not initialised"});
 
             if (account == null) //should never be hit provided no-one touches the templates
-                return WebService.JSONMessage(new { error = "Account name must be provided" });
+                return WebService.JSONMessage(new {error = "Account name must be provided"});
             if (password == null) //should never be hit provided no-one touches the templates
-                return WebService.JSONMessage(new { error = "Password must be provided" });
+                return WebService.JSONMessage(new {error = "Password must be provided"});
 
             IAccount ac = Orleans.GrainClient.GrainFactory.GetGrain<IAccount>(account);
 
             if (ac == null)
-                return WebService.JSONMessage(new { error = "Internal error: client returned null actor" });
+                return WebService.JSONMessage(new {error = "Internal error: client returned null actor"});
 
             var result = ac.Authenticate(password).Result;
 
@@ -53,4 +53,3 @@ namespace Server
         }
     }
 }
-

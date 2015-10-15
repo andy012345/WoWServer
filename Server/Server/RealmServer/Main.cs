@@ -52,7 +52,7 @@ namespace Server.RealmServer
 
                 if (realmname == null)
                     throw new Exception("Config-Realm.xml includes a Realm entry that does not specify Name");
-                
+
                 string realmaddress = el.GetAttribute("Address");
 
                 if (realmaddress == null)
@@ -66,10 +66,14 @@ namespace Server.RealmServer
                 settings.Port = UInt16.Parse(port);
 
                 string attrib;
-                attrib = el.GetAttribute("MaxPlayers"); if (attrib != null && attrib.Length > 0) settings.MaxPlayers = int.Parse(attrib);
-                attrib = el.GetAttribute("RealID"); if (attrib != null && attrib.Length > 0) settings.RealmID = int.Parse(attrib);
-                attrib = el.GetAttribute("RequiredAccountLevel"); if (attrib != null && attrib.Length > 0) settings.RequiredAccountLevel = int.Parse(attrib);
-                attrib = el.GetAttribute("Category"); if (attrib != null && attrib.Length > 0) settings.Cat = int.Parse(attrib);
+                attrib = el.GetAttribute("MaxPlayers");
+                if (attrib != null && attrib.Length > 0) settings.MaxPlayers = int.Parse(attrib);
+                attrib = el.GetAttribute("RealID");
+                if (attrib != null && attrib.Length > 0) settings.RealmID = int.Parse(attrib);
+                attrib = el.GetAttribute("RequiredAccountLevel");
+                if (attrib != null && attrib.Length > 0) settings.RequiredAccountLevel = int.Parse(attrib);
+                attrib = el.GetAttribute("Category");
+                if (attrib != null && attrib.Length > 0) settings.Cat = int.Parse(attrib);
 
                 RealmClient client = new RealmClient(settings);
                 Realms.Add(client);
@@ -94,6 +98,5 @@ namespace Server.RealmServer
             Realms.Clear();
             Running = false;
         }
-
     }
 }

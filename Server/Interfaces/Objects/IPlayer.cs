@@ -15,11 +15,13 @@ namespace Server
         Task Save();
     }
 
-    public interface IPlayer : IPlayerImpl { }
-   
+    public interface IPlayer : IPlayerImpl
+    {
+    }
+
     public interface IPlayerImpl : IUnitImpl
     {
-       // Task<string> VirtualCall();
+        // Task<string> VirtualCall();
         Task<string> PlayerCall();
         Task<LoginErrorCode> Create(PlayerCreateData info);
         Task<PacketOut> BuildEnum();
@@ -42,5 +44,4 @@ namespace Server
         Task<byte> GetGender();
         Task<byte> GetClass();
     }
-
 }

@@ -10,23 +10,22 @@ using Shared;
 
 namespace Server
 {
-    
     public partial class Map
     {
         public const float TileSize = 533.33333f;
         public const UInt32 TileCount = 64;
 
-        public const float MinX = -TileCount * TileSize / 2;
-        public const float MinY = -TileCount * TileSize / 2;
-        public const float MaxX = TileCount * TileSize / 2;
-        public const float MaxY = TileCount * TileSize / 2;
+        public const float MinX = -TileCount*TileSize/2;
+        public const float MinY = -TileCount*TileSize/2;
+        public const float MaxX = TileCount*TileSize/2;
+        public const float MaxY = TileCount*TileSize/2;
 
         public const UInt32 CellsPerTile = 8;
-        public const float CellSize = TileSize / CellsPerTile;
-        public const UInt32 CellSizeX = TileCount * CellsPerTile;
-        public const UInt32 CellSizeY = TileCount * CellsPerTile;
+        public const float CellSize = TileSize/CellsPerTile;
+        public const UInt32 CellSizeX = TileCount*CellsPerTile;
+        public const UInt32 CellSizeY = TileCount*CellsPerTile;
 
-        List<IMapCell> _activeCells = new List<IMapCell>();
+        private List<IMapCell> _activeCells = new List<IMapCell>();
 
         public Task InitMapCells()
         {
@@ -36,12 +35,12 @@ namespace Server
         public async Task CreateCell(IMapCell cell)
         {
             List<Task> tasks = new List<Task>();
-            var key = (UInt64)cell.GetPrimaryKeyLong();
+            var key = (UInt64) cell.GetPrimaryKeyLong();
 
             var cellx = (key >> 48) & 0xFFFF;
             var celly = (key >> 32) & 0xFFFF;
 
-            await cell.Create(State.InstanceID, (UInt32)cellx, (UInt32)celly);
+            await cell.Create(State.InstanceID, (UInt32) cellx, (UInt32) celly);
 
             if (CreatureEntryByCellKey.ContainsKey(key))
             {
@@ -62,16 +61,16 @@ namespace Server
 
         public UInt64 GetCellKey(UInt32 cellx, UInt32 celly)
         {
-            UInt64 cellx64 = (UInt64)cellx;
-            UInt64 celly64 = (UInt64)celly;
-            UInt64 instanceid64 = (UInt64)State.InstanceID;
+            UInt64 cellx64 = (UInt64) cellx;
+            UInt64 celly64 = (UInt64) celly;
+            UInt64 instanceid64 = (UInt64) State.InstanceID;
             UInt64 key = (cellx64 << 48) | (celly64 << 32) | instanceid64;
             return key;
         }
 
         public async Task<IMapCell> GetCell(UInt64 key, bool can_create = false)
         {
-            var cell = GrainFactory.GetGrain<IMapCell>((Int64)key);
+            var cell = GrainFactory.GetGrain<IMapCell>((Int64) key);
 
             var valid = await cell.IsValid();
 
@@ -89,16 +88,16 @@ namespace Server
         {
             if (x < MinX || x >= MaxX)
                 throw new ArgumentException("Position out of range");
-            var tile = (MaxX - x) / CellSize;
-            return (UInt32)tile;
+            var tile = (MaxX - x)/CellSize;
+            return (UInt32) tile;
         }
 
         public UInt32 GetCellY(float y)
         {
             if (y < MinY || y >= MaxY)
                 throw new ArgumentException("Position out of range");
-            var tile = (MaxY - y) / CellSize;
-            return (UInt32)tile;
+            var tile = (MaxY - y)/CellSize;
+            return (UInt32) tile;
         }
 
         public async Task<IMapCell> GetCell(float x, float y, bool can_create = false)

@@ -12,11 +12,14 @@ using System.Security.Cryptography;
 
 namespace Server.RealmServer
 {
-    class RealmPacketProcessor : PacketProcessor
+    internal class RealmPacketProcessor : PacketProcessor
     {
-        public RealmPacketProcessor() : base() { dataNeeded = DefaultDataNeeded(); } //opcode
+        public RealmPacketProcessor() : base()
+        {
+            dataNeeded = DefaultDataNeeded();
+        } //opcode
 
-        RealmOp opcode;
+        private RealmOp opcode;
         public int DecryptPointer = 0;
         public UInt32 Seed = 0;
         public int RealmID = 0;
@@ -32,10 +35,10 @@ namespace Server.RealmServer
             sock.session.SetRealmInfo(realmparent.GetRealmSettings());
 
             Random rnd = new Random();
-            Seed = (UInt32)rnd.Next();
+            Seed = (UInt32) rnd.Next();
 
             PacketOut p = new PacketOut(RealmOp.SMSG_AUTH_CHALLENGE);
-            p.Write((int)1);
+            p.Write((int) 1);
             p.Write(Seed);
 
             p.Write(0xF3539DA3);
@@ -48,7 +51,6 @@ namespace Server.RealmServer
             p.Write(0xA4F170F4);
 
             SendPacket(p);
-
         }
 
         public void SetupCrypto(BigInteger key)
@@ -88,7 +90,10 @@ namespace Server.RealmServer
             sock.Send(parray, parray.Length);
         }
 
-        public override int DefaultDataNeeded() { return 6; } //shortest is 2 byte size, 4 byte command
+        public override int DefaultDataNeeded()
+        {
+            return 6;
+        } //shortest is 2 byte size, 4 byte command
 
         public override PacketProcessResult ProcessData()
         {
@@ -118,7 +123,7 @@ namespace Server.RealmServer
                 if (currentPacket.Length < dataNeeded) return PacketProcessResult.RequiresData;
             }
 
-            opcode = (RealmOp)currentPacket.ReadUInt32();
+            opcode = (RealmOp) currentPacket.ReadUInt32();
 
             Console.WriteLine("Received Packet {0} Length {1}", opcode.ToString(), sz);
 
@@ -127,7 +132,7 @@ namespace Server.RealmServer
             return ProcessPacket();
         }
 
-        void DecryptData(int to)
+        private void DecryptData(int to)
         {
             if (sock.Decrypt == null || DecryptPointer >= to)
                 return;
@@ -136,14 +141,15 @@ namespace Server.RealmServer
             DecryptPointer = to;
         }
 
-        PacketProcessResult ProcessPacket()
+        private PacketProcessResult ProcessPacket()
         {
             var handler = RealmServer.Main.PacketHandler.GetHandler(opcode);
 
             if (handler == null)
             {
                 Console.WriteLine("Recieved packet {0} which has no handler", opcode);
-                return PacketProcessResult.Processed; //In realm we have known sizes so we mark as processed as multiple packets can come through in one burst, we want to continue reading
+                return PacketProcessResult.Processed;
+                    //In realm we have known sizes so we mark as processed as multiple packets can come through in one burst, we want to continue reading
             }
 
             return handler(this);
@@ -152,7 +158,8 @@ namespace Server.RealmServer
 
     public partial class RealmPacketHandler
     {
-        Dictionary<UInt32, Func<PacketProcessor, PacketProcessResult>> PacketHandlers = new Dictionary<UInt32, Func<PacketProcessor, PacketProcessResult>>();
+        private Dictionary<UInt32, Func<PacketProcessor, PacketProcessResult>> PacketHandlers =
+            new Dictionary<UInt32, Func<PacketProcessor, PacketProcessResult>>();
 
         public void Init()
         {
@@ -167,7 +174,9 @@ namespace Server.RealmServer
                 if (attrib == null)
                     continue;
 
-                var handlerDelegate = (Func<PacketProcessor, PacketProcessResult>)Delegate.CreateDelegate(typeof(Func<PacketProcessor, PacketProcessResult>), method);
+                var handlerDelegate =
+                    (Func<PacketProcessor, PacketProcessResult>)
+                        Delegate.CreateDelegate(typeof (Func<PacketProcessor, PacketProcessResult>), method);
 
                 if (handlerDelegate == null)
                     continue;
@@ -178,12 +187,11 @@ namespace Server.RealmServer
 
         public Func<PacketProcessor, PacketProcessResult> GetHandler(RealmOp opcode)
         {
-            UInt32 op = (UInt32)opcode;
+            UInt32 op = (UInt32) opcode;
 
             Func<PacketProcessor, PacketProcessResult> retval = null;
             PacketHandlers.TryGetValue(op, out retval);
             return retval;
         }
     }
-
 }

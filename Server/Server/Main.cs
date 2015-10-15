@@ -7,9 +7,9 @@ using Orleans;
 
 namespace Server
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             AppDomain orleansHostDomain = null;
 
@@ -62,7 +62,7 @@ namespace Server
                 orleansHostDomain.DoCallBack(ShutdownSilo);
         }
 
-        static void InitSilo(string[] args)
+        private static void InitSilo(string[] args)
         {
             hostWrapper = new OrleansHostWrapper(args);
 
@@ -72,7 +72,7 @@ namespace Server
             }
         }
 
-        static void ShutdownSilo()
+        private static void ShutdownSilo()
         {
             if (hostWrapper != null)
             {

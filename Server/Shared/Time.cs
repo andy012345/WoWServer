@@ -12,19 +12,21 @@ namespace Shared
 
         public static uint GetUnixTime(DateTime time)
         {
-            return (uint)((time.Ticks - TICKS_SINCE_1970) / 10000000L);
+            return (uint) ((time.Ticks - TICKS_SINCE_1970)/10000000L);
         }
 
-        public static uint GetUnixTime() { return GetUnixTime(DateTime.UtcNow); }
+        public static uint GetUnixTime()
+        {
+            return GetUnixTime(DateTime.UtcNow);
+        }
 
         public static UInt32 GetMSTime()
         {
-            var nowms = DateTime.UtcNow.Ticks / TimeSpan.TicksPerMillisecond;
+            var nowms = DateTime.UtcNow.Ticks/TimeSpan.TicksPerMillisecond;
 
             //wow uses a 32bit mstime
-            UInt32 nowms32 = (UInt32)(nowms & 0xFFFFFFFF);
+            UInt32 nowms32 = (UInt32) (nowms & 0xFFFFFFFF);
             return nowms32;
         }
     }
-
 }

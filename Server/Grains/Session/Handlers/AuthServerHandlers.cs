@@ -50,22 +50,23 @@ namespace Server
             if (gmod < 0)
                 gmod += N;
 
-            B = ((v * 3) + gmod) % N;
+            B = ((v*3) + gmod)%N;
 
             if (B < 0)
                 B += N;
 
-            Shared.BigInteger unk = new Shared.BigInteger(new Random(), 128); //I'm sure this is used for matrix proofing (2 factor auth)
+            Shared.BigInteger unk = new Shared.BigInteger(new Random(), 128);
+                //I'm sure this is used for matrix proofing (2 factor auth)
 
             PacketOut rtn = new PacketOut(AuthOp.AUTH_LOGON_CHALLENGE);
-            rtn.Write((byte)AuthError.Success);
-            rtn.Write((byte)0); //unknown
+            rtn.Write((byte) AuthError.Success);
+            rtn.Write((byte) 0); //unknown
             rtn.WriteBigInt(B, 32);
             rtn.WriteBigIntLength(g, 1);
             rtn.WriteBigIntLength(N, 32);
             rtn.WriteBigInt(s, 32);
             rtn.WriteBigInt(unk, 16);
-            rtn.Write((byte)0); //security flag
+            rtn.Write((byte) 0); //security flag
             await SendPacket(rtn); //test
         }
 
@@ -85,7 +86,7 @@ namespace Server
             BigInteger tmp = v.ModPow(u, N);
             if (tmp < 0)
                 tmp += N;
-            BigInteger S = A * tmp;
+            BigInteger S = A*tmp;
             S = S.ModPow(b, N);
             if (S < 0)
                 S += N;
@@ -99,8 +100,8 @@ namespace Server
 
             for (int i = 0; i < 16; ++i)
             {
-                t1[i] = t[i * 2];
-                t2[i] = t[(i * 2) + 1];
+                t1[i] = t[i*2];
+                t2[i] = t[(i*2) + 1];
             }
 
             var t1sha = BigInt.Hash(t1);
@@ -111,8 +112,8 @@ namespace Server
 
             for (int i = 0; i < 20; ++i)
             {
-                vK[i * 2] = t1shabytes[i];
-                vK[(i * 2) + 1] = t2shabytes[i];
+                vK[i*2] = t1shabytes[i];
+                vK[(i*2) + 1] = t2shabytes[i];
             }
 
             var t3 = BigInt.Hash(N) ^ BigInt.Hash(g);
@@ -138,11 +139,11 @@ namespace Server
                 BigInteger M2 = BigInt.Hash(A, M, SessionKey);
 
                 PacketOut p = new PacketOut(AuthOp.AUTH_LOGON_PROOF);
-                p.Write((byte)AuthError.Success);
+                p.Write((byte) AuthError.Success);
                 p.WriteBigInt(M2, 20);
-                p.Write((int)0);
-                p.Write((int)0);
-                p.Write((short)0);
+                p.Write((int) 0);
+                p.Write((int) 0);
+                p.Write((short) 0);
 
                 await SendPacket(p);
             }
@@ -165,50 +166,49 @@ namespace Server
             var realms = await realm_manager.GetRealms();
 
             PacketOut p = new PacketOut(AuthOp.REALM_LIST);
-            p.Write((UInt16)0); //size
+            p.Write((UInt16) 0); //size
 
-            p.Write((int)0);
+            p.Write((int) 0);
 
             //lets write a test realm!
-            p.Write((UInt16)realms.Length); //realmCount
+            p.Write((UInt16) realms.Length); //realmCount
 
 
             foreach (var r in realms)
             {
-                p.Write((byte)0); //type
-                p.Write((byte)0); //status
-                p.Write((byte)0); //flags
+                p.Write((byte) 0); //type
+                p.Write((byte) 0); //status
+                p.Write((byte) 0); //flags
                 p.WriteCString(r.RealmSettings.Name);
                 p.WriteCString(r.RealmSettings.Address);
                 p.Write(r.GetPopulationStatus());
-                p.Write((byte)1); //character count, TODO
-                p.Write((byte)r.RealmSettings.Cat);
-                p.Write((byte)0); //unknown
+                p.Write((byte) 1); //character count, TODO
+                p.Write((byte) r.RealmSettings.Cat);
+                p.Write((byte) 0); //unknown
             }
 
             //this should be a loop based on realmcount in future
             //end loop
 
-            p.Write((byte)0x10);
-            p.Write((byte)0);
+            p.Write((byte) 0x10);
+            p.Write((byte) 0);
 
             //rewrite size
             p.strm.Position = 1;
-            p.Write((UInt16)(p.strm.Length - 3));
+            p.Write((UInt16) (p.strm.Length - 3));
             p.strm.Position = p.strm.Length;
 
             await SendPacket(p);
         }
 
-        Task SendAuthError(AuthError error)
+        private Task SendAuthError(AuthError error)
         {
             PacketOut p = new PacketOut();
-            p.w.Write((byte)AuthOp.AUTH_LOGON_CHALLENGE);
-            p.w.Write((byte)0);
-            p.w.Write((byte)error);
+            p.w.Write((byte) AuthOp.AUTH_LOGON_CHALLENGE);
+            p.w.Write((byte) 0);
+            p.w.Write((byte) error);
             SendPacket(p);
             return TaskDone.Done;
         }
-
     }
 }

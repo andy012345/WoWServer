@@ -19,8 +19,8 @@ namespace Server
 
         public RealmMapKey(UInt32 MapID, UInt32 RealmID)
         {
-            _key = (UInt64)MapID;
-            _key |= ((UInt64)RealmID) << 32;
+            _key = (UInt64) MapID;
+            _key |= ((UInt64) RealmID) << 32;
         }
 
         public override int GetHashCode()
@@ -48,7 +48,6 @@ namespace Server
         {
             return x.GetHashCode();
         }
-
     }
 
 
@@ -56,8 +55,13 @@ namespace Server
     {
         public Dictionary<int, Realm> RealmMap { get; set; }
 
-        Dictionary<UInt64, List<UInt32>> _RealmInstances = new Dictionary<UInt64, List<UInt32>>();
-        public Dictionary<UInt64, List<UInt32>> RealmInstaces { get { return _RealmInstances; } set { if (value != null) _RealmInstances = value; } }
+        private Dictionary<UInt64, List<UInt32>> _RealmInstances = new Dictionary<UInt64, List<UInt32>>();
+
+        public Dictionary<UInt64, List<UInt32>> RealmInstaces
+        {
+            get { return _RealmInstances; }
+            set { if (value != null) _RealmInstances = value; }
+        }
     }
 
     [Reentrant]
@@ -108,7 +112,8 @@ namespace Server
 
         public Task<Realm[]> GetRealms(int AccountLevel = 0)
         {
-            var realms = State.RealmMap.Values.Where(rlm => rlm.RealmSettings.RequiredAccountLevel <= AccountLevel).ToArray();
+            var realms =
+                State.RealmMap.Values.Where(rlm => rlm.RealmSettings.RequiredAccountLevel <= AccountLevel).ToArray();
             return Task.FromResult(realms);
         }
 
@@ -133,7 +138,7 @@ namespace Server
                     return map;
             }
 
-            var realm = await GetRealm((int)RealmID);
+            var realm = await GetRealm((int) RealmID);
 
             if (realm == null)
                 return null;
@@ -152,7 +157,7 @@ namespace Server
 
         public async Task<IMap> GetMap(UInt32 MapID, UInt32 RealmID)
         {
-            var realm = await GetRealm((int)RealmID);
+            var realm = await GetRealm((int) RealmID);
 
             if (realm == null)
                 return null;
@@ -174,7 +179,7 @@ namespace Server
             if (State.RealmInstaces.ContainsKey(key._key))
             {
                 //todo: load balance? whatever do in future
-                map = GrainFactory.GetGrain<IMap>((Int64)State.RealmInstaces[key._key].First());
+                map = GrainFactory.GetGrain<IMap>((Int64) State.RealmInstaces[key._key].First());
                 if (!(await map.IsValid())) //if not valid, dont use
                     map = null;
             }
@@ -199,7 +204,7 @@ namespace Server
         {
             var creator = GrainFactory.GetGrain<ICreator>(0);
             var instanceid = await creator.GenerateInstanceID();
-            var map = GrainFactory.GetGrain<IMap>((Int64)instanceid);
+            var map = GrainFactory.GetGrain<IMap>((Int64) instanceid);
             await map.Create(MapID, instanceid, RealmID);
             await AddMap(MapID, instanceid, RealmID);
             return map;

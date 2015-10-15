@@ -8,7 +8,7 @@ namespace Server
 {
     public partial class DataStoreManager
     {
-        GTCombatRatingsEntry _GTCombatRatingsEntry = new GTCombatRatingsEntry();
+        private GTCombatRatingsEntry _GTCombatRatingsEntry = new GTCombatRatingsEntry();
 
         [DataStoreLoader]
         public List<Task> LoadGTableDBCs()

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Shared
 {
     public enum AuthOp
-    { 
+    {
         AUTH_LOGON_CHALLENGE = 0x00,
         AUTH_LOGON_PROOF = 0x01,
         AUTH_RECONNECT_CHALLENGE = 0x02,

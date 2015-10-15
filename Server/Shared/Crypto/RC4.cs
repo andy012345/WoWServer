@@ -31,34 +31,35 @@ namespace Shared
 
             for (int counter = 0; counter < 256; counter++)
             {
-                state[counter] = (byte)counter;
+                state[counter] = (byte) counter;
             }
             x = 0;
             y = 0;
             for (int counter = 0; counter < 256; counter++)
             {
-                index2 = (byte)(key[index1] + state[counter] + index2);
+                index2 = (byte) (key[index1] + state[counter] + index2);
                 // swap byte
                 byte tmp = state[counter];
                 state[counter] = state[index2];
                 state[index2] = tmp;
-                index1 = (byte)((index1 + 1) % key.Length);
+                index1 = (byte) ((index1 + 1)%key.Length);
             }
         }
 
-        private int InternalTransformBlock(byte[] inputBuffer, int inputOffset, int inputCount, byte[] outputBuffer, int outputOffset)
+        private int InternalTransformBlock(byte[] inputBuffer, int inputOffset, int inputCount, byte[] outputBuffer,
+            int outputOffset)
         {
             for (var counter = 0; counter < inputCount; counter++)
             {
-                x = (byte)(x + 1);
-                y = (byte)(state[x] + y);
+                x = (byte) (x + 1);
+                y = (byte) (state[x] + y);
                 // swap byte
                 var tmp = state[x];
                 state[x] = state[y];
                 state[y] = tmp;
 
-                var xorIndex = (byte)(state[x] + state[y]);
-                outputBuffer[outputOffset + counter] = (byte)(inputBuffer[inputOffset + counter] ^ state[xorIndex]);
+                var xorIndex = (byte) (state[x] + state[y]);
+                outputBuffer[outputOffset + counter] = (byte) (inputBuffer[inputOffset + counter] ^ state[xorIndex]);
             }
             return inputCount;
         }

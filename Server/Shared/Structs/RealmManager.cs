@@ -13,8 +13,13 @@ namespace Shared
         public string Address;
         public string Name;
         public string Lol;
-        public int RealmID; //The real ID, for example, multiple front ends can point to the same realm (for debug testing around NATs mainly)
-        public int RequiredAccountLevel = 0; //required account level to see this, default 0. Allows dev realms to be on the auth server but hidden from normal users.    
+
+        public int RealmID;
+            //The real ID, for example, multiple front ends can point to the same realm (for debug testing around NATs mainly)
+
+        public int RequiredAccountLevel = 0;
+            //required account level to see this, default 0. Allows dev realms to be on the auth server but hidden from normal users.    
+
         public int MaxPlayers = 1000;
         public int Cat = 1;
 
@@ -25,8 +30,13 @@ namespace Shared
     {
         public int CurrentPlayers = 0;
         public UInt32 LastPingUT = 0;
-        DateTime LastPing;
-        public void PingStatus() { LastPing = DateTime.UtcNow; LastPingUT = Time.GetUnixTime(); }
+        private DateTime LastPing;
+
+        public void PingStatus()
+        {
+            LastPing = DateTime.UtcNow;
+            LastPingUT = Time.GetUnixTime();
+        }
 
         public bool IsOnline()
         {
@@ -38,9 +48,12 @@ namespace Shared
             return true;
         }
 
-        public void SetOffline() { LastPing = DateTime.UtcNow.AddMinutes(-10); }
+        public void SetOffline()
+        {
+            LastPing = DateTime.UtcNow.AddMinutes(-10);
+        }
     }
-    
+
     public class Realm
     {
         public RealmSettings RealmSettings = null;
@@ -51,9 +64,19 @@ namespace Shared
             return 1.0f; //todo, i believe 0 = new, 1 = medium, 2 = high, 3 = full
         }
 
-        public void PingStatus() { RealmStatus.PingStatus(); }
-        public bool IsOnline() { return RealmStatus.IsOnline(); }
-        public void SetOffline() { RealmStatus.SetOffline(); }
-    }
+        public void PingStatus()
+        {
+            RealmStatus.PingStatus();
+        }
 
+        public bool IsOnline()
+        {
+            return RealmStatus.IsOnline();
+        }
+
+        public void SetOffline()
+        {
+            RealmStatus.SetOffline();
+        }
+    }
 }

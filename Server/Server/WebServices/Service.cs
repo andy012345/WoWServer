@@ -31,17 +31,28 @@ namespace Server
 
     public class Service : IService
     {
-        public string TestGet(string s) { return "Hi"; }
-        public string TestPost(string s) { return "Hi2"; }
+        public string TestGet(string s)
+        {
+            return "Hi";
+        }
+
+        public string TestPost(string s)
+        {
+            return "Hi2";
+        }
+
         public System.ServiceModel.Channels.Message OrleanStats()
         {
             if (Orleans.GrainClient.IsInitialized == false)
-                return WebOperationContext.Current.CreateTextResponse("Error: Client not initialised", "text/plain", Encoding.UTF8);
+                return WebOperationContext.Current.CreateTextResponse("Error: Client not initialised", "text/plain",
+                    Encoding.UTF8);
 
-            IManagementGrain systemManagement = GrainClient.GrainFactory.GetGrain<IManagementGrain>(RuntimeInterfaceConstants.SYSTEM_MANAGEMENT_ID);
+            IManagementGrain systemManagement =
+                GrainClient.GrainFactory.GetGrain<IManagementGrain>(RuntimeInterfaceConstants.SYSTEM_MANAGEMENT_ID);
 
             if (systemManagement == null)
-                return WebOperationContext.Current.CreateTextResponse("Error: System management not found", "text/plain", Encoding.UTF8);
+                return WebOperationContext.Current.CreateTextResponse("Error: System management not found", "text/plain",
+                    Encoding.UTF8);
 
             var stats = systemManagement.GetSimpleGrainStatistics().Result;
 
@@ -64,7 +75,6 @@ namespace Server
                 writer.WritePropertyName("type");
                 writer.WriteValue(s.GrainType);
                 writer.WriteEndObject();
-
             }
 
             writer.WriteEndArray();
@@ -75,4 +85,3 @@ namespace Server
         }
     }
 }
-

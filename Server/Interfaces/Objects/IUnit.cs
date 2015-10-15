@@ -6,8 +6,10 @@ using Server;
 
 namespace Server
 {
-    public interface IUnit : IUnitImpl { }
-  
+    public interface IUnit : IUnitImpl
+    {
+    }
+
     public interface IUnitImpl : IObjectImpl
     {
         //  Task<string> VirtualCall();
@@ -16,5 +18,4 @@ namespace Server
         Task<int> GetDisplayID();
         Task<int> GetNativeDisplayID();
     }
-
 }

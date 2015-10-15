@@ -12,15 +12,34 @@ namespace Server
 {
     public class ObjectCreatorState : GrainState
     {
-        UInt64 _MaxPlayerGuid = 1;
-        UInt64 _MaxCreatureGuid = 1;
-        UInt64 _MaxObjectGuid = 1;
-        UInt32 _MaxInstanceGuid = 1;
+        private UInt64 _MaxPlayerGuid = 1;
+        private UInt64 _MaxCreatureGuid = 1;
+        private UInt64 _MaxObjectGuid = 1;
+        private UInt32 _MaxInstanceGuid = 1;
 
-        public UInt64 MaxPlayerGUID { get { return _MaxPlayerGuid; } set { _MaxPlayerGuid = value; } }
-        public UInt64 MaxCreatureGUID { get { return _MaxCreatureGuid; } set { _MaxCreatureGuid = value; } }
-        public UInt64 MaxObjectGUID { get { return _MaxObjectGuid; } set { _MaxObjectGuid = value; } }
-        public UInt32 MaxInstanceGUID { get { return _MaxInstanceGuid; } set { _MaxInstanceGuid = value; } }
+        public UInt64 MaxPlayerGUID
+        {
+            get { return _MaxPlayerGuid; }
+            set { _MaxPlayerGuid = value; }
+        }
+
+        public UInt64 MaxCreatureGUID
+        {
+            get { return _MaxCreatureGuid; }
+            set { _MaxCreatureGuid = value; }
+        }
+
+        public UInt64 MaxObjectGUID
+        {
+            get { return _MaxObjectGuid; }
+            set { _MaxObjectGuid = value; }
+        }
+
+        public UInt32 MaxInstanceGUID
+        {
+            get { return _MaxInstanceGuid; }
+            set { _MaxInstanceGuid = value; }
+        }
     }
 
     public class ObjectRetriever
@@ -31,8 +50,14 @@ namespace Server
 
             switch (highguid)
             {
-                case HighGuid.HIGHGUID_UNIT: { return factory.GetGrain<ICreature>(guid.ToInt64()); }
-                case HighGuid.HIGHGUID_PLAYER: { return factory.GetGrain<IPlayer>(guid.ToInt64()); }
+                case HighGuid.HIGHGUID_UNIT:
+                {
+                    return factory.GetGrain<ICreature>(guid.ToInt64());
+                }
+                case HighGuid.HIGHGUID_PLAYER:
+                {
+                    return factory.GetGrain<IPlayer>(guid.ToInt64());
+                }
             }
 
             return factory.GetGrain<IObject>(0);
@@ -42,14 +67,15 @@ namespace Server
 
     [Reentrant]
     [StorageProvider(ProviderName = "Default")]
-    class ObjectCreator : Grain<ObjectCreatorState>, ICreator
+    internal class ObjectCreator : Grain<ObjectCreatorState>, ICreator
     {
-        IDisposable SaveTask = null;
+        private IDisposable SaveTask = null;
         public double SavePeriodSeconds = 30;
 
         public override Task OnActivateAsync()
         {
-            SaveTask = RegisterTimer(SaveState, null, TimeSpan.FromSeconds(SavePeriodSeconds), TimeSpan.FromSeconds(SavePeriodSeconds));
+            SaveTask = RegisterTimer(SaveState, null, TimeSpan.FromSeconds(SavePeriodSeconds),
+                TimeSpan.FromSeconds(SavePeriodSeconds));
             return base.OnActivateAsync();
         }
 
@@ -63,18 +89,20 @@ namespace Server
         {
             switch (objectType)
             {
-                case ObjectType.Player: return await GeneratePlayerGUID();
-                default: return new ObjectGUID(0);
+                case ObjectType.Player:
+                    return await GeneratePlayerGUID();
+                default:
+                    return new ObjectGUID(0);
             }
         }
 
         public Task<ObjectGUID> GenerateCreatureGUID(UInt32 Entry)
         {
             UInt64 counter = State.MaxCreatureGUID;
-            UInt64 entry64 = (UInt64)Entry;
+            UInt64 entry64 = (UInt64) Entry;
             State.MaxCreatureGUID += 1;
 
-            UInt64 highguid = (UInt64)HighGuid.HIGHGUID_UNIT;
+            UInt64 highguid = (UInt64) HighGuid.HIGHGUID_UNIT;
             return Task.FromResult(new ObjectGUID(highguid << 48 | (entry64 << 24) | counter));
         }
 
@@ -87,7 +115,7 @@ namespace Server
 
         private Task<ObjectGUID> GeneratePlayerGUID()
         {
-            var guid = new ObjectGUID(State.MaxPlayerGUID | (UInt64)HighGuid.HIGHGUID_PLAYER);
+            var guid = new ObjectGUID(State.MaxPlayerGUID | (UInt64) HighGuid.HIGHGUID_PLAYER);
             State.MaxPlayerGUID += 1;
             return Task.FromResult(guid);
         }

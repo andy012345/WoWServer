@@ -56,21 +56,36 @@ namespace Server
 
     public class PlayerByNameIndexState : GrainState
     {
-        ObjectGUID _GUID = new ObjectGUID(0);
+        private ObjectGUID _GUID = new ObjectGUID(0);
 
-        public ObjectGUID GUID { get { return _GUID; } set { _GUID = value; } }
+        public ObjectGUID GUID
+        {
+            get { return _GUID; }
+            set { _GUID = value; }
+        }
     }
 
     [StorageProvider(ProviderName = "Default")]
     public class PlayerByNameIndex : Grain<PlayerByNameIndexState>, IPlayerByNameIndex
     {
-        public Task<ObjectGUID> GetPlayerGUID() { return Task.FromResult(State.GUID); }
-        public Task<IPlayer> GetPlayer() { return Task.FromResult(GrainFactory.GetGrain<IPlayer>(State.GUID.ToInt64())); }
-        public async Task Save() { await WriteStateAsync(); }
+        public Task<ObjectGUID> GetPlayerGUID()
+        {
+            return Task.FromResult(State.GUID);
+        }
+
+        public Task<IPlayer> GetPlayer()
+        {
+            return Task.FromResult(GrainFactory.GetGrain<IPlayer>(State.GUID.ToInt64()));
+        }
+
+        public async Task Save()
+        {
+            await WriteStateAsync();
+        }
 
         public async Task<bool> SetPlayer(IPlayer plr)
         {
-            ObjectGUID plrGUID = new ObjectGUID((UInt64)plr.GetPrimaryKeyLong());
+            ObjectGUID plrGUID = new ObjectGUID((UInt64) plr.GetPrimaryKeyLong());
             if (State.GUID != 0)
                 return false;
             State.GUID = plrGUID;
@@ -79,27 +94,30 @@ namespace Server
         }
     }
 
-    public class PlayerImpl : Player, IPlayer { }
+    public class PlayerImpl : Player, IPlayer
+    {
+    }
+
     public class Player : Unit<PlayerData>, IPlayerImpl
     {
-        IAccount _Account = null;
-        SessionStream _Stream = null;
+        private IAccount _Account = null;
+        private SessionStream _Stream = null;
 
-        UInt32 TimeSyncCounter = 0;
+        private UInt32 TimeSyncCounter = 0;
 
-        public async override Task OnActivateAsync()
+        public override async Task OnActivateAsync()
         {
             await base.OnActivateAsync();
             await OnConstruct();
         }
 
-        public async override Task OnConstruct()
+        public override async Task OnConstruct()
         {
             await base.OnConstruct();
             if (_IsValid())
             {
                 State.MyType = TypeID.TYPEID_PLAYER;
-                await SetType((UInt32)(TypeMask.TYPEMASK_PLAYER | TypeMask.TYPEMASK_UNIT | TypeMask.TYPEMASK_OBJECT));
+                await SetType((UInt32) (TypeMask.TYPEMASK_PLAYER | TypeMask.TYPEMASK_UNIT | TypeMask.TYPEMASK_OBJECT));
 
                 if (State.PendingUpdateData == null)
                     State.PendingUpdateData = new List<PacketOut>();
@@ -108,10 +126,20 @@ namespace Server
                 _Account = GrainFactory.GetGrain<IAccount>(State.Account);
         }
 
-        public override IObjectImpl ToRef() { return this.AsReference<IPlayer>(); }
+        public override IObjectImpl ToRef()
+        {
+            return this.AsReference<IPlayer>();
+        }
 
-        public override Task<string> VirtualCall() { return Task.FromResult("Virtual call from player"); }
-        public Task<string> PlayerCall() { return Task.FromResult("Call from player"); }
+        public override Task<string> VirtualCall()
+        {
+            return Task.FromResult("Virtual call from player");
+        }
+
+        public Task<string> PlayerCall()
+        {
+            return Task.FromResult("Call from player");
+        }
 
         public Task Create()
         {
@@ -126,16 +154,25 @@ namespace Server
             await OnLogout();
         }
 
-        public override bool _IsPlayer() { return true; }
+        public override bool _IsPlayer()
+        {
+            return true;
+        }
 
-        public Task<string> GetAccount() { return Task.FromResult(State.Account); }
+        public Task<string> GetAccount()
+        {
+            return Task.FromResult(State.Account);
+        }
+
         public async Task OnLogin()
         {
             var account = GrainFactory.GetGrain<IAccount>(State.Account);
             var session = await account.GetRealmSession();
             _Stream = await session.GetSessionStream(); //cache this to send packets without tonnes of copying
             if (_Stream != null)
-                await _Stream.CommandStream.OnNextAsync(new SocketCommand(SocketCommands.SetPlayer, new object[] { this.AsReference<IPlayer>() }));
+                await
+                    _Stream.CommandStream.OnNextAsync(new SocketCommand(SocketCommands.SetPlayer,
+                        new object[] {this.AsReference<IPlayer>()}));
         }
 
         public async Task SendPacket(PacketOut p)
@@ -156,7 +193,7 @@ namespace Server
             State.Race = info.CreateData.Race;
             State.Class = info.CreateData.Class;
             State.Gender = info.CreateData.Gender;
-            State.RealmID = (UInt32)info.RealmID;
+            State.RealmID = (UInt32) info.RealmID;
             await SetGender(info.CreateData.Gender);
             await SetRace(info.CreateData.Race);
             await SetClass(info.CreateData.Class);
@@ -165,7 +202,7 @@ namespace Server
             await SetHairStyle(info.CreateData.HairStyle);
             await SetHairColor(info.CreateData.HairColor);
             await SetFacialHair(info.CreateData.FacialHair);
- 
+
             var datastore = GrainFactory.GetGrain<IDataStoreManager>(0);
             var chrclass = await datastore.GetChrClasses(info.CreateData.Class);
             var chrrace = await datastore.GetChrRaces(info.CreateData.Race);
@@ -174,18 +211,18 @@ namespace Server
             if (chrclass == null || chrrace == null || creationinfo == null)
                 return LoginErrorCode.CHAR_CREATE_ERROR;
 
-            await SetFaction((int)chrrace.Faction);
-            await SetPowerType((byte)chrclass.powerType);
+            await SetFaction((int) chrrace.Faction);
+            await SetPowerType((byte) chrclass.powerType);
 
             if (_GetGender() == 0) //male
             {
-                await SetDisplayID((int)chrrace.ModelMale);
-                await SetNativeDisplayID((int)chrrace.ModelMale);
+                await SetDisplayID((int) chrrace.ModelMale);
+                await SetNativeDisplayID((int) chrrace.ModelMale);
             }
             else
             {
-                await SetDisplayID((int)chrrace.ModelFemale);
-                await SetNativeDisplayID((int)chrrace.ModelFemale);
+                await SetDisplayID((int) chrrace.ModelFemale);
+                await SetNativeDisplayID((int) chrrace.ModelFemale);
             }
 
             State.PositionX = creationinfo.position_x;
@@ -202,12 +239,12 @@ namespace Server
 
             State.Exists = true; //WE EXIST, YAY
 
-            await SetUInt32((int)EUnitFields.UNIT_FIELD_FLAGS_2, 2048); //regen power
-            await SetUInt32((int)EUnitFields.PLAYER_FIELD_WATCHED_FACTION_INDEX, 0xFFFFFFFF);
-            await SetUInt32((int)EUnitFields.UNIT_FIELD_LEVEL, 1);
-            await SetUInt32((int)EUnitFields.PLAYER_FIELD_COINAGE, 1);
-            await SetUInt32((int)EUnitFields.UNIT_FIELD_HEALTH, 100);
-            await SetUInt32((int)EUnitFields.UNIT_FIELD_MAXHEALTH, 100);
+            await SetUInt32((int) EUnitFields.UNIT_FIELD_FLAGS_2, 2048); //regen power
+            await SetUInt32((int) EUnitFields.PLAYER_FIELD_WATCHED_FACTION_INDEX, 0xFFFFFFFF);
+            await SetUInt32((int) EUnitFields.UNIT_FIELD_LEVEL, 1);
+            await SetUInt32((int) EUnitFields.PLAYER_FIELD_COINAGE, 1);
+            await SetUInt32((int) EUnitFields.UNIT_FIELD_HEALTH, 100);
+            await SetUInt32((int) EUnitFields.UNIT_FIELD_MAXHEALTH, 100);
 
             await OnConstruct();
             await Save();
@@ -229,60 +266,60 @@ namespace Server
                 p.Write(_GetHairStyle());
                 p.Write(_GetHairColor());
                 p.Write(_GetFacialHair());
-                p.Write((byte)1); //level to do
-                p.Write((int)0); //zone to do
-                p.Write((int)0); //map to do
+                p.Write((byte) 1); //level to do
+                p.Write((int) 0); //zone to do
+                p.Write((int) 0); //map to do
                 p.Write(State.PositionX); //positionx
                 p.Write(State.PositionY); //positiony
                 p.Write(State.PositionZ); //positionz
-                p.Write((int)0); //guildid
-                p.Write((int)0); //charflags (stuff like hide helm, is a ghost from death, needs a rename, is locked)
-                p.Write((int)0); //customisationflags (race change, faction change etc)
-                p.Write((byte)0); //firstlogin
-                p.Write((int)0); //petdisplayid
-                p.Write((int)0); //petlevel
-                p.Write((int)0); //petfamilyid
+                p.Write((int) 0); //guildid
+                p.Write((int) 0); //charflags (stuff like hide helm, is a ghost from death, needs a rename, is locked)
+                p.Write((int) 0); //customisationflags (race change, faction change etc)
+                p.Write((byte) 0); //firstlogin
+                p.Write((int) 0); //petdisplayid
+                p.Write((int) 0); //petlevel
+                p.Write((int) 0); //petfamilyid
 
                 //this is a loop of the item display slots, to do when implementing items
                 for (int i = 0; i < 23; ++i)
                 {
-                    p.Write((int)0); //item display
-                    p.Write((byte)0); //inventory type
-                    p.Write((int)0); //enchantment
+                    p.Write((int) 0); //item display
+                    p.Write((byte) 0); //inventory type
+                    p.Write((int) 0); //enchantment
                 }
             }
             else
             {
-                p.Write((UInt64)0); //guid
+                p.Write((UInt64) 0); //guid
                 p.WriteCString("Unknown"); //name
-                p.Write((byte)0); //race
-                p.Write((byte)0); //class
-                p.Write((byte)0); //gender
-                p.Write((byte)0); //skin
-                p.Write((byte)0); //face 
-                p.Write((byte)0); //hairstyle
-                p.Write((byte)0); //haircolor
-                p.Write((byte)0); //facialhair
-                p.Write((byte)1); //level
-                p.Write((int)0); //zoneid
-                p.Write((int)0); //mapid
-                p.Write((float)0); //positionx
-                p.Write((float)0); //positiony
-                p.Write((float)0); //positionz
-                p.Write((int)0); //guildid
-                p.Write((int)0); //charflags
-                p.Write((int)0); //customisationflags
-                p.Write((byte)0); //firstlogin
-                p.Write((int)0); //petdisplayid
-                p.Write((int)0); //petlevel
-                p.Write((int)0); //petfamilyid
+                p.Write((byte) 0); //race
+                p.Write((byte) 0); //class
+                p.Write((byte) 0); //gender
+                p.Write((byte) 0); //skin
+                p.Write((byte) 0); //face 
+                p.Write((byte) 0); //hairstyle
+                p.Write((byte) 0); //haircolor
+                p.Write((byte) 0); //facialhair
+                p.Write((byte) 1); //level
+                p.Write((int) 0); //zoneid
+                p.Write((int) 0); //mapid
+                p.Write((float) 0); //positionx
+                p.Write((float) 0); //positiony
+                p.Write((float) 0); //positionz
+                p.Write((int) 0); //guildid
+                p.Write((int) 0); //charflags
+                p.Write((int) 0); //customisationflags
+                p.Write((byte) 0); //firstlogin
+                p.Write((int) 0); //petdisplayid
+                p.Write((int) 0); //petlevel
+                p.Write((int) 0); //petfamilyid
 
                 //this is a loop of the item display slots, to do when implementing items
                 for (int i = 0; i < 23; ++i)
                 {
-                    p.Write((int)0); //item display
-                    p.Write((byte)0); //inventory type
-                    p.Write((int)0); //enchantment
+                    p.Write((int) 0); //item display
+                    p.Write((byte) 0); //inventory type
+                    p.Write((int) 0); //enchantment
                 }
             }
 
@@ -292,25 +329,87 @@ namespace Server
 
         #region Customisation
 
-        public async Task SetSkin(byte val) { await SetByte(EUnitFields.PLAYER_BYTES, 0, val); }
-        public Task<byte> GetSkin() { return Task.FromResult(_GetSkin()); }
-        protected byte _GetSkin() { return _GetByte(EUnitFields.PLAYER_BYTES, 0); }
-        public async Task SetFace(byte val) { await SetByte(EUnitFields.PLAYER_BYTES, 1, val); }
-        public Task<byte> GetFace() { return Task.FromResult(_GetFace()); }
-        protected byte _GetFace() { return _GetByte(EUnitFields.PLAYER_BYTES, 1); }
-        public async Task SetHairStyle(byte val) { await SetByte(EUnitFields.PLAYER_BYTES, 2, val); }
-        public Task<byte> GetHairStyle() { return Task.FromResult(_GetHairStyle()); }
-        protected byte _GetHairStyle() { return _GetByte(EUnitFields.PLAYER_BYTES, 2); }
-        public async Task SetHairColor(byte val) { await SetByte(EUnitFields.PLAYER_BYTES, 3, val); }
-        public Task<byte> GetHairColor() { return Task.FromResult(_GetHairColor()); }
-        protected byte _GetHairColor() { return _GetByte(EUnitFields.PLAYER_BYTES, 3); }
-        public async Task SetFacialHair(byte val) { await SetByte(EUnitFields.PLAYER_BYTES_2, 0, val); }
-        public Task<byte> GetFacialHair() { return Task.FromResult(_GetFacialHair()); }
-        protected byte _GetFacialHair() { return _GetByte(EUnitFields.PLAYER_BYTES_2, 0); }
+        public async Task SetSkin(byte val)
+        {
+            await SetByte(EUnitFields.PLAYER_BYTES, 0, val);
+        }
+
+        public Task<byte> GetSkin()
+        {
+            return Task.FromResult(_GetSkin());
+        }
+
+        protected byte _GetSkin()
+        {
+            return _GetByte(EUnitFields.PLAYER_BYTES, 0);
+        }
+
+        public async Task SetFace(byte val)
+        {
+            await SetByte(EUnitFields.PLAYER_BYTES, 1, val);
+        }
+
+        public Task<byte> GetFace()
+        {
+            return Task.FromResult(_GetFace());
+        }
+
+        protected byte _GetFace()
+        {
+            return _GetByte(EUnitFields.PLAYER_BYTES, 1);
+        }
+
+        public async Task SetHairStyle(byte val)
+        {
+            await SetByte(EUnitFields.PLAYER_BYTES, 2, val);
+        }
+
+        public Task<byte> GetHairStyle()
+        {
+            return Task.FromResult(_GetHairStyle());
+        }
+
+        protected byte _GetHairStyle()
+        {
+            return _GetByte(EUnitFields.PLAYER_BYTES, 2);
+        }
+
+        public async Task SetHairColor(byte val)
+        {
+            await SetByte(EUnitFields.PLAYER_BYTES, 3, val);
+        }
+
+        public Task<byte> GetHairColor()
+        {
+            return Task.FromResult(_GetHairColor());
+        }
+
+        protected byte _GetHairColor()
+        {
+            return _GetByte(EUnitFields.PLAYER_BYTES, 3);
+        }
+
+        public async Task SetFacialHair(byte val)
+        {
+            await SetByte(EUnitFields.PLAYER_BYTES_2, 0, val);
+        }
+
+        public Task<byte> GetFacialHair()
+        {
+            return Task.FromResult(_GetFacialHair());
+        }
+
+        protected byte _GetFacialHair()
+        {
+            return _GetByte(EUnitFields.PLAYER_BYTES_2, 0);
+        }
 
         #endregion
 
-        public override Task<bool> IsCellActivator() { return Task.FromResult(true); }
+        public override Task<bool> IsCellActivator()
+        {
+            return Task.FromResult(true);
+        }
 
         public async Task Login()
         {
@@ -319,9 +418,9 @@ namespace Server
             PacketOut p = new PacketOut(RealmOp.MSG_SET_DUNGEON_DIFFICULTY);
 
             p.Reset(RealmOp.MSG_SET_DUNGEON_DIFFICULTY);
-            p.Write((UInt32)0); //difficulty
-            p.Write((UInt32)1); //val
-            p.Write((UInt32)0); //isingroup
+            p.Write((UInt32) 0); //difficulty
+            p.Write((UInt32) 1); //val
+            p.Write((UInt32) 0); //isingroup
             await SendPacket(p);
 
             p.Reset(RealmOp.SMSG_LOGIN_VERIFY_WORLD);
@@ -335,67 +434,67 @@ namespace Server
             await _Account.SendAccountDataTimes(0xEA);
 
             p.Reset(RealmOp.SMSG_FEATURE_SYSTEM_STATUS);
-            p.Write((byte)2);
-            p.Write((byte)0);
+            p.Write((byte) 2);
+            p.Write((byte) 0);
             await SendPacket(p);
 
             p.Reset(RealmOp.SMSG_MOTD);
-            p.Write((UInt32)0);
+            p.Write((UInt32) 0);
             await SendPacket(p);
 
             p.Reset(RealmOp.SMSG_LEARNED_DANCE_MOVES);
-            p.Write((UInt32)0);
-            p.Write((UInt32)0);
+            p.Write((UInt32) 0);
+            p.Write((UInt32) 0);
             await SendPacket(p);
 
             p.Reset(RealmOp.SMSG_CONTACT_LIST);
-            p.Write((UInt32)7); //update all
-            p.Write((UInt32)0); //nothing yet
+            p.Write((UInt32) 7); //update all
+            p.Write((UInt32) 0); //nothing yet
             await SendPacket(p);
 
             await SendBindPointUpdate();
 
             p.Reset(RealmOp.SMSG_TALENTS_INFO);
-            p.Write((byte)0);
-            p.Write((UInt32)0);
-            p.Write((byte)0);
-            p.Write((byte)0);
+            p.Write((byte) 0);
+            p.Write((UInt32) 0);
+            p.Write((byte) 0);
+            p.Write((byte) 0);
             await SendPacket(p);
 
             p.Reset(RealmOp.SMSG_INSTANCE_DIFFICULTY);
-            p.Write((UInt32)0);
-            p.Write((UInt32)0);
+            p.Write((UInt32) 0);
+            p.Write((UInt32) 0);
             await SendPacket(p);
 
             p.Reset(RealmOp.SMSG_INITIAL_SPELLS);
-            p.Write((byte)0);
-            p.Write((UInt16)0);
+            p.Write((byte) 0);
+            p.Write((UInt16) 0);
             await SendPacket(p);
 
             p.Reset(RealmOp.SMSG_SEND_UNLEARN_SPELLS);
-            p.Write((UInt32)0);
+            p.Write((UInt32) 0);
             await SendPacket(p);
 
             await SendActionButtons();
 
 
             p.Reset(RealmOp.SMSG_INITIALIZE_FACTIONS);
-            p.Write((UInt32)0);
+            p.Write((UInt32) 0);
             await SendPacket(p);
 
             p.Reset(RealmOp.SMSG_LOGIN_SETTIMESPEED);
             p.WriteWTime(DateTime.Now);
-            p.Write((float)0.01666667f);
-            p.Write((UInt32)0);
+            p.Write((float) 0.01666667f);
+            p.Write((UInt32) 0);
             await SendPacket(p);
 
-       
+
             p.Reset(RealmOp.SMSG_SEND_UNLEARN_SPELLS);
-            p.Write((UInt32)0);
+            p.Write((UInt32) 0);
             await SendPacket(p);
 
             p.Reset(RealmOp.SMSG_SET_FORCED_REACTIONS);
-            p.Write((UInt32)0);
+            p.Write((UInt32) 0);
             await SendPacket(p);
 
             //add us to our map
@@ -409,11 +508,11 @@ namespace Server
                 switch (mapresult)
                 {
                     case MapAddResult.AlreadyOnMap:
-                        {
-                            //might be logging back in after a DC for example
-                            await BuildInitialUpdate();
-                            await BuildCreateUpdateAllInRange();
-                        }
+                    {
+                        //might be logging back in after a DC for example
+                        await BuildInitialUpdate();
+                        await BuildCreateUpdateAllInRange();
+                    }
                         break;
                 }
             }
@@ -433,11 +532,11 @@ namespace Server
                 switch (mapresult)
                 {
                     case MapAddResult.AlreadyOnMap:
-                        {
-                            //might be logging back in after a DC for example
-                            await BuildInitialUpdate();
-                            await BuildCreateUpdateAllInRange();
-                        }
+                    {
+                        //might be logging back in after a DC for example
+                        await BuildInitialUpdate();
+                        await BuildCreateUpdateAllInRange();
+                    }
                         break;
                 }
             }
@@ -459,7 +558,7 @@ namespace Server
             var update = await BuildCreateUpdateFor(this as IPlayer);
 
             PacketOut pkt = new PacketOut(RealmOp.SMSG_UPDATE_OBJECT);
-            pkt.Write((UInt32)1);
+            pkt.Write((UInt32) 1);
             pkt.Write(update);
             await SendPacket(pkt);
 
@@ -472,10 +571,10 @@ namespace Server
         {
             PacketOut pkt = new PacketOut(RealmOp.SMSG_ACTION_BUTTONS);
 
-            pkt.Write((byte)1);
+            pkt.Write((byte) 1);
 
             for (var i = 0; i < 144; ++i)
-                pkt.Write((UInt32)0);
+                pkt.Write((UInt32) 0);
 
             await SendPacket(pkt);
         }
@@ -493,14 +592,14 @@ namespace Server
             PacketOut p = new PacketOut(RealmOp.SMSG_SPELL_GO);
             p.Write(pGUID); //caster
             p.Write(pGUID); //target?
-            p.Write((byte)1); //counter
-            p.Write((UInt32)836); //LOGINEFFECT
-            p.Write((UInt32)256); //flags
+            p.Write((byte) 1); //counter
+            p.Write((UInt32) 836); //LOGINEFFECT
+            p.Write((UInt32) 256); //flags
             p.Write(Time.GetMSTime());
-            p.Write((byte)1); //hit 1 person
+            p.Write((byte) 1); //hit 1 person
             p.Write(oGUID); //hit me
-            p.Write((byte)0); //missed 0 people
-            p.Write((UInt32)2); //targetmask unit
+            p.Write((byte) 0); //missed 0 people
+            p.Write((UInt32) 2); //targetmask unit
             p.Write(pGUID); //targetted unit was me
             await SendPacket(p);
         }
@@ -536,7 +635,7 @@ namespace Server
             foreach (var updatedata in State.PendingUpdateData)
             {
                 pkt.Reset(RealmOp.SMSG_UPDATE_OBJECT);
-                pkt.Write((UInt32)1);
+                pkt.Write((UInt32) 1);
                 pkt.Write(updatedata);
                 tasks.Add(SendPacket(pkt));
             }
@@ -566,8 +665,8 @@ namespace Server
         public async Task Logout(bool instant = false)
         {
             PacketOut p = new PacketOut(RealmOp.SMSG_LOGOUT_RESPONSE);
-            p.Write((UInt32)0); //logoutReason
-            p.Write(instant? (byte)1 : (byte)0); //hasLogoutTimer
+            p.Write((UInt32) 0); //logoutReason
+            p.Write(instant ? (byte) 1 : (byte) 0); //hasLogoutTimer
             await SendPacket(p);
         }
 

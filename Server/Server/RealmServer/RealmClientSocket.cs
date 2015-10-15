@@ -16,16 +16,33 @@ namespace Server.RealmServer
 {
     public class RealmClientSocket : Server.Networking.ServerSocket
     {
-        Task PingTask = null;
-        CancellationTokenSource PingTaskCancelSource = null;
-        RealmSettings settings = null;
+        private Task PingTask = null;
+        private CancellationTokenSource PingTaskCancelSource = null;
+        private RealmSettings settings = null;
 
-        RealmClientSocket() { }
-        public RealmClientSocket(AddressFamily addressFamily, SocketType sockType, ProtocolType protoType) : base(addressFamily, sockType, protoType) { }
-        public RealmClientSocket(Socket s) : base(s) { }
+        private RealmClientSocket()
+        {
+        }
 
-        public void SetRealmSettings(RealmSettings s) { settings = s; }
-        public RealmSettings GetRealmSettings() { return settings; }
+        public RealmClientSocket(AddressFamily addressFamily, SocketType sockType, ProtocolType protoType)
+            : base(addressFamily, sockType, protoType)
+        {
+        }
+
+        public RealmClientSocket(Socket s) : base(s)
+        {
+        }
+
+        public void SetRealmSettings(RealmSettings s)
+        {
+            settings = s;
+        }
+
+        public RealmSettings GetRealmSettings()
+        {
+            return settings;
+        }
+
         public void PingRunner()
         {
             PingTaskCancelSource = new CancellationTokenSource();
@@ -33,13 +50,13 @@ namespace Server.RealmServer
             PingTask = Task.Factory.StartNew(async delegate
             {
                 var realm_manager = Orleans.GrainClient.GrainFactory.GetGrain<IRealmManager>(0);
-                
+
                 while (cancelToken.IsCancellationRequested == false)
                 {
                     await realm_manager.PingRealm(settings.ID);
                     await Task.Delay(TimeSpan.FromSeconds(5));
                 }
-            },  cancelToken);
+            }, cancelToken);
         }
 
         public void PingRunnerCancel()
@@ -67,7 +84,7 @@ namespace Server.RealmServer
             {
                 SendRealmOffline();
                 PingRunnerCancel();
-                
+
                 if (PingTaskCancelSource != null)
                     PingTaskCancelSource.Dispose();
 
@@ -75,7 +92,6 @@ namespace Server.RealmServer
                     PingTask.Dispose();
             }
             base.Dispose(disposing);
-
         }
     }
 }
