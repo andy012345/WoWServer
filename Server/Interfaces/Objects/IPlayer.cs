@@ -43,5 +43,7 @@ namespace Server
         Task<byte> GetRace();
         Task<byte> GetGender();
         Task<byte> GetClass();
+
+        Task MovementUpdate(RealmOp opcode, MovementData data);
     }
 }

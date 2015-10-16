@@ -12,14 +12,14 @@ using System.Security.Cryptography;
 
 namespace Server.RealmServer
 {
-    internal class RealmPacketProcessor : PacketProcessor
+    public class RealmPacketProcessor : PacketProcessor
     {
         public RealmPacketProcessor() : base()
         {
             dataNeeded = DefaultDataNeeded();
         } //opcode
 
-        private RealmOp opcode;
+        public RealmOp CurrentOpcode;
         public int DecryptPointer = 0;
         public UInt32 Seed = 0;
         public int RealmID = 0;
@@ -73,7 +73,7 @@ namespace Server.RealmServer
             var decryptHash = decryptHMAC.ComputeHash(key.GetBytes());
             var encryptHash = encryptHMAC.ComputeHash(key.GetBytes());
 
-            int dropN = 1024; //1000 before WoTLK, 1024 now
+            const int dropN = 1024; //1000 before WoTLK, 1024 now
             var buf = new byte[dropN];
 
             sock.Decrypt = new ARC4(decryptHash);
@@ -123,9 +123,9 @@ namespace Server.RealmServer
                 if (currentPacket.Length < dataNeeded) return PacketProcessResult.RequiresData;
             }
 
-            opcode = (RealmOp) currentPacket.ReadUInt32();
+            CurrentOpcode = (RealmOp) currentPacket.ReadUInt32();
 
-            Console.WriteLine("Received Packet {0} Length {1}", opcode.ToString(), sz);
+            Console.WriteLine("Received Packet {0} Length {1}", CurrentOpcode.ToString(), sz);
 
             //ok now we need sz + 2 to continue
 
@@ -143,11 +143,11 @@ namespace Server.RealmServer
 
         private PacketProcessResult ProcessPacket()
         {
-            var handler = RealmServer.Main.PacketHandler.GetHandler(opcode);
+            var handler = RealmServer.Main.PacketHandler.GetHandler(CurrentOpcode);
 
             if (handler == null)
             {
-                Console.WriteLine("Recieved packet {0} which has no handler", opcode);
+                Console.WriteLine("Recieved packet {0} which has no handler", CurrentOpcode);
                 return PacketProcessResult.Processed;
                     //In realm we have known sizes so we mark as processed as multiple packets can come through in one burst, we want to continue reading
             }
@@ -169,19 +169,17 @@ namespace Server.RealmServer
 
             foreach (var method in methods)
             {
-                var attrib = method.GetCustomAttribute<PacketHandlerAttribute>();
+                foreach (var attrib in method.GetCustomAttributes<PacketHandlerAttribute>())
+                {
+                    var handlerDelegate =
+                        (Func<PacketProcessor, PacketProcessResult>)
+                            Delegate.CreateDelegate(typeof (Func<PacketProcessor, PacketProcessResult>), method);
 
-                if (attrib == null)
-                    continue;
+                    if (handlerDelegate == null)
+                        continue;
 
-                var handlerDelegate =
-                    (Func<PacketProcessor, PacketProcessResult>)
-                        Delegate.CreateDelegate(typeof (Func<PacketProcessor, PacketProcessResult>), method);
-
-                if (handlerDelegate == null)
-                    continue;
-
-                PacketHandlers.Add(attrib.Id, handlerDelegate);
+                    PacketHandlers.Add(attrib.Id, handlerDelegate);
+                }
             }
         }
 

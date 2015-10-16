@@ -64,6 +64,24 @@ namespace Shared
             return new ObjectGUID(guid);
         }
 
+        public PackedGUID ReadPackedGUID()
+        {
+            UInt64 guid = 0;
+            byte mask = ReadByte();
+
+            for (var i = 0; i < 8; ++i)
+            {
+                if ((mask & (1 << i)) != 0)
+                {
+                    byte part = ReadByte();
+                    UInt64 part64 = part;
+                    guid |= part64 << (i*8);
+                }
+            }
+
+            return new PackedGUID(guid);
+        }
+
         public string ReadFourCC()
         {
             byte[] tmp = ReadBytes(4);

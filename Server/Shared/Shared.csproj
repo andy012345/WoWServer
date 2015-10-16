@@ -82,6 +82,8 @@
     <Compile Include="Structs\PlayerCreateInfo.cs" />
     <Compile Include="Structs\RealmManager.cs" />
     <Compile Include="Structs\AuthServerStructs.cs" />
+    <Compile Include="Structs\RealmPackets\Movement.cs" />
+    <Compile Include="Structs\RealmPackets\MovementDataTransport.cs" />
     <Compile Include="Structs\RealmPackets\Ping.cs" />
     <Compile Include="Structs\RealmPackets\Character.cs" />
     <Compile Include="Structs\RealmPackets\AuthSession.cs" />

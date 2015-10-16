@@ -175,7 +175,7 @@ namespace Server
                         new object[] {this.AsReference<IPlayer>()}));
         }
 
-        public async Task SendPacket(PacketOut p)
+        public override  async Task SendPacket(PacketOut p)
         {
             if (_Stream == null)
                 return;
@@ -688,6 +688,14 @@ namespace Server
         public Task<uint> GetRealmID()
         {
             return Task.FromResult(State.RealmID);
+        }
+
+        public async Task MovementUpdate(RealmOp opcode, MovementData data)
+        {
+            //send to all for now
+            PacketOut pkt = new PacketOut(opcode);
+            data.Write(pkt);
+            await SendToAll(pkt);
         }
     }
 }

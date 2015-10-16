@@ -149,6 +149,13 @@ namespace Shared
                     return true;
                 return false;
             }
+            
+            if (object.ReferenceEquals(y, null))
+            {
+                if (object.ReferenceEquals(x, null))
+                    return true;
+                return false;
+            }
             return x._value == y._value;
         }
 

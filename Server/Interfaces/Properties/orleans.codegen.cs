@@ -2732,6 +2732,12 @@ namespace Server
                 return base.InvokeMethodAsync<System.Byte>(-825606002, null );
             }
             
+            System.Threading.Tasks.Task Server.IPlayerImpl.MovementUpdate(Shared.RealmOp @opcode, Shared.MovementData @data)
+            {
+
+                return base.InvokeMethodAsync<object>(-1181912828, new object[] {@opcode, @data} );
+            }
+            
             System.Threading.Tasks.Task<string> Server.IUnitImpl.UnitCall()
             {
 
@@ -3060,6 +3066,8 @@ namespace Server
                                 return ((IPlayerImpl)grain).GetGender().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -825606002: 
                                 return ((IPlayerImpl)grain).GetClass().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1181912828: 
+                                return ((IPlayerImpl)grain).MovementUpdate((RealmOp)arguments[0], (MovementData)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 1519937893: 
                                 return ((IPlayerImpl)grain).UnitCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -342467399: 
@@ -3395,6 +3403,8 @@ namespace Server
                             return "GetGender";
                     case -825606002:
                             return "GetClass";
+                    case -1181912828:
+                            return "MovementUpdate";
                     case 1519937893:
                             return "UnitCall";
                     case -342467399:
@@ -3885,6 +3895,12 @@ namespace Server
                 return base.InvokeMethodAsync<System.Byte>(-825606002, null );
             }
             
+            System.Threading.Tasks.Task Server.IPlayerImpl.MovementUpdate(Shared.RealmOp @opcode, Shared.MovementData @data)
+            {
+
+                return base.InvokeMethodAsync<object>(-1181912828, new object[] {@opcode, @data} );
+            }
+            
             System.Threading.Tasks.Task<string> Server.IUnitImpl.UnitCall()
             {
 
@@ -4213,6 +4229,8 @@ namespace Server
                                 return ((IPlayer)grain).GetGender().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -825606002: 
                                 return ((IPlayer)grain).GetClass().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1181912828: 
+                                return ((IPlayer)grain).MovementUpdate((RealmOp)arguments[0], (MovementData)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 1519937893: 
                                 return ((IPlayer)grain).UnitCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -342467399: 
@@ -4340,6 +4358,8 @@ namespace Server
                                 return ((IPlayerImpl)grain).GetGender().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -825606002: 
                                 return ((IPlayerImpl)grain).GetClass().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
+                            case -1181912828: 
+                                return ((IPlayerImpl)grain).MovementUpdate((RealmOp)arguments[0], (MovementData)arguments[1]).ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)null; });
                             case 1519937893: 
                                 return ((IPlayerImpl)grain).UnitCall().ContinueWith(t => {if (t.Status == System.Threading.Tasks.TaskStatus.Faulted) throw t.Exception; return (object)t.Result; });
                             case -342467399: 
@@ -4675,6 +4695,8 @@ namespace Server
                             return "GetGender";
                     case -825606002:
                             return "GetClass";
+                    case -1181912828:
+                            return "MovementUpdate";
                     case 1519937893:
                             return "UnitCall";
                     case -342467399:
@@ -4804,6 +4826,8 @@ namespace Server
                             return "GetGender";
                     case -825606002:
                             return "GetClass";
+                    case -1181912828:
+                            return "MovementUpdate";
                     case 1519937893:
                             return "UnitCall";
                     case -342467399:
@@ -11133,6 +11157,150 @@ namespace InterfacesSerializers
         public static void Register()
         {
             global::Orleans.Serialization.SerializationManager.Register(typeof(Shared.PlayerCreateData), DeepCopier, Serializer, Deserializer);
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    [global::Orleans.CodeGeneration.RegisterSerializerAttribute()]
+    internal class Shared_MovementDataSerialization
+    {
+        
+        static Shared_MovementDataSerialization()
+        {
+            Register();
+        }
+        
+        public static object DeepCopier(object original)
+        {
+            Shared.MovementData input = ((Shared.MovementData)(original));
+            Shared.MovementData result = default(Shared.MovementData);
+            Orleans.Serialization.SerializationContext.Current.RecordObject(original, result);
+            result.FallCosine = input.FallCosine;
+            result.FallLateralSpeed = input.FallLateralSpeed;
+            result.FallSine = input.FallSine;
+            result.FallTime = input.FallTime;
+            result.FallVerticalSpeed = input.FallVerticalSpeed;
+            result.Flags = input.Flags;
+            result.Flags2 = input.Flags2;
+            result.GUID = ((Shared.PackedGUID)(Orleans.Serialization.SerializationManager.DeepCopyInner(input.GUID)));
+            result.MovementDataTransport = ((Shared.MovementDataTransport)(Orleans.Serialization.SerializationManager.DeepCopyInner(input.MovementDataTransport)));
+            result.Pitch = input.Pitch;
+            result.PositionO = input.PositionO;
+            result.PositionX = input.PositionX;
+            result.PositionY = input.PositionY;
+            result.PositionZ = input.PositionZ;
+            result.SplineElevation = input.SplineElevation;
+            result.Time = input.Time;
+            return result;
+        }
+        
+        public static void Serializer(object untypedInput, Orleans.Serialization.BinaryTokenStreamWriter stream, System.Type expected)
+        {
+            Shared.MovementData input = ((Shared.MovementData)(untypedInput));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.FallCosine, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.FallLateralSpeed, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.FallSine, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.FallTime, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.FallVerticalSpeed, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.Flags, stream, typeof(Shared.MovementFlags));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.Flags2, stream, typeof(Shared.MovementFlags2));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.GUID, stream, typeof(Shared.PackedGUID));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.MovementDataTransport, stream, typeof(Shared.MovementDataTransport));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.Pitch, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.PositionO, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.PositionX, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.PositionY, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.PositionZ, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.SplineElevation, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.Time, stream, typeof(uint));
+        }
+        
+        public static object Deserializer(System.Type expected, global::Orleans.Serialization.BinaryTokenStreamReader stream)
+        {
+            Shared.MovementData result = default(Shared.MovementData);
+            result.FallCosine = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.FallLateralSpeed = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.FallSine = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.FallTime = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.FallVerticalSpeed = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.Flags = ((Shared.MovementFlags)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(Shared.MovementFlags), stream)));
+            result.Flags2 = ((Shared.MovementFlags2)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(Shared.MovementFlags2), stream)));
+            result.GUID = ((Shared.PackedGUID)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(Shared.PackedGUID), stream)));
+            result.MovementDataTransport = ((Shared.MovementDataTransport)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(Shared.MovementDataTransport), stream)));
+            result.Pitch = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.PositionO = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.PositionX = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.PositionY = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.PositionZ = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.SplineElevation = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.Time = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            return result;
+        }
+        
+        public static void Register()
+        {
+            global::Orleans.Serialization.SerializationManager.Register(typeof(Shared.MovementData), DeepCopier, Serializer, Deserializer);
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("Orleans-CodeGenerator", "1.0.9.0")]
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute()]
+    [global::Orleans.CodeGeneration.RegisterSerializerAttribute()]
+    internal class Shared_MovementDataTransportSerialization
+    {
+        
+        static Shared_MovementDataTransportSerialization()
+        {
+            Register();
+        }
+        
+        public static object DeepCopier(object original)
+        {
+            Shared.MovementDataTransport input = ((Shared.MovementDataTransport)(original));
+            Shared.MovementDataTransport result = new Shared.MovementDataTransport();
+            Orleans.Serialization.SerializationContext.Current.RecordObject(original, result);
+            result.TransportGuid = ((Shared.PackedGUID)(Orleans.Serialization.SerializationManager.DeepCopyInner(input.TransportGuid)));
+            result.TransportO = input.TransportO;
+            result.TransportSeat = input.TransportSeat;
+            result.TransportTime = input.TransportTime;
+            result.TransportTime2 = input.TransportTime2;
+            result.TransportX = input.TransportX;
+            result.TransportY = input.TransportY;
+            result.TransportZ = input.TransportZ;
+            return result;
+        }
+        
+        public static void Serializer(object untypedInput, Orleans.Serialization.BinaryTokenStreamWriter stream, System.Type expected)
+        {
+            Shared.MovementDataTransport input = ((Shared.MovementDataTransport)(untypedInput));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.TransportGuid, stream, typeof(Shared.PackedGUID));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.TransportO, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.TransportSeat, stream, typeof(byte));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.TransportTime, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.TransportTime2, stream, typeof(uint));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.TransportX, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.TransportY, stream, typeof(float));
+            Orleans.Serialization.SerializationManager.SerializeInner(input.TransportZ, stream, typeof(float));
+        }
+        
+        public static object Deserializer(System.Type expected, global::Orleans.Serialization.BinaryTokenStreamReader stream)
+        {
+            Shared.MovementDataTransport result = new Shared.MovementDataTransport();
+            result.TransportGuid = ((Shared.PackedGUID)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(Shared.PackedGUID), stream)));
+            result.TransportO = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.TransportSeat = ((byte)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(byte), stream)));
+            result.TransportTime = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.TransportTime2 = ((uint)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(uint), stream)));
+            result.TransportX = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.TransportY = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            result.TransportZ = ((float)(Orleans.Serialization.SerializationManager.DeserializeInner(typeof(float), stream)));
+            return result;
+        }
+        
+        public static void Register()
+        {
+            global::Orleans.Serialization.SerializationManager.Register(typeof(Shared.MovementDataTransport), DeepCopier, Serializer, Deserializer);
         }
     }
     

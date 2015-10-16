@@ -801,6 +801,28 @@ namespace Server
         {
             return TaskDone.Done;
         }
+
+        //packet sending
+        public virtual Task SendPacket(PacketOut p)
+        {
+            return TaskDone.Done;
+        }
+
+        public async Task SendToAll(PacketOut p)
+        {
+            var tasks = new List<Task>();
+
+            foreach (var entry in _inrangePlayers)
+            {
+                var plr = entry.Value as IPlayer;
+
+                if (plr == null)
+                    throw new Exception("Entry in _inrangePlayers cannot convert to player interface");
+                tasks.Add(plr.SendPacket(p));
+            }
+
+            await Task.WhenAll(tasks);
+        }
     }
 
     [Reentrant]
