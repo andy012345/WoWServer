@@ -13,19 +13,19 @@ namespace Server.AuthServer
         [PacketHandler(AuthOp.AUTH_LOGON_PROOF)]
         public static PacketProcessResult HandleLogonAuthProof(PacketProcessor p)
         {
-            p.dataNeeded = 75; //1 op, 32 A, 20 M1, 20 crc_hash, 1 number_of_keys, 1 unk
-            if (p.currentPacket.Length < p.dataNeeded) return PacketProcessResult.RequiresData;
+            p.DataNeeded = 75; //1 op, 32 A, 20 M1, 20 crc_hash, 1 number_of_keys, 1 unk
+            if (p.CurrentPacket.Length < p.DataNeeded) return PacketProcessResult.RequiresData;
 
             AuthLogonProof proof = new AuthLogonProof();
 
-            proof.A = p.currentPacket.ReadBytes(32);
-            proof.M1 = p.currentPacket.ReadBytes(20);
-            proof.crchash = p.currentPacket.ReadBytes(20);
-            proof.number_of_keys = p.currentPacket.ReadByte();
-            proof.unk = p.currentPacket.ReadByte();
+            proof.A = p.CurrentPacket.ReadBytes(32);
+            proof.M1 = p.CurrentPacket.ReadBytes(20);
+            proof.crchash = p.CurrentPacket.ReadBytes(20);
+            proof.number_of_keys = p.CurrentPacket.ReadByte();
+            proof.unk = p.CurrentPacket.ReadByte();
 
-            if (p.sock != null && p.sock.session != null)
-                p.sock.session.OnLogonProof(proof);
+            if (p.ClientConnection != null && p.ClientConnection.CurrentSession != null)
+                p.ClientConnection.CurrentSession.OnLogonProof(proof);
 
             return PacketProcessResult.Processed;
         }

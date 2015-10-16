@@ -18,12 +18,12 @@ namespace Server.RealmServer
         public static PacketProcessResult HandlePing(PacketProcessor p)
         {
             CMSG_PING pkt = new CMSG_PING();
-            pkt.Read(p.currentPacket);
+            pkt.Read(p.CurrentPacket);
 
             PacketOut pout = new PacketOut(RealmOp.SMSG_PONG);
             pout.Write(pkt.ping);
             pout.Finalise();
-            p.sock.Send(pout.strm.ToArray());
+            p.ClientConnection.Send(pout.strm.ToArray());
 
             return PacketProcessResult.Processed;
         }

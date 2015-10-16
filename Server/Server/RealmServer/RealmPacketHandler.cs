@@ -16,7 +16,7 @@ namespace Server.RealmServer
     {
         public RealmPacketProcessor() : base()
         {
-            dataNeeded = DefaultDataNeeded();
+            DataNeeded = DefaultDataNeeded();
         } //opcode
 
         public RealmOp CurrentOpcode;
@@ -26,13 +26,13 @@ namespace Server.RealmServer
 
         public override void OnConnect(ServerSocket parent = null)
         {
-            if (sock.session == null)
+            if (ClientConnection.CurrentSession == null)
                 throw new Exception("Realm connection with no session");
             var realmparent = parent as RealmClientSocket;
             if (realmparent == null)
                 throw new Exception("Realm connection with non realm parent!");
 
-            sock.session.SetRealmInfo(realmparent.GetRealmSettings());
+            ClientConnection.CurrentSession.SetRealmInfo(realmparent.GetRealmSettings());
 
             Random rnd = new Random();
             Seed = (UInt32) rnd.Next();
@@ -76,18 +76,18 @@ namespace Server.RealmServer
             const int dropN = 1024; //1000 before WoTLK, 1024 now
             var buf = new byte[dropN];
 
-            sock.Decrypt = new ARC4(decryptHash);
-            sock.Encrypt = new ARC4(encryptHash);
+            ClientConnection.Decrypt = new ARC4(decryptHash);
+            ClientConnection.Encrypt = new ARC4(encryptHash);
 
-            sock.Decrypt.Process(buf, 0, buf.Length);
-            sock.Encrypt.Process(buf, 0, buf.Length);
+            ClientConnection.Decrypt.Process(buf, 0, buf.Length);
+            ClientConnection.Encrypt.Process(buf, 0, buf.Length);
         }
 
         public void SendPacket(PacketOut p)
         {
             p.Finalise();
             var parray = p.strm.ToArray();
-            sock.Send(parray, parray.Length);
+            ClientConnection.Send(parray, parray.Length);
         }
 
         public override int DefaultDataNeeded()
@@ -98,32 +98,32 @@ namespace Server.RealmServer
         public override PacketProcessResult ProcessData()
         {
             DecryptData(6);
-            int sz = currentPacket.ReadUInt16BE();
+            int sz = CurrentPacket.ReadUInt16BE();
 
             if ((sz & 0x8000) != 0) //large packet
             {
-                dataNeeded = 3; //we need 3 byte size to continue
-                if (currentPacket.Length < dataNeeded) return PacketProcessResult.RequiresData;
+                DataNeeded = 3; //we need 3 byte size to continue
+                if (CurrentPacket.Length < DataNeeded) return PacketProcessResult.RequiresData;
 
                 DecryptData(7);
-                currentPacket.Position = 3;
+                CurrentPacket.Position = 3;
                 sz = 0;
-                sz |= currentPacket.GetBuffer()[0] & 0x7F;
+                sz |= CurrentPacket.GetBuffer()[0] & 0x7F;
                 sz <<= 8;
-                sz |= currentPacket.GetBuffer()[1];
+                sz |= CurrentPacket.GetBuffer()[1];
                 sz <<= 8;
-                sz |= currentPacket.GetBuffer()[2];
+                sz |= CurrentPacket.GetBuffer()[2];
 
-                dataNeeded = 3 + sz;
-                if (currentPacket.Length < dataNeeded) return PacketProcessResult.RequiresData;
+                DataNeeded = 3 + sz;
+                if (CurrentPacket.Length < DataNeeded) return PacketProcessResult.RequiresData;
             }
             else
             {
-                dataNeeded = 2 + sz;
-                if (currentPacket.Length < dataNeeded) return PacketProcessResult.RequiresData;
+                DataNeeded = 2 + sz;
+                if (CurrentPacket.Length < DataNeeded) return PacketProcessResult.RequiresData;
             }
 
-            CurrentOpcode = (RealmOp) currentPacket.ReadUInt32();
+            CurrentOpcode = (RealmOp) CurrentPacket.ReadUInt32();
 
             Console.WriteLine("Received Packet {0} Length {1}", CurrentOpcode.ToString(), sz);
 
@@ -134,10 +134,10 @@ namespace Server.RealmServer
 
         private void DecryptData(int to)
         {
-            if (sock.Decrypt == null || DecryptPointer >= to)
+            if (ClientConnection.Decrypt == null || DecryptPointer >= to)
                 return;
 
-            sock.Decrypt.Process(currentPacket.GetBuffer(), DecryptPointer, (to - DecryptPointer));
+            ClientConnection.Decrypt.Process(CurrentPacket.GetBuffer(), DecryptPointer, (to - DecryptPointer));
             DecryptPointer = to;
         }
 

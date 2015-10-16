@@ -17,7 +17,7 @@ namespace Server.RealmServer
         [PacketHandler(RealmOp.CMSG_CHAR_ENUM)]
         public static PacketProcessResult HandleCharEnum(PacketProcessor p)
         {
-            p.sock.session.HandleCharEnum();
+            p.ClientConnection.CurrentSession.HandleCharEnum();
 
             return PacketProcessResult.Processed;
         }
@@ -27,9 +27,9 @@ namespace Server.RealmServer
         public static PacketProcessResult HandleCharCreate(PacketProcessor p)
         {
             CMSG_CHAR_CREATE create = new CMSG_CHAR_CREATE();
-            create.Read(p.currentPacket);
+            create.Read(p.CurrentPacket);
 
-            p.sock.session.HandleCharCreate(create);
+            p.ClientConnection.CurrentSession.HandleCharCreate(create);
 
             return PacketProcessResult.Processed;
         }
@@ -38,9 +38,9 @@ namespace Server.RealmServer
         public static PacketProcessResult HandlePlayerLogin(PacketProcessor p)
         {
             CMSG_PLAYER_LOGIN pkt = new CMSG_PLAYER_LOGIN();
-            pkt.Read(p.currentPacket);
+            pkt.Read(p.CurrentPacket);
 
-            p.sock.session.HandlePlayerLogin(pkt);
+            p.ClientConnection.CurrentSession.HandlePlayerLogin(pkt);
 
             return PacketProcessResult.Processed;
         }
@@ -48,7 +48,7 @@ namespace Server.RealmServer
         [PacketHandler(RealmOp.CMSG_LOGOUT_REQUEST)]
         public static PacketProcessResult HandleLogoutRequest(PacketProcessor p)
         {
-            var player = p.sock._player;
+            var player = p.ClientConnection.CurrentPlayer;
             if (player == null)
                 return PacketProcessResult.Processed;
 

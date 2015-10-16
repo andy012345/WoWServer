@@ -18,10 +18,10 @@ namespace Server.Networking
 
     public class PacketProcessor
     {
-        public PacketIn currentPacket;
-        public ServerSocket sock = null;
+        public PacketIn CurrentPacket;
+        public ServerSocket ClientConnection = null;
 
-        public int dataNeeded = 0;
+        public int DataNeeded = 0;
 
         public PacketProcessor()
         {
@@ -30,8 +30,8 @@ namespace Server.Networking
 
         private void Reset()
         {
-            currentPacket = new PacketIn();
-            dataNeeded = DefaultDataNeeded();
+            CurrentPacket = new PacketIn();
+            DataNeeded = DefaultDataNeeded();
         }
 
         public virtual int DefaultDataNeeded()
@@ -41,7 +41,7 @@ namespace Server.Networking
 
         public void SetSocket(ServerSocket s)
         {
-            sock = s;
+            ClientConnection = s;
         }
 
         public void ReadHandler(byte[] data, int dataIndex, int dataSize)
@@ -52,14 +52,14 @@ namespace Server.Networking
 
             if (res == PacketProcessResult.Error) //Unknown data on a stream that doesn't have a reported size
             {
-                sock.Dispose();
+                ClientConnection.Dispose();
                 return;
             }
 
             if (res == PacketProcessResult.Processed)
             {
-                currentPacket.Reset();
-                dataNeeded = DefaultDataNeeded();
+                CurrentPacket.Reset();
+                DataNeeded = DefaultDataNeeded();
 
                 var realmProcessor = this as RealmPacketProcessor;
                 if (realmProcessor != null)
@@ -77,13 +77,13 @@ namespace Server.Networking
         private PacketProcessResult OnReceive(byte[] data, int dataIndex, int dataSize, out int copyAmount)
         {
             copyAmount = 0;
-            int dataLeft = dataNeeded - (int) currentPacket.Length;
+            int dataLeft = DataNeeded - (int) CurrentPacket.Length;
 
             if (dataLeft >= 1)
             {
                 if (dataLeft <= (dataSize - dataIndex)) //we have received all we need to continue processing, WOO!
                 {
-                    currentPacket.Write(data, dataIndex, dataLeft);
+                    CurrentPacket.Write(data, dataIndex, dataLeft);
                     copyAmount = dataLeft;
                     //pass to our handler
                     return HandleProcess();
@@ -91,7 +91,7 @@ namespace Server.Networking
                 else
                 {
                     //copy what we can :(
-                    currentPacket.Write(data, dataIndex, (dataSize - dataIndex));
+                    CurrentPacket.Write(data, dataIndex, (dataSize - dataIndex));
                     copyAmount = (dataSize - dataIndex);
                     return PacketProcessResult.RequiresData;
                 }
@@ -110,12 +110,12 @@ namespace Server.Networking
 
         private PacketProcessResult HandleProcess()
         {
-            var oldPosition = currentPacket.Position;
-            currentPacket.Position = 0;
+            var oldPosition = CurrentPacket.Position;
+            CurrentPacket.Position = 0;
 
             var retval = ProcessData();
 
-            currentPacket.Position = oldPosition;
+            CurrentPacket.Position = oldPosition;
 
             return retval;
         }

@@ -18,9 +18,9 @@ namespace Server.RealmServer
         public static PacketProcessResult HandleNameQuery(PacketProcessor p)
         {
             CMSG_NAME_QUERY data = new CMSG_NAME_QUERY();
-            data.Read(p.currentPacket);
+            data.Read(p.CurrentPacket);
 
-            p.sock.session.HandleNameQuery(data);
+            p.ClientConnection.CurrentSession.HandleNameQuery(data);
 
             return PacketProcessResult.Processed;
         }

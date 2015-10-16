@@ -17,7 +17,7 @@ namespace Server.RealmServer
         [PacketHandler(RealmOp.CMSG_READY_FOR_ACCOUNT_DATA_TIMES)]
         public static PacketProcessResult HandleReadyForAccountDataTimes(PacketProcessor p)
         {
-            p.sock.session.HandleReadyForAccountDataTimes();
+            p.ClientConnection.CurrentSession.HandleReadyForAccountDataTimes();
 
             return PacketProcessResult.Processed;
         }
@@ -25,12 +25,12 @@ namespace Server.RealmServer
         [PacketHandler(RealmOp.CMSG_UPDATE_ACCOUNT_DATA)]
         public static PacketProcessResult HandleUpdateAccountData(PacketProcessor p)
         {
-            var type = p.currentPacket.ReadUInt32();
-            var time = p.currentPacket.ReadUInt32();
-            var size = p.currentPacket.ReadUInt32();
-            var data = p.currentPacket.ReadBytes((int) p.currentPacket.RemainingLength);
+            var type = p.CurrentPacket.ReadUInt32();
+            var time = p.CurrentPacket.ReadUInt32();
+            var size = p.CurrentPacket.ReadUInt32();
+            var data = p.CurrentPacket.ReadBytes((int) p.CurrentPacket.RemainingLength);
 
-            p.sock.session.HandleUpdateAccountData(type, time, size, data);
+            p.ClientConnection.CurrentSession.HandleUpdateAccountData(type, time, size, data);
 
             return PacketProcessResult.Processed;
         }
@@ -39,9 +39,9 @@ namespace Server.RealmServer
         [PacketHandler(RealmOp.CMSG_REQUEST_ACCOUNT_DATA)]
         public static PacketProcessResult HandleRequestAccountData(PacketProcessor p)
         {
-            var type = p.currentPacket.ReadUInt32();
+            var type = p.CurrentPacket.ReadUInt32();
 
-            p.sock.session.HandleRequestAccountData(type);
+            p.ClientConnection.CurrentSession.HandleRequestAccountData(type);
 
             return PacketProcessResult.Processed;
         }

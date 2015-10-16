@@ -15,7 +15,7 @@ namespace Server.AuthServer
     {
         public LogonPacketProcessor() : base()
         {
-            dataNeeded = DefaultDataNeeded();
+            DataNeeded = DefaultDataNeeded();
         } //opcode
 
         private AuthOp opcode;
@@ -27,7 +27,7 @@ namespace Server.AuthServer
 
         public override PacketProcessResult ProcessData()
         {
-            opcode = (AuthOp) currentPacket.ReadByte();
+            opcode = (AuthOp) CurrentPacket.ReadByte();
 
             return ProcessPacket();
         }
