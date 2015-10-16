@@ -45,7 +45,7 @@ namespace Server.RealmServer
 
         public static PacketProcessResult HandleMovement(PacketProcessor p)
         {
-            if (p.sock._player == null) //should never happen but if someone messes with code...
+            if (p.ClientConnection.CurrentPlayer == null)
                 return PacketProcessResult.Processed;
 
             Debug.Assert(p is RealmPacketProcessor);
@@ -53,9 +53,9 @@ namespace Server.RealmServer
             var RealmProcessor = p as RealmPacketProcessor;
             MovementData data = new MovementData();
 
-            data.Read(p.currentPacket);
+            data.Read(p.CurrentPacket);
 
-            p.sock._player.MovementUpdate(RealmProcessor.CurrentOpcode, data);
+            p.ClientConnection.CurrentPlayer.MovementUpdate(RealmProcessor.CurrentOpcode, data);
 
             return PacketProcessResult.Processed;
         }
