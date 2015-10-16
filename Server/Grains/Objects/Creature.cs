@@ -89,7 +89,7 @@ namespace Server
             }
 
             //some defaults for now
-            await SetUInt32((int) EUnitFields.UNIT_FIELD_HEALTH, 100);
+            await SetUInt32((int) EUnitFields.UNIT_FIELD_HEALTH, 1000);
         }
     }
 }
