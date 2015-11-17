@@ -27,9 +27,34 @@ namespace Server
 
         private List<IMapCell> _activeCells = new List<IMapCell>();
 
-        public Task InitMapCells()
+        public async Task InitMapCells()
         {
-            return TaskDone.Done;
+            var ActiveCells = State.ActiveCells;
+            List<Task> tasks = new List<Task>();
+
+            //deactivate all cells then re-activate, this is in case of corruptions from a crash
+            foreach (var cell in ActiveCells)
+            {
+                var cellinterface = GrainFactory.GetGrain<IMapCell>((Int64)cell);
+                tasks.Add(cellinterface.SetRefs(0));
+            }
+
+            //await Task.WhenAll(tasks);
+
+            var _objectCopy = _objectCache;
+            var ActiveObjectsCopy = State.ActiveObjects;
+            foreach (var obj in _objectCopy)
+            {
+                if (!ActiveObjectsCopy.Contains(obj.Key))
+                    continue;
+
+                var posx = await obj.Value.GetPositionX();
+                var posy = await obj.Value.GetPositionY();
+
+                //tasks.Add(AddRefCells(posx, posy));
+            }
+
+            await Task.WhenAll(tasks);
         }
 
         public async Task CreateCell(IMapCell cell)

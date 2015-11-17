@@ -16,6 +16,7 @@ namespace Server
         Task RemoveObject(ObjectGUID guid, IObjectImpl obj);
         Task AddRef();
         Task DecRef();
+        Task SetRefs(Int64 refs);
 
         Task Update();
 
@@ -23,6 +24,6 @@ namespace Server
 
         Task<bool> IsValid();
 
-        Task UpdateInRange(IObjectImpl obj);
+        Task UpdateInRange(IObjectImpl obj, List<ObjectGUID> ignoreGuids);
     }
 }

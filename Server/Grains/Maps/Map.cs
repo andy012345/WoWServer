@@ -71,10 +71,23 @@ namespace Server
             SetupUpdateTask();
             SetupSaveTask();
 
-            await InitMapCells();
-
             List<Task> tasks = new List<Task>();
 
+
+            foreach (var guid in State.ObjectList)
+            {
+                var obj = ObjectRetriever.GetObject(GrainFactory, guid);
+                _objectCache.Add(guid, obj);
+            }
+
+            tasks.Add(LoadCreatureEntries());
+            tasks.Add(InitMapCells());
+
+            await Task.WhenAll(tasks);
+        }
+
+        private async Task LoadCreatureEntries()
+        {
             IDataStoreManager datastore = GrainFactory.GetGrain<IDataStoreManager>(0);
 
             //get all creatures for my map!
@@ -94,14 +107,6 @@ namespace Server
                     CreatureEntryByCellKey.Add(cellkey, l);
                 }
             }
-
-            foreach (var guid in State.ObjectList)
-            {
-                var obj = ObjectRetriever.GetObject(GrainFactory, guid);
-                _objectCache.Add(guid, obj);
-            }
-
-            await Task.WhenAll(tasks);
         }
 
         public async Task Create(UInt32 MapID, UInt32 InstanceID, UInt32 RealmID)
@@ -163,7 +168,7 @@ namespace Server
             {
                 var currentmap = await obj.GetMap();
 
-                if (currentmap != this.AsReference<IMap>())
+                if (currentmap != this)
                 {
                     //could be doing a map quick-change
                     await currentmap.RemoveObject(guid, obj);
@@ -181,7 +186,7 @@ namespace Server
             var cellkey = GetCellKey(posx, posy);
             var cell = await GetCell(cellkey, true);
 
-            ServerLog.Debug("Adding {0} to map {1} instance {2} at {3}, {4}", guid.ToUInt64(), State.MapID,
+            ServerLog.Debug("Map", "Adding {0} to map {1} instance {2} at {3}, {4}", guid.ToUInt64(), State.MapID,
                 State.InstanceID, posx, posy);
 
             if (cell == null)
@@ -285,7 +290,7 @@ namespace Server
 
             for (var x = cellx - 1; x <= cellx + 1; ++x)
             {
-                for (var y = celly - 1; x <= celly + 1; ++y)
+                for (var y = celly - 1; y <= celly + 1; ++y)
                 {
                     var cell = await GetCellDirect(x, y, true);
 
@@ -332,8 +337,6 @@ namespace Server
             {
                 var guid = await creator.GenerateCreatureGUID(cre.id);
 
-                //ServerLog.Debug("Spawning creature {0} due to cell activation", cre.guid);
-
                 var creature = GrainFactory.GetGrain<ICreature>(guid.ToInt64());
                 creaturespawns.Add(creature);
                 tasks.Add(creature.Create(cre));
@@ -347,7 +350,7 @@ namespace Server
             await Task.WhenAll(tasks);
         }
 
-        public async Task UpdateInRangeObject(IObjectImpl obj)
+        public async Task UpdateInRangeObject(IObjectImpl obj, List<ObjectGUID> ignoreGuids)
         {
             List<Task> tasks = new List<Task>();
             var posx = await obj.GetPositionX();
@@ -358,7 +361,7 @@ namespace Server
             var player = await obj.IsPlayer();
 
             if (player)
-                ServerLog.Debug("Updating inrange for player");
+                ServerLog.Debug("Map", "Updating inrange for player");
 
             for (var x = cellx - 1; x <= cellx + 1; ++x)
             {
@@ -367,7 +370,7 @@ namespace Server
                     var cell = await GetCellDirect(x, y);
 
                     if (cell != null)
-                        tasks.Add(cell.UpdateInRange(obj));
+                        tasks.Add(cell.UpdateInRange(obj, ignoreGuids));
                 }
             }
 

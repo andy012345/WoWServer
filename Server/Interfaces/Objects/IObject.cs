@@ -28,8 +28,6 @@ namespace Server
         Task<float> GetOrientation();
 
         Task UpdateInRangeSet();
-        Task UpdateInRangeSet_Add();
-        Task UpdateInRangeSet_Remove();
         Task RemoveInRangeObject(ObjectGUID guid, IObjectImpl obj, bool remove_other = true);
         Task AddInRangeObject(ObjectGUID guid, IObjectImpl obj, bool add_other = true);
         Task<bool> CanSee(IObjectImpl other);

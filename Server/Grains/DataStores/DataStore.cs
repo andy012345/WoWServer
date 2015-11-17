@@ -50,7 +50,7 @@ namespace Server
         public async Task Load(string constring)
         {
             await LoadImpl(await CreateConnection(constring));
-            ServerLog.Debug("Loaded {0} entries from {1}", NumRecords, TableName);
+            ServerLog.Debug("DataStore", "Loaded {0} entries from {1}", NumRecords, TableName);
         }
 
         private async Task LoadImpl(MySqlConnection connection)

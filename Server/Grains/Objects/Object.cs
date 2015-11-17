@@ -4,6 +4,7 @@ using Orleans.Providers;
 using Orleans.Storage;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -158,11 +159,10 @@ namespace Server
             return TaskDone.Done;
         }
 
-        public Task SetObjectType(ObjectType type)
+        public async Task SetObjectType(ObjectType type)
         {
             State.ObjType = type;
-            CreateUpdateFieldsByType(type);
-            return TaskDone.Done;
+            await CreateUpdateFieldsByType(type);
         }
 
         public async Task CreateUpdateFieldsByType(ObjectType type)
@@ -311,10 +311,12 @@ namespace Server
             await UpdateInRangeSet();
 
             var asref = ToRef();
-            if (asref is IPlayer)
+            if (_IsPlayer())
             {
-                IPlayer plrthis = asref as IPlayer;
-                IPlayer plrthis2 = this as IPlayer;
+                var plrthis = this as Player;
+
+                Debug.Assert(plrthis != null);
+
                 await plrthis.BuildInitialUpdate();
             }
         }
@@ -362,38 +364,30 @@ namespace Server
             return Task.FromResult(false);
         }
 
+
         public async Task UpdateInRangeSet()
         {
             _inrangeObjectTracker = new Dictionary<ObjectGUID, IObjectImpl>();
-            await UpdateInRangeSet_Add();
-            await UpdateInRangeSet_Remove();
-            _inrangeObjectTracker = null;
-        }
+            List<Task> tasks = new List<Task>();
 
-        public async Task UpdateInRangeSet_Add()
-        {
             var map = _GetMap();
-
-            if (map == null)
-                return;
-
-            await map.UpdateInRangeObject(this);
-        }
-
-        public async Task UpdateInRangeSet_Remove()
-        {
-            //Remove old
-            foreach (var obj in _inrangeObjects)
+            
+            //Remove what we can't see, we must take a copy of inrange list incase it's modified during before CanSee async completes
+            var inrangeCopy = _inrangeObjects;
+            foreach (var obj in inrangeCopy)
             {
-                if (_inrangeObjectTracker.ContainsKey(obj.Key))
-                    //we have just added this object, there's no reason to run this code as he's already proven to be seen
-                    continue;
-
                 var cansee = await CanSee(obj.Value);
 
                 if (!cansee)
-                    await RemoveInRangeObject(obj.Key, obj.Value);
+                    tasks.Add(RemoveInRangeObject(obj.Key, obj.Value));
             }
+
+            var inRangeGuids = _inrangeObjects.Keys.ToList(); //pass these to map to avoid double checks of if we can see them
+
+            if (map != null)
+                tasks.Add(map.UpdateInRangeObject(this, inRangeGuids));
+
+            await Task.WhenAll(tasks);
         }
 
         public async Task AddInRangeObject(ObjectGUID guid, bool add_other = true)
@@ -404,8 +398,8 @@ namespace Server
 
         public async Task AddInRangeObject(ObjectGUID guid, IObjectImpl obj, bool add_other = true)
         {
-            if (guid == oGUID)
-                return; //not inrange of self
+            if (guid == oGUID) //Cannot be inrange of self
+                return;
             if (_inrangeObjects.ContainsKey(guid))
                 return; //already inrange
 
@@ -419,6 +413,8 @@ namespace Server
 
         protected void AddInRangeObjectImpl(ObjectGUID guid, IObjectImpl obj)
         {
+            if (guid == oGUID) //Cannot be inrange of self
+                return;
             if (!State.InRangeObjects.Contains(guid))
                 State.InRangeObjects.Add(guid);
             if (!_inrangeObjects.ContainsKey(guid))
@@ -556,15 +552,15 @@ namespace Server
 
                 pkt.Write((UInt32) 0); //fall time
 
-                pkt.Write((float) 1.0); //walk speed
-                pkt.Write((float) 1.0); //run speed
-                pkt.Write((float) 1.0); //runback speed
-                pkt.Write((float) 1.0); //swim speed
-                pkt.Write((float) 1.0); //swimback speed
-                pkt.Write((float) 1.0); //flight speed
-                pkt.Write((float) 1.0); //flightback speed
-                pkt.Write((float) 1.0); //turn rate
-                pkt.Write((float) 1.0); //pitch rate
+                pkt.Write((float) 14.0); //walk speed
+                pkt.Write((float) 14.0); //run speed
+                pkt.Write((float) 14.0); //runback speed
+                pkt.Write((float) 14.0); //swim speed
+                pkt.Write((float) 14.0); //swimback speed
+                pkt.Write((float) 14.0); //flight speed
+                pkt.Write((float) 14.0); //flightback speed
+                pkt.Write((float) 14.0); //turn rate
+                pkt.Write((float) 14.0); //pitch rate
             }
             else
             {
@@ -808,7 +804,7 @@ namespace Server
             return TaskDone.Done;
         }
 
-        public async Task SendToAll(PacketOut p)
+        public async Task SendToAll(PacketOut p, bool toself)
         {
             var tasks = new List<Task>();
 
@@ -816,19 +812,42 @@ namespace Server
             {
                 var plr = entry.Value as IPlayer;
 
-                if (plr == null)
-                    throw new Exception("Entry in _inrangePlayers cannot convert to player interface");
+                Debug.Assert(plr != null);
+
                 tasks.Add(plr.SendPacket(p));
             }
 
+            if (toself)
+                tasks.Add(SendPacket(p));
+
             await Task.WhenAll(tasks);
+        }
+
+        protected async Task UpdatePosition(float x, float y, float z)
+        {
+            if (await IsCellActivator())
+            {
+                var map = _GetMap();
+
+                if (map != null)
+                    await map.OnActivatorMove(this, State.PositionX, State.PositionY, x, y);
+            }
+
+            State.PositionX = x;
+            State.PositionY = y;
+            State.PositionZ = z;
+        }
+
+        protected void UpdateOrientation(float o)
+        {
+            State.Orientation = o;
         }
     }
 
     [Reentrant]
     [StorageProvider(ProviderName = "Default")]
     public class BaseObject<T> : Grain<T>, IBaseObjectImpl
-        where T : class, IGrainState
+        where T : GrainState
     {
     }
 }

@@ -106,7 +106,7 @@ namespace Orleans.Storage.MySQLDB
             return con;
         }
 
-        public async Task ReadStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
+        public async Task ReadStateAsync(string grainType, GrainReference grainReference, GrainState grainState)
         {
             var con = await GetFreeConnection();
 
@@ -138,7 +138,7 @@ namespace Orleans.Storage.MySQLDB
                             try
                             {
                                 var data =
-                                    (IGrainState)
+                                    (GrainState)
                                         Newtonsoft.Json.JsonConvert.DeserializeObject(dict["data"].ToString(),
                                             grainState.GetType());
                                 grainState.SetAll(data.AsDictionary());
@@ -157,7 +157,7 @@ namespace Orleans.Storage.MySQLDB
             await AddFreeConnection(con);
         }
 
-        private string GetTableName(IGrainState grainState)
+        private string GetTableName(GrainState grainState)
         {
             if (Table != null && Table.Length > 0)
                 return Table;
@@ -205,7 +205,7 @@ namespace Orleans.Storage.MySQLDB
             return keyAsString;
         }
 
-        public async Task WriteStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
+        public async Task WriteStateAsync(string grainType, GrainReference grainReference, GrainState grainState)
         {
             var con = await GetFreeConnection();
             var table = GetTableName(grainState);
@@ -239,7 +239,7 @@ namespace Orleans.Storage.MySQLDB
             await AddFreeConnection(con);
         }
 
-        public async Task ClearStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
+        public async Task ClearStateAsync(string grainType, GrainReference grainReference, GrainState grainState)
         {
             var con = await GetFreeConnection();
             var table = GetTableName(grainState);

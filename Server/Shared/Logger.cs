@@ -10,13 +10,20 @@ namespace Shared
 {
     public static class ServerLog
     {
-        public static void Debug(string format, params object[] arg)
+        public static void Debug(string from, string format, params object[] arg)
         {
+            //var CurrentForeground = Console.ForegroundColor;
+            //var CurrentBackground = Console.BackgroundColor;
+
+           // Console.ForegroundColor = ConsoleColor.Cyan;
+
             DateTime now = DateTime.Now;
-            string formatted = string.Format("[{0}:{1}:{2}] DEBUG: ", now.Hour, now.Minute, now.Second) +
+            string formatted = string.Format("[{0}:{1}:{2}] [{3}]: ", now.Hour.ToString("D2"), now.Minute.ToString("D2"), now.Second.ToString("D2"), from) +
                                string.Format(format, arg);
             Console.WriteLine(formatted);
-            // await Task.Factory.StartNew(() => { Console.WriteLine(formatted); });
+
+            //Console.ForegroundColor = CurrentForeground;
+            //Console.ForegroundColor = CurrentBackground;
         }
     }
 }

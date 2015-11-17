@@ -95,13 +95,13 @@ namespace Server
                     }
                     catch (Exception e)
                     {
-                        ServerLog.Debug("Exception setting {0} to {1} in {2}, details:\n{3}", tmp.Key, tmp.Value,
+                        ServerLog.Debug("MySQLHelper", "Exception setting {0} to {1} in {2}, details:\n{3}", tmp.Key, tmp.Value,
                             type.ToString(), e.ToString());
                     }
                 }
                 else
                 {
-                    ServerLog.Debug("Cannot set {0} to {1} in type {2} as field does not exist", tmp.Key, tmp.Value,
+                    ServerLog.Debug("MySQLHelper", "Cannot set {0} to {1} in type {2} as field does not exist", tmp.Key, tmp.Value,
                         type.ToString());
                 }
             }

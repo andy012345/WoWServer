@@ -141,10 +141,9 @@ namespace Server
             return Task.FromResult("Call from player");
         }
 
-        public Task Create()
+        public async Task Create()
         {
-            SetObjectType(ObjectType.Player);
-            return TaskDone.Done;
+            await SetObjectType(ObjectType.Player);
         }
 
         public async Task Kick(bool remove_from_world = false)
@@ -175,7 +174,7 @@ namespace Server
                         new object[] {this.AsReference<IPlayer>()}));
         }
 
-        public override  async Task SendPacket(PacketOut p)
+        public override async Task SendPacket(PacketOut p)
         {
             if (_Stream == null)
                 return;
@@ -692,10 +691,14 @@ namespace Server
 
         public async Task MovementUpdate(RealmOp opcode, MovementData data)
         {
+            //update position
+            await UpdatePosition(data.PositionX, data.PositionY, data.PositionZ);
+            UpdateOrientation(data.PositionO);
+
             //send to all for now
             PacketOut pkt = new PacketOut(opcode);
             data.Write(pkt);
-            await SendToAll(pkt);
+            await SendToAll(pkt, false);            
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Server
         public async Task Load(string path)
         {
             await Task.Factory.StartNew(() => { LoadImpl(path); });
-            ServerLog.Debug("Loaded {0} entries from {1}", NumRecords, path);
+            ServerLog.Debug("DBCStore", "Loaded {0} entries from {1}", NumRecords, path);
         }
 
         private void LoadImpl(string path)

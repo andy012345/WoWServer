@@ -112,6 +112,19 @@ namespace Server
             if (State.Refs == 0) await Deactivate();
         }
 
+        public async Task SetRefs(Int64 refs)
+        {
+            var oldrefs = State.Refs;
+            State.Refs = refs;
+
+            ServerLog.Debug("MapCell", "Setting refs {0} to {1} on {2}, {3}", oldrefs, refs, State.CellX, State.CellY);
+
+            if (oldrefs == 0 && State.Refs > 0)
+                await Activate();
+            if (oldrefs > 0 && State.Refs == 0)
+                await Deactivate();
+        }
+
         private async Task Activate()
         {
             var map = _GetMap();
@@ -119,6 +132,7 @@ namespace Server
             if (map == null)
                 throw new Exception("Attempting to activate a cell which has no map");
 
+            ServerLog.Debug("MapCell", "Activating cell {0}, {1}", State.CellX, State.CellY);
             await map.OnCellActivate(this);
         }
 
@@ -129,7 +143,8 @@ namespace Server
             if (map == null)
                 throw new Exception("Attempting to activate a cell which has no map");
 
-            await map.OnCellActivate(this);
+            ServerLog.Debug("MapCell", "Deactivating cell {0}, {1}", State.CellX, State.CellY);
+            await map.OnCellDeactivate(this);
         }
 
         public async Task Update()
@@ -142,12 +157,14 @@ namespace Server
             await Task.WhenAll(tasks);
         }
 
-        public async Task UpdateInRange(IObjectImpl obj)
+        public async Task UpdateInRange(IObjectImpl obj, List<ObjectGUID> ignoreGuids)
         {
             List<Task> tasks = new List<Task>();
 
             foreach (var o in _objectCache)
             {
+                if (ignoreGuids.Contains(o.Key))
+                    continue;
                 var cansee = await obj.CanSee(o.Value);
 
                 if (cansee)
